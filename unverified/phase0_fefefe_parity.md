@@ -1,8 +1,7 @@
 # "fefefe is 101 010" [Phase 0]
 
 In the 2021-03-01 conversation a solver writes "hundred FOUR = 104 is the fefefe square" and
-"fefefe is 101 010". Note this is Janusz Baran rather than Jrk, so it is a community claim and not an
-official hint.
+"fefefe is 101 010". Note this is a community claim and not an official hint.
 
 ## hypothesis
 
