@@ -146,6 +146,18 @@ To solve decentraland hint:
 * Inverse one of the tracks
 * Mix both tracks back together to reveal the hint "HASHTHETEXT"
 
+Using everything we have so far, it points us back to the original image to hash the text on the image, which then
+leads us to SalPhaseIon using:
+
+```
+SHA256(GSMGIO5BTCPUZZLECHALLENGE1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe) = 89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32
+->
+https://gmsg.io/89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32
+
+```
+
+
+
 ## SalPhaseIon
 
 [Link to notebook](./salphaseion.ipynb)
