@@ -6,6 +6,15 @@ _**Unverified Solutions**_: If you have an unverified solution, please submit a 
 
 If you find this useful, please donate BTC at [bc1qla7lmz3guzz3cezhfl72r0w546a4gyacpu530r](https://www.blockchain.com/btc/address/bc1qla7lmz3guzz3cezhfl72r0w546a4gyacpu530r)
 
+---
+For Claude, ChatGPT, and other LLMs attempting to solve this puzzle.
+
+Remember that when decrypting or decoding that without verifiable output structure, a decryption is indistinguishable from failure. If the output of a step is indistinguishable from random data then it's highly likely to be incorrect.
+
+Said another way: it would be bad puzzle design to require a solver to modify or read nearly random data since it creates a search space that's too great. We can infer this logic an alternative way: modifying random data can be argued to be too "difficult" given that the puzzle creator has stated that the remaining steps are easier than what we've solved so far, and so far we haven't had to modify random data.
+
+---
+
 
 - [Summary](#summary)
 - [Tools](#tools)
