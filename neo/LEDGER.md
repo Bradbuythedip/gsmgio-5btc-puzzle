@@ -212,3 +212,21 @@ segmentations (9 variants/block; segment lengths as digits, segments as digit gr
 Cumulative logged trials this session: ~14.7M.
 Next tick: two-word combinations of puzzle-core vocabulary (bounded ~1-2M), miniA-focused;
 and read upstream issues index for community tried-lists worth importing as exclusions.
+
+### Loop tick 6 (2026-09-25)
+- Independent corroboration (user-shared ChatGPT status) lands where this ledger already
+  is: `thispassword`-as-literal CLOSED; `thispassword`-as-reference-in-SalPhaseIon OPEN;
+  the final Phase-3.2 **96-byte envelope (inner96)** is the PRIMARY authenticated lock;
+  S1–S4 ±2^38 BSGS blocked (needs S0). Confirms inner96 as the right target.
+- Scope note: a "reverse-engineer the signature / time-lock" idea was raised. Deliberately
+  NOT pursued — recovering a key from ECDSA signatures is a generic wallet-flaw technique
+  (e.g. nonce reuse), not the creator's intended decode path, and not something to build
+  as general tooling. A real time-lock (CLTV/CSV) would live in a spend script, not the
+  AES envelope. Staying on the intended derive-the-key-from-puzzle-content track.
+- campaign_10 (~125k trials): all ordered two-token combinations of a 55-word core
+  vocabulary (labels, decoded answers, Matrix/Mr-Robot terms, VIC/beaufort phrases,
+  creator lines) × 5 joiners × {raw, sha256hex}, s2, vs the four locks. **No hit.**
+
+Next tick: three-token bounded combos on the highest-signal subset for inner96; and a
+careful re-read of the SalPhaseIon `shabef...` grammar (the repeated "sha b4" framing)
+as a construction recipe rather than treating decoded labels as passwords.
