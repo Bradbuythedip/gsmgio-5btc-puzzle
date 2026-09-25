@@ -602,3 +602,31 @@ alignment is real and someone will rediscover it; the negative is the useful par
 Also filed per that note, and consistent with this ledger: the 12:00 photo is Reloaded lore
 (the 314-second window, the midnight shift change), not a grid operand, and neither it nor
 the doctored header enters the password battery.
+
+### Loop tick 18 (2026-09-25) — the two recurring claims, measured
+
+Agreed with the five verdicts (corridor gloss = film flavour; the "impossible to decrypt"
+quote is unverified and contradicts the 2023 hint; "source is raw data" is already on the
+board as DBBI/FAED; "3.2 → 32" is filename numerology; window=32 / IV=0 drops). Made two of
+them quantitative — see `unverified/why_false_decrypts_recur.md`.
+
+**The IV is KDF-emitted.** For the known-good Phase-3.2 decrypt, EVP_BytesToKey emits
+key `f4c72c3a…` *and* IV `b620574d04ee253df257fcd340eb201f`. Not chosen.
+
+**Important nuance that makes zero-IV claims look credible**: the correct key with a zero IV
+still prints ~94% readable text, because in CBC a wrong IV corrupts only the first 16-byte
+block and the stream self-heals from block 2. So a zero-IV "decrypt" can look like a hit and
+is not one. The decisive direction is the converse — a wrong key gives nothing readable for
+any IV — so "IV = 0" is not a construction: it still requires naming the 32-byte key, which
+is the entire problem.
+
+**Padding is a 1-in-256 coincidence, measured**: against the real 80-byte ciphertext with
+random keys, 300,000 trials gave **1,235 PKCS#7-valid** results (1 in 243; theory ~1 in 256)
+and **0** that also passed this harness's gate. So a 100k-candidate battery throws ~400
+padding-valid results by chance — the complete explanation for the recurring Cosmic
+"decryptions", and a validation of the pad≥4 / magic / printability rule.
+
+Rules of thumb now on record: a 1-byte pad with a non-printable body is noise, always; a
+claim that names an IV but not a key has specified nothing; and "it yields a valid
+key/padding/address" is never evidence, since every 64-symbol string gives a valid scalar
+and 1 in 256 keys gives valid padding.

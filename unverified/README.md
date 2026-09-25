@@ -17,3 +17,4 @@ This folder contains a list of currently unverified, or unverifiable, solutions 
 | OP_RETURN script VM | Chain records | [OP_RETURN VM](./op_return_script_vm.md) | the 'exactly one byte short' recursion is forced whenever payload length equals its first byte; closed on logic |
 | Single-t mutation family | Endgame | [Single-t mutation](./single_t_mutation.md) | control passes, 716 variants / 150k trials empty; creator states typos contain no clues |
 | yellowblueprimes grid indices | Phase 0 | [Grid indices](./yellowblueprimes_grid_indices.md) | exact authenticated spiral index lists published; prime readings closed; corrects a circulating 25-char colour string |
+| Why false decrypts recur | Method | [False decrypts](./why_false_decrypts_recur.md) | measured: 1 in 243 random keys gives valid PKCS#7; the IV is KDF-emitted not chosen; our gate had 0 false positives in 300k |
