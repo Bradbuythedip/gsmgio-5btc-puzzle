@@ -911,3 +911,22 @@ path, not a reason to pursue raw keys.
 Cumulative ~33M logged trials across 23 campaigns. The pipeline is exhausted; the open work
 remains the FAED decoder and the bit-selector reading of yellow/blue implied by
 "First or zero".
+
+### Loop tick 27 (2026-09-25) — zero-injection decode of faed/dbbi: negative
+
+Best remaining source-grounded lead, run. Logic: faed and dbbi use letters **a–i only**
+(no `o`), while the sibling tokens `agda`/`cfob` decoded with the map `o=0, a=1…i=9` →
+concatenate digits → decimal int → hex → ASCII. So "some characters need to be zeroed out"
+may be the instruction that *injects* the missing `o` (zero) into faed/dbbi, after which the
+same sibling decode could apply.
+
+Tested: zero-inject at prime positions (0- and 1-based, prime and non-prime), and at the 24
+colour-bit positions mapped to the 24 primes ≤ 91 (both polarities), then the exact
+agda/cfob decode. **Every result is ~33–45% printable — garbage.** No readable text, no token,
+no structure. faed and dbbi remain high-entropy under this transform too, re-confirming the
+tick-10 entropy result.
+
+This was the last well-motivated, source-named decoder hypothesis on the board. With it
+negative, the honest state is that **no source-named operand or decoder for faed has been
+found**, and the confirmed dbbi operation (⊖ VIC → YOUWON) is terminal (tick 20). The puzzle
+is not solvable from the material in hand by the systematic methods available in this session.
