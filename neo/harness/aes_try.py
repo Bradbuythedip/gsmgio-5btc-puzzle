@@ -55,6 +55,7 @@ KDFS = {
     "m5_128": ("md5", 16),
     "s2_128": ("sha256", 16),
     "rk":     ("rawkey", 32),   # key = sha256(pw) digest, iv = zeros (openssl -K style)
+    "s1":     ("sha1", 32),
 }
 
 _PRINTABLE = set(string.printable.encode())

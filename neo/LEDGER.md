@@ -138,3 +138,42 @@ pad-valid subset; all candidates reproducible from campaign scripts).
 Next tick: harvest vocabulary from unread hint images (2020-08-02, 2021-01-21, 2021-12-02,
 2021-12-25, 2023-01-09/12, 2023-08-*, 2024-*, 2026-07-12-other), add sha1-EVP mode, then
 vocabulary-driven campaign 06.
+
+### Loop tick 3 (2026-09-25)
+**Live Telegram intel (user-supplied screenshot, "GSMG Puzzle Solvers", today):**
+Two 32-byte `Salted__` blobs posted by a π-named account:
+`U2FsdGVkX18yZW/gbclQ5kgE0hTuyBQYgDM+3Q6iBEw=` and
+`U2FsdGVkX18yZW/gbclQ5vnkmWwR8NfqVPIKhUiGDu4=`
+**Analysis: both are splices of the public Cosmic Duality blob** — ct(X) = cosmic ct
+block 8 (byte offset 144), ct(Y) = cosmic ct block 18 (offset 304), salt =
+`32656fe06dc950e6` (= cosmic salt with first two bytes changed 2d3f→3265, tail
+identical). The accompanying claim "decrypts using sha256('GSMGIO....prBe') and raw
+keys" does NOT verify: tested EVP md5/sha256/sha1 ×128/256 with passphrase = caption
+and its sha256hex, raw-digest keys (-K style, iv=0), in-stream IVs (preceding cosmic
+block), crafted-IV equality, whole-cosmic bulk decrypt under those keys — all random
+(printable ≈0.37 baseline). Verdict: community splice/noise unless a future message
+supplies a different key. TG "ETA 1 hour / Congratulations?" chatter has no
+cryptographic backing in the screenshot.
+
+**New creator-source vocabulary/ops from previously unread hint images:**
+- 2021-12-25 official: "some characters need to be 'zeroed out'" (+ primes required)
+- 2021-12-02: acrostic THERE IS ANOTHER DOOR
+- 2021-03-01: prime part uses 2,3,5,7; "too many combinations" (selection/order matters);
+  Jrk: "You are at the prime part already???" (prime part is late-stage)
+- 2023-01-09: "At least prime number is very important to get any further"
+- 2023-01-12: "theory of everything is also still a valid path to reaching the private key"
+- 2023-08-03: "shine us some 'light'"; "Are you really looking for just the btc...?";
+  "the hardest part is done"
+- 2023-08-06: "The puzzle talks for me"; Mr Robot last-scene wish; "Once you hit a
+  'ying yang', you'll be able to solve it the same day" (recognizable checkpoint!);
+  "salvation part" (SalPhaseIon wordplay); creator located in France
+- 2026-07-12: "The '5' btc was never the actual prize. That was only a tiny fraction."
+
+- campaign_06 (~355k trials): new vocab, o→0 / drop-o "zeroed out" transforms over key
+  tokens, URL yellow-position zeroing, all 2357 permutations/ordered subsets alone and
+  in the seven-token frame; added sha1-EVP mode. **No hit.**
+
+Next tick: read remaining unread images (2020-08-02, 2021-01-21, 2024-*, 2020-05-11,
+2020-06-07, 2021-02-12/03-14/04-16/05-06), then consider Beaufort-key reuse
+("thematrixhasyou") on the letter blocks under 26-letter interpretation, and
+"connect the last pieces" composite orderings.
