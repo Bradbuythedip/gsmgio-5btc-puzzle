@@ -331,3 +331,53 @@ the wrong consumer — the bits were only applied to the remainder and to the ma
 yet to the blob-adjacent material.
 
 Cumulative logged trials: ~15.0M.
+
+### Loop tick 10 (2026-09-25) — primary material ingested; model corrected
+
+User supplied an authenticated primary archive (raw page captures, verified decrypts, a
+445-message creator transcript, 2026 site snapshots). Key files copied to
+`neo/materials/primary/`. Findings written up in `unverified/salphaseion_soup_grammar.md`.
+
+**Authenticity verified.** The Cosmic envelope (1344 B, salt `2d3f6fe06dc950e6`) and the
+Phase-3.2 trailing envelope (96 B, salt `b45a5e3d827593ca`, offset 2292 of 2422) are
+**byte-identical** to my working copies. This retires the risk that the Cosmic blob —
+originally sourced from an untrusted LLM repo — was corrupt.
+
+**Three model corrections, all creator-sourced:**
+1. `yinyang` is an **output, not an input** (2025-04-28: "It's the next phase"; 2023-08-06:
+   "once you hit a ying yang you'll solve it the same day"). Campaigns 01/03/05/10 fed it in
+   as a password component — that was backwards.
+2. The **prime hint IS the matrixsumlist hint** (2021-03-14 → points back at 2021-03-01,
+   itself answering "which primes, 2/3/5/7?"). With Christmas 2021's "characters need to be
+   zeroed out", matrixsumlist = zero at prime-derived positions, then sum.
+3. The master hint yields **three inputs**, not seven: `yellowblueprimes`, `matrixsumlist`,
+   `lastwordsbeforearchichoice`, then `yinyang` as the checkpoint.
+
+**Soup grammar** (authoritative): `dbbi(91) | bin1=matrixsumlist | faed(570) |
+agda=lastwordsbeforearchichoice | cfob=thispassword | bin2=enter | salph_inner envelope`,
+salt `3ab585348552415d`, with `enter` spliced into the base64 at a `z`. So there are **two**
+96-byte envelopes, and my `miniAB` reconstruction is the correct one.
+
+**dbbi and faed are high-entropy data, not enciphered prose.** faed's 285 base-81 pairs use
+75 of 81 symbols with a near-uniform profile (top counts 13,10,9,7,7,7,7…) against English's
+steep profile (34,28,26,24,23…). No substitution or homophonic map bridges that. So faed
+≈ 226 bytes and dbbi ≈ 36 bytes of ciphertext/compressed payload. Any theory that reads them
+as English by choosing a mapping is fitting noise — this also independently re-confirms the
+tick-8 rejection of the "KEY in the column sums" claim.
+
+**New unsolved object**: `architect_span.txt`, 501 uppercase letters, IC ≈ 1.10 (random;
+English ≈ 1.73). Not a short-key Vigenère/Beaufort, not present in any plaintext, and
+known-plaintext key recovery against the Architect speech yields no repeating key. Parked
+as its own object.
+
+- **campaign_14** (~16.6M trials): the creator-authenticated recipe — 2016 matrixsumlist
+  candidates from seven prime-derived zero masks across all seven 7×13 matrices, both digit
+  bases, row/column axes, eight renderings; alone and wrapped in the other two authenticated
+  components, raw and hashed. **No hit.**
+
+Cumulative logged trials: ~31.6M.
+
+Next: the exact zero-mask and sum rendering remain the gap. Since dbbi/faed are
+high-entropy, the sum list is plausibly consumed as key material directly rather than read
+as text. Also worth attacking: `architect_span.txt` as base-26 data, and the 2026 site
+captures (`root_2026-08-19.html`, `followthewhiterabbit_2026-04-18.html`) not yet examined.
