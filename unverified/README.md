@@ -15,3 +15,4 @@ This folder contains a list of currently unverified, or unverifiable, solutions 
 | SalPhaseIon soup grammar | SalPhaseIon | [Soup grammar](./salphaseion_soup_grammar.md) | primary-material reading: yinyang is an output not an input, the prime hint is the matrixsumlist hint, dbbi/faed are high-entropy data |
 | DBBI minus VIC = YOUWON | SalPhaseIon | [DBBI YOUWON](./salphaseion_dbbi_youwon.md) | reproduces, 0/200k in null tests, leaves exactly 64 chars; a planted confirmation marker, not key material |
 | OP_RETURN script VM | Chain records | [OP_RETURN VM](./op_return_script_vm.md) | the 'exactly one byte short' recursion is forced whenever payload length equals its first byte; closed on logic |
+| Single-t mutation family | Endgame | [Single-t mutation](./single_t_mutation.md) | control passes, 716 variants / 150k trials empty; creator states typos contain no clues |

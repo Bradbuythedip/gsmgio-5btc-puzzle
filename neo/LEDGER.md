@@ -451,3 +451,33 @@ as given here, not verified.
 
 Closed without needing the emulator. Reopening requires (a) provenance as primary material
 and (b) a carry rule stated in advance giving the same structural byte across all records.
+
+### Loop tick 13 (2026-09-25) — single-`t` mutation family closed, with control
+
+Ran the proposed protocol exactly. **Positive control passes**: the `giveit` spelling opens
+Phase 3.2 via sha256hex + EVP-SHA256 ("I've been waiting for you…"); `givetit` fails. So the
+harness models the historical typo bypass, and its negatives are meaningful.
+
+| tier | variants | trials | hits |
+|---|---|---|---|
+| tier 1 — insertion adjacent to existing `t`/`it` | 110 | 23,100 | 0 |
+| tier 2 — insertion at every boundary | 606 | 127,260 | 0 |
+
+**The creator settles it independently of the null result.** `giveit = givetit` is attested
+(#867, #1602) — but so is its meaning: #1806 *"No clues to be found in those typos"*; #871 he
+tested the whole puzzle three times with his own typo'd string, which is how it survived;
+#898 *"no hints after stage 2 except the 't' to fix my stupid mistake"*; #3345 *"errors and
+typos are mostly not intended"*. A one-off erratum with a published correction, not a
+reusable operator. Typo-mining is ruled out at the source.
+
+**`architect_span.txt` supplied** to the collaborator (501 letters, in
+`neo/materials/primary/`). Constraints agreed: 501 = 3×167 so the only clean reshapes are
+3×167 / 167×3; IC 1.10 rules out short-key polyalphabetic, so keying it against the token
+list is fishing. The proposed film-transcript-difference test names a real operand, but the
+film transcript is **not** in the authenticated archive, so running it would import
+unattested text — flagged rather than run.
+
+Ledger state: Bitcoin source/password battery CLOSED · OP_RETURN-as-secret CLOSED ·
+giveit/givetit VERIFIED CONTROL · single-`t` family CLOSED · faed⊖VIC CLOSED ·
+2026 captures CLOSED. Open: faed's operand (unnamed), architect_span (unattributed),
+the grid (yellow/blue × primes).
