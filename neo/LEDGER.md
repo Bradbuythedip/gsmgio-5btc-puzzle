@@ -177,3 +177,20 @@ Next tick: read remaining unread images (2020-08-02, 2021-01-21, 2024-*, 2020-05
 2020-06-07, 2021-02-12/03-14/04-16/05-06), then consider Beaufort-key reuse
 ("thematrixhasyou") on the letter blocks under 26-letter interpretation, and
 "connect the last pieces" composite orderings.
+
+### Loop tick 4 (2026-09-25)
+- Remaining hint images read: 2020-08-02 (second half maybe another puzzle "or not at all";
+  nobody found the extra door), 2021-01-21 ("a few might not require the internet
+  anymore" → final stage is fully offline once you have the materials), 2024-04-19
+  (halving; prizes besides banter: "a private key, some 'obscure' intel"; "see you in
+  4 years"), 2024-04-10 ("1357 blocks to go" — halving countdown, also odd-digits wink).
+- campaign_07 (~19k trials): char-interleaved "intertwined" composites (labels, values,
+  per-answer sha256s; pad+cut modes), pairwise intertwines (half/betterhalf, yin/yang…),
+  mod-26 Vigenère/Beaufort decodes of head/faed under 8 puzzle keys used as passwords,
+  reinsert-2357-at-primes into rowsums, halving numbers (840000/630000/dates), 1357
+  permutations. **No hit.** Mod-26 decodes also scored for English: chance-level only.
+
+Next tick: (a) "zeroed out" digit maps — for head/faed try a=1..i=9 with each letter
+X∈{a..i} remapped to 0 (9 variants/block) → int→hex→ascii; (b) letter-as-separator
+segmentations (9 variants/block; segment lengths as digits, segments as digit groups);
+(c) column-wise Vigenère on head 7×13 keyed "matrixsumlist" per column.
