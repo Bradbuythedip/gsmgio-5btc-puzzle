@@ -230,3 +230,46 @@ and read upstream issues index for community tried-lists worth importing as excl
 Next tick: three-token bounded combos on the highest-signal subset for inner96; and a
 careful re-read of the SalPhaseIon `shabef...` grammar (the repeated "sha b4" framing)
 as a construction recipe rather than treating decoded labels as passwords.
+
+### Loop tick 7 (2026-09-25) — the circulating XOR theory, tested end to end
+
+Added `neo/harness/btc_addr.py`: dependency-free secp256k1 → P2PKH, validated against
+canonical known-answer vectors (privkey 1 and 2, compressed + uncompressed) so that a
+negative result from it is trustworthy. `neo/harness/verify_xor_theory.py` runs the test.
+
+**Claim A.1 — CONFIRMED (arithmetic reproduces).**
+XOR of sha256 over the seven published tokens
+(matrixsumlist, enter, lastwordsbeforearchichoice, thispassword, matrixsumlist,
+yourlastcommand, secondanswer) does equal
+`a795de117e472590e572dc193130c763e3fb555ee5db9d34494e156152e50735`. The number is real.
+
+**Claim A.2 — FALSIFIED. This is the load-bearing failure.**
+That value does NOT decrypt the Cosmic Duality blob. Tested as password (hex lower,
+hex upper, recomputed) × EVP md5/sha256/sha1 × 128/256-bit, and as a raw 32-byte key
+with zero IV, doubled-salt IV, and ct-prefix IV. No valid PKCS#7 + structure anywhere.
+So the writeup's "known working shape: XOR(sha256(t1..t7)) → OpenSSL password → Cosmic
+Duality blob" is **not** a working shape. The premise the whole XOR branch rests on is
+unsupported.
+
+**Claim B — FALSIFIED.** 121 bounded XOR candidates around the witness scalar
+`abc09ead…` (XOR against the claimed key, the recomputed XOR, sha256 of each of the
+seven tokens, yinyang, yellowblueprimes, half, betterhalf, the prize address, the page
+caption, zero; singles and pairs) produce **zero** prize-address matches.
+
+**Confirmed, and worth keeping:** the witness scalar `abc09ead…` uncompressed derives to
+`1GSMG9VDLTU6jyuG7bkNMdmnHBLtbbM51M` — a genuine GSMG-prefixed vanity address, but not
+`1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe`. So the "witness operand, not the prize key" read is
+exactly right, and now demonstrated rather than asserted. A "1GSMG" prefix is ~58⁴ ≈ 11M
+work — cheap to grind — so the prefix alone carries no authority. This also matches the
+prior S1–S4 ledger, which had already demoted that scalar.
+
+**Per the theory's own stated pass condition** ("one miss → discard"; "only a scalar that
+spends 1GSMG1JC… counts"), this branch is now closed. Recommend the community stop
+spending time on XOR-of-token-hashes as a prize-key construction.
+
+Method note retained from the writeup, and correct: only 32-byte scalars (or SHA256
+digests) are XOR-meaningful. EC points, addresses and HASH160s are not XOR-closed, so
+XORing those is category error regardless of theory.
+
+Next tick: back to the primary lock — bounded three-token combos on inner96, and the
+`shabef…` ("sha b4") grammar read as a construction recipe rather than as label-passwords.
