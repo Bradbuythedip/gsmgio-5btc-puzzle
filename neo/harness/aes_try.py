@@ -36,6 +36,7 @@ def load_targets():
     add_salted("cosmic", cosmic)
     t["miniB_nosalt"] = {"salt": None, "ct": b}   # raw blob, EVP without salt
     t["miniB_saltA"] = {"salt": a[8:16], "ct": b} # sibling ct sharing A's salt
+    t["miniB_iv16"] = {"salt": None, "ct": b[16:], "iv": b[:16]}  # [iv||ct] layout
     return t
 
 def evp_bytes_to_key(pw: bytes, salt, md_name: str, keylen: int, ivlen: int = 16):
@@ -53,6 +54,7 @@ KDFS = {
     "s2":     ("sha256", 32),
     "m5_128": ("md5", 16),
     "s2_128": ("sha256", 16),
+    "rk":     ("rawkey", 32),   # key = sha256(pw) digest, iv = zeros (openssl -K style)
 }
 
 _PRINTABLE = set(string.printable.encode())
@@ -107,7 +109,13 @@ class Harness:
                     continue
                 self.seen.add(sig)
                 md, keylen = KDFS[kname]
-                key, iv = evp_bytes_to_key(pwb, t["salt"], md, keylen)
+                if md == "rawkey":
+                    key = hashlib.sha256(pwb).digest()
+                    iv = t.get("iv", b"\x00" * 16)
+                else:
+                    key, iv = evp_bytes_to_key(pwb, t["salt"], md, keylen)
+                    if "iv" in t:
+                        iv = t["iv"]
                 try:
                     pt = decrypt(t["ct"], key, iv)
                 except Exception:
@@ -167,6 +175,8 @@ def self_test():
         import hashlib as _h
         for vpw in (pw, _h.sha256(pw.encode()).hexdigest()):
             for kname, (md, keylen) in KDFS.items():
+                if md == "rawkey":
+                    continue
                 key, iv = evp_bytes_to_key(vpw.encode(), salt, md, keylen)
                 pt = decrypt(ct, key, iv)
                 res = check_pt(pt)

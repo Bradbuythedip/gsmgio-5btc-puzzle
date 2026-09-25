@@ -119,3 +119,22 @@ material it references is demoted solver-derived artifact).
 
 Cumulative excluded trials this session: ~1.34M (see neo/attempts/*.jsonl for the
 pad-valid subset; all candidates reproducible from campaign scripts).
+
+### Loop tick 2 (2026-09-25)
+- Harness: added miniB [iv||ct] layout target, raw-key mode (key=sha256 digest, -K style);
+  self-test still green. 7 targets × 5 KDF modes.
+- campaign_04: spiral ring sums, prime-indexed row/col/cell sums, URL byte popcounts,
+  case variants (Title/UPPER, MatrixSumList spellings). No hit.
+- Reran campaigns 01–03 over expanded targets/KDFs. No hit.
+- campaign_05 (big bounded cartesian, pinned-convention-only s2 + {raw,sha256hex}):
+  433k candidates — 7-component product with Dutch variants (geel/blauw/priemgetallen),
+  long prime strings, 4-component SalPhaseIon-order product, and "sha b4 ans too"
+  structures (concatenated per-answer sha256 hexes, 2- and 3-part). 3.46M trials. No hit.
+- Sizes note: inner96/miniAB ct=80 fits exactly a 64-char hex privkey + LF (65→pad 80);
+  miniA ct=32 fits ≤31 chars (an instruction/passphrase?). These stay the priority targets.
+- Excluded: colored-cell spiral reading (restates URL — unverified/phase0_yellow_blue_counts.md).
+  Page letter-grid has no intrinsic width (screenshot shows soft wrap): "the matrix" = phase-0 grid.
+
+Next tick: harvest vocabulary from unread hint images (2020-08-02, 2021-01-21, 2021-12-02,
+2021-12-25, 2023-01-09/12, 2023-08-*, 2024-*, 2026-07-12-other), add sha1-EVP mode, then
+vocabulary-driven campaign 06.

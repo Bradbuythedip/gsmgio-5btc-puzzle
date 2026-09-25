@@ -1,0 +1,23 @@
+{"pw": "matrixsumlist302518121150", "target": "inner96", "kdf": "s2_128", "pad": 1, "printable": 0.392, "printable_head": 0.359, "magic": false, "note": "p0-labeled:rings"}
+{"pw": "192bb290d30df47aee694992fe6fbb69ffdbd76401fd1df2a420f8441f020fe5", "target": "cosmic", "kdf": "s2_128", "pad": 1, "printable": 0.415, "printable_head": 0.438, "magic": false, "note": "p0:prime_rows:','|sha256hex"}
+{"pw": "f0d4f47d06a4a22ae8423477adb1a0f2cad53728d914bb698c711ac6b20e84bb", "target": "cosmic", "kdf": "s2", "pad": 1, "printable": 0.408, "printable_head": 0.344, "magic": false, "note": "p0:prime_rows:','|sha256(sha256hex)"}
+{"pw": "f0d4f47d06a4a22ae8423477adb1a0f2cad53728d914bb698c711ac6b20e84bb", "target": "miniB_nosalt", "kdf": "m5", "pad": 1, "printable": 0.404, "printable_head": 0.404, "magic": false, "note": "p0:prime_rows:','|sha256(sha256hex)"}
+{"pw": "f0d4f47d06a4a22ae8423477adb1a0f2cad53728d914bb698c711ac6b20e84bb", "target": "miniB_iv16", "kdf": "m5", "pad": 1, "printable": 0.419, "printable_head": 0.419, "magic": false, "note": "p0:prime_rows:','|sha256(sha256hex)"}
+{"pw": "10 8 8 3 9 6", "target": "miniAB", "kdf": "s2_128", "pad": 1, "printable": 0.253, "printable_head": 0.203, "magic": false, "note": "p0:prime_cols:' '"}
+{"pw": "10 8 8 3 9 6", "target": "miniB_saltA", "kdf": "s2_128", "pad": 1, "printable": 0.362, "printable_head": 0.362, "magic": false, "note": "p0:prime_cols:' '"}
+{"pw": "8688519f753293b6749e45537b4358513dc9dcb4433c08c04a997812371f11ea", "target": "miniA", "kdf": "m5", "pad": 1, "printable": 0.516, "printable_head": 0.516, "magic": false, "note": "p0-labeled:prime_rows_total|sha256(sha256hex)"}
+{"pw": "8688519f753293b6749e45537b4358513dc9dcb4433c08c04a997812371f11ea", "target": "miniA", "kdf": "s2", "pad": 1, "printable": 0.548, "printable_head": 0.548, "magic": false, "note": "p0-labeled:prime_rows_total|sha256(sha256hex)"}
+{"pw": "44", "target": "miniAB", "kdf": "s2", "pad": 1, "printable": 0.43, "printable_head": 0.438, "magic": false, "note": "p0:prime_cols_total:''"}
+{"pw": "44", "target": "miniB_saltA", "kdf": "s2", "pad": 1, "printable": 0.426, "printable_head": 0.426, "magic": false, "note": "p0:prime_cols_total:''"}
+{"pw": "matrixsumlist44", "target": "miniA", "kdf": "s2", "pad": 1, "printable": 0.452, "printable_head": 0.452, "magic": false, "note": "p0-labeled:prime_cols_total"}
+{"pw": "25344213233435", "target": "inner96", "kdf": "rk", "pad": 1, "printable": 0.342, "printable_head": 0.328, "magic": false, "note": "p0:rows_at_prime_cols:''"}
+{"pw": "matrixsumlist25344213233435", "target": "miniAB", "kdf": "rk", "pad": 1, "printable": 0.443, "printable_head": 0.422, "magic": false, "note": "p0-labeled:rows_at_prime_cols"}
+{"pw": "matrixsumlist25344213233435", "target": "miniB_nosalt", "kdf": "s2", "pad": 1, "printable": 0.511, "printable_head": 0.511, "magic": false, "note": "p0-labeled:rows_at_prime_cols"}
+{"pw": "matrixsumlist25344213233435", "target": "miniB_nosalt", "kdf": "rk", "pad": 1, "printable": 0.489, "printable_head": 0.489, "magic": false, "note": "p0-labeled:rows_at_prime_cols"}
+{"pw": "matrixsumlist25344213233435", "target": "miniB_saltA", "kdf": "rk", "pad": 1, "printable": 0.489, "printable_head": 0.489, "magic": false, "note": "p0-labeled:rows_at_prime_cols"}
+{"pw": "matrixsumlist25344213233435", "target": "miniB_iv16", "kdf": "s2", "pad": 1, "printable": 0.484, "printable_head": 0.484, "magic": false, "note": "p0-labeled:rows_at_prime_cols"}
+{"pw": "matrixsumlist25344213233435", "target": "miniB_iv16", "kdf": "rk", "pad": 1, "printable": 0.484, "printable_head": 0.484, "magic": false, "note": "p0-labeled:rows_at_prime_cols"}
+{"pw": "5507db7ba2bb0d0a9b35588ba69bec30135c20de2b7e488c26d85603751387a2", "target": "miniA", "kdf": "m5", "pad": 1, "printable": 0.258, "printable_head": 0.258, "magic": false, "note": "p0:url_byte_popcounts:','|sha256hex"}
+{"pw": "2965D3403D9FAA1A7425545C02F01B29A223D4B5BD4331327B4DBBE5345F1D71", "target": "cosmic", "kdf": "rk", "pad": 1, "printable": 0.41, "printable_head": 0.453, "magic": false, "note": "p0:url_byte_values:''|SHA256HEX"}
+{"pw": "1CEC87C28B0F30D7F40FBF81EF18CC9A017A148AF2B310B3418B91D0E50ED6B1", "target": "cosmic", "kdf": "s2_128", "pad": 1, "printable": 0.387, "printable_head": 0.297, "magic": false, "note": "case:Title|SHA256HEX"}
+{"pw": "1acf23eb931fe96a1208dcfa3c72f79a2a5e63286b3d4274d4bac957d81655eb", "target": "miniA", "kdf": "rk", "pad": 1, "printable": 0.387, "printable_head": 0.387, "magic": false, "note": "case:msl|sha256(sha256hex)"}
