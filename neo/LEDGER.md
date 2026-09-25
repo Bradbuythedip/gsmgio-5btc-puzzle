@@ -104,3 +104,18 @@ material it references is demoted solver-derived artifact).
    data, LSB, palette).
 4. Import kaibuzz0 + remaining upstream issues as tried-lists/exclusions.
 5. Independent verification of cosmic blob tail bytes.
+
+- Mod-9 cipher sweep (Vigenère/Beaufort with 35 vocab keys, 8 Caesars, atbash) on
+  head/faed, decoded via digits→int→hex→ascii: nothing scored. Logged as excluded.
+- PNG forensics: repo copies of cosmic-duality-book.png / 2022-12-10-cosmic.png are
+  2023 gnome-screenshot re-captures; SalPhaselonCosmicDuality.png and puzzle.png have
+  clean IEND, no appended data. Stego on these *copies* is a dead end (originals live
+  on gsmg.io / Telegram, both unreachable from this container).
+- Book cover identified: Time-Life "Mysteries of the Unknown — Cosmic Duality".
+- campaign_03 (~1.21M trials): URL-hash/"in front of your eyes" chain (89727c…, page
+  caption string, all known passphrase sha256s), book vocab, 23/16/7/140 numbers,
+  full 7! order permutations of the seven components (label set and value set),
+  z/newline/space/dash joins. **No hit.**
+
+Cumulative excluded trials this session: ~1.34M (see neo/attempts/*.jsonl for the
+pad-valid subset; all candidates reproducible from campaign scripts).
