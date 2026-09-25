@@ -481,3 +481,33 @@ Ledger state: Bitcoin source/password battery CLOSED · OP_RETURN-as-secret CLOS
 giveit/givetit VERIFIED CONTROL · single-`t` family CLOSED · faed⊖VIC CLOSED ·
 2026 captures CLOSED. Open: faed's operand (unnamed), architect_span (unattributed),
 the grid (yellow/blue × primes).
+
+### Loop tick 14 (2026-09-25) — the grid number frame, enumerated and closed
+
+Published the exact authenticated coloured-cell spiral indices from
+`matrix_grid_spiral_colors.json` (see `unverified/yellowblueprimes_grid_indices.md`):
+blue `7 15 23 31 47 55 63 87 95 103 111 127 135 159 183`, yellow
+`39 71 79 119 143 151 167 175 191`, colour sequence `BBBBYBBBYYBBBBYBBYYBYYBY`,
+fefefe (7,4) = spiral index **163**.
+
+**Corrects a circulating string**: the 25-char `BBBBYBBBYYBBBBYBBYYBFYYBY` with a spurious
+`F` is wrong; the authenticated sequence is 24 chars, one per byte. Schedule-driven parses
+built on the 25-char form are parsing a typo.
+
+**Key structural point**: 1-based, every coloured index is a multiple of 8, so **none is
+prime**. A prime subset exists only 0-based: `7 23 31 47 71 79 103 127 151 167 191`.
+
+**A tempting coincidence, rejected**: there are exactly 9 primes ≤ 24 and exactly 9 yellow
+cells (15 non-primes, 15 blue) — but yellow's positions intersect the prime positions only
+at 5 and 19 (2 of 9). The 9/15 split is forced by the URL's LSBs, so the count match is a
+coincidence of 24, not prime structure.
+
+- **campaign_17** (66 candidates, 24,192 trials): every prime/`{2,3,5,7}` selection and
+  zeroing of the URL, colour sequence and index list, both index bases; prime spiral
+  indices; blue/yellow lists; sequence as 0/1 both polarities; 9/15 counts; fefefe values —
+  each alone and wrapped with the other two authenticated components, raw and hashed.
+  **No hit.**
+
+Open and unchanged: whether `yellowblueprimes` consumes these indices at all, or names a
+selector applied to the letter blocks with the grid only supplying the mask. Also still
+open: an operand for `faed` named by primary material.

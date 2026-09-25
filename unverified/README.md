@@ -16,3 +16,4 @@ This folder contains a list of currently unverified, or unverifiable, solutions 
 | DBBI minus VIC = YOUWON | SalPhaseIon | [DBBI YOUWON](./salphaseion_dbbi_youwon.md) | reproduces, 0/200k in null tests, leaves exactly 64 chars; a planted confirmation marker, not key material |
 | OP_RETURN script VM | Chain records | [OP_RETURN VM](./op_return_script_vm.md) | the 'exactly one byte short' recursion is forced whenever payload length equals its first byte; closed on logic |
 | Single-t mutation family | Endgame | [Single-t mutation](./single_t_mutation.md) | control passes, 716 variants / 150k trials empty; creator states typos contain no clues |
+| yellowblueprimes grid indices | Phase 0 | [Grid indices](./yellowblueprimes_grid_indices.md) | exact authenticated spiral index lists published; prime readings closed; corrects a circulating 25-char colour string |
