@@ -273,3 +273,39 @@ XORing those is category error regardless of theory.
 
 Next tick: back to the primary lock — bounded three-token combos on inner96, and the
 `shabef…` ("sha b4") grammar read as a construction recipe rather than as label-passwords.
+
+### Loop tick 8 (2026-09-25) — 7×13 block claim tested; repo brought up to date
+
+**Structural facts CONFIRMED and kept as a live lead.** The two undecoded letter blocks
+have exact shapes: `dbbib…` head = **91 = 7×13**, `faed` = **570 = 6×91 + 24** (remainder
+`ibibbibdcbahaidhfahiihic`). Seven identically shaped 7×13 matrices. Important: 13 does
+**not** divide 570, so every earlier sweep in this ledger — which only used exact divisors
+of the block length — structurally could not have found this. Genuine new ground.
+
+**"KEY in the column sums" REJECTED as mask-overfitting.** Raw 7×13 column sums recorded in
+`unverified/salphaseion_7x13_key_columns.md`; `faed[6]` reads `MERMLHQMIPIEK`, not the
+claimed `DTEKEYUFFXGTD`, and no block spells KEY under any obvious sum→letter mapping. The
+claim only appears after zeroing a chosen subset of source characters. Quantified the
+freedom that buys: counting three-column windows that *some* mask can force to read KEY —
+head 9/11, faed[1] 11/11, faed[2] 9/11, faed[3] 10/11, faed[4] 9/11, faed[5] 11/11,
+faed[6] 11/11. **Every block can produce KEY in nearly every window**, so "only matrix #6"
+is an artifact of which mask was searched, not a property of the data. A 3-letter word
+bought with dozens of free binary choices is not evidence. To be persuasive a mask must be
+fully specified in advance from the puzzle text and yield far more structure than one word.
+
+**campaign_11_april** (~7.4k trials): issue #32's `lastwordsbeforearchichoice = april`,
+`sha256(gsmg101adressapril)`, spelling variants and combos. **No hit.**
+
+**Repo brought up to date** (the "reflect our status" pass):
+- `README.md`: new "Current status of the endgame" section — the four locks with salts and
+  provenance, the pinned decrypt convention, the 7×13 structural lead, and what is ruled out.
+- `unverified/`: three new notes (XOR token hashes; 7×13 KEY columns; endgame password
+  exclusions) + index table updated, following the folder's stated purpose of tracking
+  approaches that don't work.
+- `neo/README.md`: how to run the harness, and the self-test-before-trusting-negatives rule.
+
+Cumulative logged trials: ~14.8M. All negatives trustworthy only because `aes_try.py`
+self-tests the three solved blobs on every run.
+
+Next: the `shabef…` grammar as a construction recipe; and for the 7×13 lead, look for a mask
+that is *derivable in advance* (e.g. from the phase-0 colour positions) rather than fitted.

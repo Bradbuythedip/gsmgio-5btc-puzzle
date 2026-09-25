@@ -185,6 +185,57 @@ https://gmsg.io/89727c598b9cd1cf8873f27cb7057f050645ddb6a7a157a110239ac0152f6a32
 
 This stage is currently unsolved.
 
+# Current status of the endgame
+
+Everything up to and including the Phase-3.2 Architect speech is solved and reproducible.
+What remains are four AES locks that no published password opens.
+
+| id | bytes | salt | where it comes from |
+|---|---|---|---|
+| `miniA` | 48 (ct 32) | `3ab585348552415d` | SalPhaseIon tail, after "sha b4 first hint is your last command" |
+| `miniB` | 48, no header | - | SalPhaseIon tail, after the abba-binary `enter` |
+| `miniAB` | 96 (ct 80) | `3ab585348552415d` | A and B joined, reading `enter` as a newline inside one blob |
+| `inner96` | 96 (ct 80) | `b45a5e3d827593ca` | tail of the decrypted Phase-3.2 plaintext |
+| `cosmic` | 1344 (ct 1328) | `2d3f6fe06dc950e6` | the "Cosmic Duality" block |
+
+`inner96` is the primary target: it is the innermost lock the solved chain actually reaches,
+and its 80-byte ciphertext fits a 64-character hex private key plus a newline.
+
+### The decrypt convention is pinned
+
+All three publicly solved blobs decrypt the same way, so this is the creator's habit and not
+a guess:
+
+```
+openssl aes-256-cbc -a -d -pass pass:$(sha256hex "<human answer>")
+```
+
+EVP_BytesToKey with SHA-256, and the passphrase is the **lowercase SHA-256 hex of the human
+answer**, not the answer itself. This is what "sha b4" in the SalPhaseIon tail is describing.
+Verified against `causality`, the phase-2.2 concatenation, and `jacquefresco...`.
+
+### Open structural lead
+
+Splitting the SalPhaseIon letter body at the two binary runs leaves two undecoded blocks
+whose lengths are suspiciously exact: the `dbbib...` head is **91 = 7 x 13**, and the
+`faed...` block is **570 = 6 x 91 + 24**. That is seven identically shaped 7x13 matrices plus
+a 24-symbol remainder. Note 13 does not divide 570, so any sweep that only tries exact
+divisors of the block length will miss this decomposition. The shape is unexplained and
+remains a live lead; one proposed reading of it has already been tested and rejected, see
+[7x13 KEY columns](./unverified/salphaseion_7x13_key_columns.md).
+
+### What has been ruled out
+
+About 14.8M password candidates have been tested and excluded against these locks, with the
+convention above and a false-positive rule strict enough to trust the negatives. See
+[Password exclusions](./unverified/endgame_aes_password_search.md) for the full list, and
+[XOR token hashes](./unverified/salphaseion_xor_token_hashes.md) for the circulating
+XOR-of-seven-hashes theory, which reproduces as arithmetic but does not decrypt anything and
+does not reach the prize address.
+
+Short version for anyone picking this up: the passphrase is not a single English word, a
+common password, a number below 10^6, or any plain concatenation of the known decoded labels.
+
 # Further Hints and 2020-present Timeline
 
 At the end of 2019, and early 2020, no one had publicly made progress passed the AES blob in phase 3.2. The following are either official hints, or various quotes that _might_ be hints.
