@@ -777,3 +777,36 @@ digit encoding, as key and/or IV, opens any lock.
 Endorsed without reservation: **do not execute unknown binaries.** Decrypting data is safe;
 running what comes out is not. Static analysis only, and an isolated VM if it ever comes to
 that. Nothing in this repo requires running third-party code.
+
+### Loop tick 23 (2026-09-25) — the déjà-vu / 314 glitch, taken literally and closed
+
+Took the film metaphor to its one genuinely cryptographic meaning. **A glitch in the Matrix
+is seeing the same thing twice; in a ciphertext that is a repeated block.** Under CBC with a
+random IV a repeat is ~2⁻⁶⁴ per pair, so finding one would be real signal — it would mean
+ECB, or a reused IV/keystream. That is a proper test, not a metaphor.
+
+**Result: no duplicate blocks anywhere.**
+
+| blob | blocks | distinct | duplicates |
+|---|---|---|---|
+| cosmic ct | 83 | 83 | **0** |
+| P32T ct | 5 | 5 | **0** |
+| miniA ct | 2 | 2 | **0** |
+| miniB raw | 3 | 3 | **0** |
+
+So the envelopes are well-formed CBC with no structural anomaly. There is no glitch in the
+ciphertext to find, which also independently re-confirms they were not made in ECB.
+
+**314 as a position**: nothing distinguished. `cosmic[314]`, `faed[314]='c'` (`ichi` in
+context), soup`[314]='a'`. **314 as a window**: faed admits 314-length slices at offsets
+0–256; their IC is flat (min 1.043, median 1.088, max 1.124), so no window is a real
+segmentation. **Longest repeated substrings**: dbbi `egge` (4), faed `aedgg` (5) — short, as
+expected from the earlier entropy finding.
+
+**campaign_21_pi314** (17,220 trials): 314 / π / window-of-opportunity / déjà-vu / black cat
+/ 12:00 / midnight / shift-change / Keymaker / corridor / two-doors vocabulary, alone and
+combined with the authenticated components. **No hit.**
+
+With tick 22's exhaustive π-as-key/IV sweep (640,480 decrypts) this closes the π/314 thread
+in all three of its forms: as key material, as an index, and as the déjà-vu structural
+signature. The metaphor is film flavour; the ciphertexts are ordinary well-formed CBC.
