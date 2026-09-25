@@ -88,3 +88,19 @@ material it references is demoted solver-derived artifact).
 3. **Order/intertwine variants** of the 7 components (permutations, z-joins, interleaves).
 4. **Verify cosmic blob tail** against an independent mirror.
 5. Cosmic Duality image steganography angle (the yin-yang book cover) — untouched.
+
+- campaign_02: ~28k trials. Letter blocks verbatim (head/faed/page ± spaces), column-major
+  transpositions, all-divisor-width row/col sum lists (both digit maps, 3 formats),
+  prime-position keeps/drops, block sums (head 422, faed 3079=prime, 3501). **No hit.**
+- Decoder sweep on head/faed (digits→int→hex→ascii, base-9→bytes, letter-pair decimal/b81,
+  mod-26): no printable/self-proving output. head=91 (7×13), faed=570 (19×30 etc.);
+  head has no 'o' (no zero digit) → agda/cfob scheme structurally excluded for it.
+
+### Roadmap for next iterations
+1. mod-9 Beaufort/Vigenère on head/faed with puzzle-vocab keys, then agda/cfob decode.
+2. 7-token order permutations (values fixed to best guesses), z/newline/space joins,
+   CamelCase variants; word-number forms; "23 16 7" numbers from beaufort text.
+3. Image forensics: hints/cosmic-duality-book.png + salphaseion-assets PNG (appended
+   data, LSB, palette).
+4. Import kaibuzz0 + remaining upstream issues as tried-lists/exclusions.
+5. Independent verification of cosmic blob tail bytes.
