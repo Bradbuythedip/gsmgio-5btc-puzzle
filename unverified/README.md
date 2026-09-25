@@ -19,3 +19,4 @@ This folder contains a list of currently unverified, or unverifiable, solutions 
 | yellowblueprimes grid indices | Phase 0 | [Grid indices](./yellowblueprimes_grid_indices.md) | exact authenticated spiral index lists published; prime readings closed; corrects a circulating 25-char colour string |
 | Why false decrypts recur | Method | [False decrypts](./why_false_decrypts_recur.md) | measured: 1 in 243 random keys gives valid PKCS#7; the IV is KDF-emitted not chosen; our gate had 0 false positives in 300k |
 | Creator hint provenance | Method | [Hint provenance](./creator_hint_provenance.md) | only 10 authenticated statements in 7 years; yellow/blue is P0-scoped and answered in 2020; the 9/15 counts have no creator warrant |
+| Salted header proves a password | Method | [Salted header](./salted_header_proves_password.md) | key+IV mode writes no header; all three locks carry Salted__ and a salt, so a password provably exists |
