@@ -668,3 +668,41 @@ Ledger per the agreed state: CLOSED adds prime-cell add/sub (covered by campaign
 DEMOTED adds RUSHMLKVTGIAG, PVYWIAEEYKNAZ, and 24→24 insertion-from-equal-lengths.
 OPEN: exact DBBI decoder, exact FAED decoder, and now — sharpened — what the P0-scoped
 yellow/blue answer actually contributes, given it is not counts.
+
+### Loop tick 20 (2026-09-25) — stage chaining tested and closed
+
+Agreed on the OpenSSL analysis (independently proved last tick: the `Salted__` magic is
+written only in password mode, so a password provably exists and the IV is not a free
+input). Held position on the third-door oracle: that address is absent from the
+authenticated archive — which excludes that dust family by name — and hunting an unknown
+preimage by hashing candidates is brainwallet grinding regardless of intent. Not built.
+
+**Outside-the-box test actually run**: the one *confirmed* operation is `dbbi ⊖ VIC`
+(planted YOUWON, 0/200k null). Chained puzzles normally feed a stage's output forward as the
+next stage's key — and stage 1's outputs had never been used that way. So:
+
+```
+stage 1 (confirmed): VOZIJBDTIQBRGVEOMZNBC YOUWON XCPKW…QTSGA
+                     [--- prefix 21 ---]        [--- tail 64 ---]
+stage 2 (new test):  faed(570) ⊖ / ⊕ {tail64, prefix21, full91, YOUWON, + reversals}
+```
+
+Operands named in advance; all six keys × two directions.
+
+| | dictionary words | special |
+|---|---|---|
+| best variant (tail64, sub) | 1 | none |
+| null (3000 shuffles of faed, same rule) | mean 1.0, median 1, p95 3, max 6 | 3/3000 |
+
+Real sits at the **37th percentile** of its own null — indistinguishable from chance. The
+null also shows the test has power (special words appear in only 0.1% of shuffles), so this
+is a genuine negative. **campaign_20_chain** additionally fed all 48 stage-2 outputs (plus
+lowercase and first/last-64 slices) to the locks: 10,080 trials, no hit.
+
+So stage chaining is closed: the YOUWON output does not key faed. Combined with tick 15
+(the tail is not a letter-encoded hex key, 24 distinct symbols vs 16 required) and tick 11
+(faed does not pair with tiled VIC), the confirmed dbbi operation appears to be
+**terminal** — a marker, with no forward link discovered from any of its outputs.
+
+Running total ~32M logged trials. OPEN remains: the exact FAED decoder, and what the
+P0-scoped yellow/blue answer contributes given the provenance pass showed it is not counts.
