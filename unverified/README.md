@@ -21,3 +21,4 @@ This folder contains a list of currently unverified, or unverifiable, solutions 
 | Creator hint provenance | Method | [Hint provenance](./creator_hint_provenance.md) | only 10 authenticated statements in 7 years; yellow/blue is P0-scoped and answered in 2020; the 9/15 counts have no creator warrant |
 | Salted header proves a password | Method | [Salted header](./salted_header_proves_password.md) | key+IV mode writes no header; all three locks carry Salted__ and a salt, so a password provably exists |
 | Bitcoin v0.1 glitch relevance | Method | [Source glitch](./bitcoin_source_glitch.md) | creator never mentions source/bugs/entropy; the one Bitcoin borrowing was the genesis coinbase string, not a behaviour |
+| Padding oracle attack does not apply | Method | [Padding oracle](./padding_oracle_does_not_apply.md) | no interactive oracle exists, it recovers plaintext not a key, and it would need the secret to attack the secret |
