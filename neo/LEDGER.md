@@ -194,3 +194,21 @@ Next tick: (a) "zeroed out" digit maps — for head/faed try a=1..i=9 with each 
 X∈{a..i} remapped to 0 (9 variants/block) → int→hex→ascii; (b) letter-as-separator
 segmentations (9 variants/block; segment lengths as digits, segments as digit groups);
 (c) column-wise Vigenère on head 7×13 keyed "matrixsumlist" per column.
+
+### Loop tick 5 (2026-09-25)
+- campaign_08 (~4k trials): zeroed-out digit maps (each of a–i as the 0, mirroring
+  agda/cfob's o=0) on head/faed → int→hex→ascii: no printable break (best 0.53 = chance);
+  letter-as-separator segment-length lists; "matrixsumlist"-keyed per-column shifts of
+  the 7×13 head (mod 9/26, ± , row/col-major reads). **No hit.**
+- campaign_09 (~9.0M trials): dwyl words_alpha (370,105 English words) + SecLists 10k
+  common passwords, raw and sha256hex, s2, vs miniA/miniAB/inner96/cosmic; integers
+  0–999,999 raw+sha vs miniA/miniAB/inner96. **No hit** (2 pad-2 near-misses = chance).
+  → Under the pinned convention, miniA's password is NOT a single English word, common
+  password, or number ≤ 999999. It is composite/derived, consistent with the puzzle's
+  established style (long concatenations + sha256).
+  Wordlists (scratchpad only, not committed): words_alpha.txt (dwyl/english-words),
+  10k-most-common.txt (danielmiessler/SecLists).
+
+Cumulative logged trials this session: ~14.7M.
+Next tick: two-word combinations of puzzle-core vocabulary (bounded ~1-2M), miniA-focused;
+and read upstream issues index for community tried-lists worth importing as exclusions.
