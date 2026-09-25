@@ -630,3 +630,41 @@ Rules of thumb now on record: a 1-byte pad with a non-printable body is noise, a
 claim that names an IV but not a key has specified nothing; and "it yields a valid
 key/padding/address" is never evidence, since every 64-symbol string gives a valid scalar
 and 1 in 256 keys gives valid padding.
+
+### Loop tick 19 (2026-09-25) — provenance pass: instructions, not coincidences
+
+Agreed with the demotion of `RUSHMLKVTGIAG` / `PVYWIAEEYKNAZ` (reproducible ≠ compelled;
+I could not reach them from any parameter-free construction, and the stated chain fixes a
+digit map `d=0,b=1,i=2,f=3,h=4,c=5,e=6,g=7,a=8` that is itself a choice). Skipped the
+redundant add/sub rerun — campaign_19 covers it. Ran the provenance pass instead.
+
+**Only 10 of 510 rows are creator-authenticated (HINT/CONFIRM) on prime / zero / yellow /
+blue / matrixsumlist / dbbi / faed / yin-yang across seven years**, and the archive's own
+tags separate them into three scopes:
+
+| thread | tag | when |
+|---|---|---|
+| yellow / blue | **P0** | 2020-01 poem, 2020-05 "answer is there", 2020-05 "First or zero" |
+| primes / matrixsumlist | **SAL** | 2021-03 prime part, 2021-03 matrixsumlist→prime hint |
+| the combined list, yin-yang | **COS** | 2023-02 master binary, 2023-08, 2025-04 |
+
+**The overlooked item**: `#4105 2020-05-21 HINT "First or zero"`, tagged P0, immediately
+after `#4102 CONFIRM "answer is there"` and `#4096` re-pointing at the poem. Two live
+readings — (a) it answers "Yellow has a number and so does Blue" with **1 and 0**, or (b) it
+disambiguates "first puzzle piece" = "phase zero". Under either, **`yellowblueprimes` is not
+licensed to mean "9, 15, primes"; under (a) that is positively excluded.**
+
+Consequences recorded in `unverified/creator_hint_provenance.md`:
+- The 9/15 counts have **no creator warrant**. Every construction here that fed `9`/`15`/
+  `915`/`159` used a community inference, not an instruction.
+- `yellowblueprimes` as one atomic operator is unsupported — the token occurs once, inside a
+  2023 list that otherwise names already-solved stages and is followed immediately by
+  "we wont give away the password / it's in front of your eyes". That list reads as a
+  **table of contents**, not a recipe.
+- The prime instruction is scoped to **SalPhaseIon**, anchored only by the 2021-03-01
+  2/3/5/7 exchange plus 2021-12-26 "some characters need to be zeroed out".
+
+Ledger per the agreed state: CLOSED adds prime-cell add/sub (covered by campaign_19).
+DEMOTED adds RUSHMLKVTGIAG, PVYWIAEEYKNAZ, and 24→24 insertion-from-equal-lengths.
+OPEN: exact DBBI decoder, exact FAED decoder, and now — sharpened — what the P0-scoped
+yellow/blue answer actually contributes, given it is not counts.
