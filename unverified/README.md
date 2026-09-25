@@ -22,3 +22,4 @@ This folder contains a list of currently unverified, or unverifiable, solutions 
 | Salted header proves a password | Method | [Salted header](./salted_header_proves_password.md) | key+IV mode writes no header; all three locks carry Salted__ and a salt, so a password provably exists |
 | Bitcoin v0.1 glitch relevance | Method | [Source glitch](./bitcoin_source_glitch.md) | creator never mentions source/bugs/entropy; the one Bitcoin borrowing was the genesis coinbase string, not a behaviour |
 | Padding oracle attack does not apply | Method | [Padding oracle](./padding_oracle_does_not_apply.md) | no interactive oracle exists, it recovers plaintext not a key, and it would need the secret to attack the secret |
+| Authenticated 32-byte inventory | Endgame | [32-byte inventory](./authenticated_32byte_inventory.md) | verified EVP keys/IVs for all three solved stages x named IVs x both 80-byte locks: 234 decrypts, 0 accepted |
