@@ -810,3 +810,31 @@ combined with the authenticated components. **No hit.**
 With tick 22's exhaustive π-as-key/IV sweep (640,480 decrypts) this closes the π/314 thread
 in all three of its forms: as key material, as an index, and as the déjà-vu structural
 signature. The metaphor is film flavour; the ciphertexts are ordinary well-formed CBC.
+
+### Loop tick 24 (2026-09-25) — the π-handle "0b1one|" claim: unverifiable, and its own test fails
+
+**Cannot verify the premise.** The Telegram handle renders in *every* screenshot supplied as
+`3.14159265358879323846264338327...` — 29 fractional digits before Telegram's ellipsis. The
+claimed insertion sits after fractional digit **50**, i.e. beyond the truncation in all
+available images. Nothing in the material shows `0b1one|`. (The claim's π arithmetic is
+right: digits 1–50 are correct and the true continuation is `5820974944592…`.)
+
+Even granting it: a participant's display name is not authenticated puzzle source, as the
+claim itself concedes.
+
+**The proposed test was run and returns negative.** The suggested criterion was: does `11`
+occur independently in authenticated material in the Phase-0 / prime / zeroing chain? It does
+not. That chain supplies **9, 15, 24, 91, 196, 570** — no 11. The only `11` in authenticated
+material is inside phase-2.2 part 5 `11110`, a 5-bit string already consumed as a solved
+component of the phase-3 password; its `11` is a substring of a bitstring, not an independent
+quantity.
+
+**And the other half is already demoted.** The `9` comes from Yellow = 9, which tick 19's
+provenance pass showed has no creator warrant — "First or zero" (2020-05-21, P0) points at
+0/1, and the colouring independently restates the URL's own byte LSBs.
+
+**campaign_22_911** (12,180 trials): `911`, `9:11`, `0b1one`, `0b1`, `one`, `oneone`, `11`,
+`nineeleven` and variants, alone and combined with the authenticated components. No hit.
+
+So by the claim's own stated standard — *"if it does, 9:11 stops being dependent on personal
+recurrence and becomes source-derived"* — the condition is not met.
