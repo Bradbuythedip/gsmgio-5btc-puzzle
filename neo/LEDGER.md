@@ -511,3 +511,28 @@ coincidence of 24, not prime structure.
 Open and unchanged: whether `yellowblueprimes` consumes these indices at all, or names a
 selector applied to the letter blocks with the grid only supplying the mask. Also still
 open: an operand for `faed` named by primary material.
+
+### Loop tick 15 (2026-09-25) — the YOUWON tail is not a hex key, structurally
+
+Tested the last hopeful reading of the confirmed `dbbi ⊖ VIC` output: its 64-character tail
+is exactly hex-private-key length, so does it encode one?
+
+**No, and not because a guess failed.** A hex key written in letters requires exactly 16
+distinct symbols. The tail uses **24** (A7 X5 D5 G4 B4 N4 P3 J3 U3 M3 C2 K2 W2 V2 T2 Y2 L2
+E2 S2 F1 Z1 R1 O1 Q1). No injective letter→hex map exists, so every mod-16 reduction is
+lossy — three letters collapse onto each digit — and whatever key emerges is an artefact of
+the chosen reduction, not a recovery.
+
+Ran three reductions regardless (A0 mod16, A1 mod16, A0 div2). All three yield valid
+secp256k1 scalars; none derives the prize address. **That all three are "valid" is the
+warning**: any 64-symbol string reduces to a valid scalar, so validity carries zero
+evidential weight here.
+
+Strengthens the marker reading: `YOUWON` confirms the *operation*, and the 21+64 characters
+around it are residue of that operation rather than payload. The tail should not be treated
+as key material again.
+
+Closed to date: Bitcoin source/password battery · OP_RETURN-as-secret · single-`t` family ·
+faed⊖VIC tiling · 2026 captures · grid prime readings · YOUWON-tail-as-hex.
+Open: an operand for `faed` named by primary material; whether `yellowblueprimes` selects on
+the letter blocks rather than the grid; `architect_span` (unattributed, not to be keyed).

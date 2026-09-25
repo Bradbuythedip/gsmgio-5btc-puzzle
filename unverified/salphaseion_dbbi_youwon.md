@@ -67,6 +67,36 @@ So `YOUWON` reads as a **planted confirmation marker** — the creator telling a
 reaches this exact operation that the operation is correct — rather than as key material.
 That matches his repeated framing that the remaining step is recognisable when you hit it.
 
+## The 64-character tail is not a letter-encoded hex key
+
+The tempting reading — 64 characters is exactly hex-private-key length — is now closed, and
+on structure rather than on a failed guess.
+
+A hex key written in letters needs exactly **16** distinct symbols. The tail uses **24**:
+
+```
+A7 X5 D5 G4 B4 N4 P3 J3 U3 M3 C2 K2 W2 V2 T2 Y2 L2 E2 S2 F1 Z1 R1 O1 Q1
+```
+
+So no injective letter→hex map exists. Every mod-16 style reduction is lossy, collapsing
+three different letters onto each digit, which means the "key" it yields is an artefact of
+the chosen reduction rather than something recovered from the data. Three such reductions
+were run anyway (`A=0 mod 16`, `A=1 mod 16`, `A=0 div 2`); all three give valid secp256k1
+scalars, and none derives the prize address:
+
+| mapping | derived hex | prize? |
+|---|---|---|
+| A0 mod16 | `72fa661d07369634dd5cf01305f007c98b9146413d78342a4e1720c539b03260` | no |
+| A1 mod16 | `830b772e1847a745ee6d0124160118da9ca257524e89453b5f2831d64ac14371` | no |
+| A0 div2  | `b175b3060b13431a66a6700902700b64c5c0ab2816bc1295a70b106a14589930` | no |
+
+That three arbitrary reductions all produce valid-looking scalars is itself the warning: any
+64-symbol string does, so "it makes a valid key" carries no evidential weight at all.
+
+This strengthens the marker reading. `YOUWON` is a planted confirmation that the *operation*
+is right; the 21 characters before it and the 64 after are residue of that operation, not a
+payload.
+
 ## What it licenses next
 
 The valuable part is the *method*, not the word: `dbbi` pairs with the VIC sentence under
