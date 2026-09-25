@@ -309,3 +309,25 @@ self-tests the three solved blobs on every run.
 
 Next: the `shabef…` grammar as a construction recipe; and for the 7×13 lead, look for a mask
 that is *derivable in advance* (e.g. from the phase-0 colour positions) rather than fitted.
+
+### Loop tick 9 (2026-09-25) — working the 7×13 lead
+
+- **campaign_12** (~108k trials): the 7×13 decomposition read literally as "matrix sum
+  list". Column/row/diagonal sum lists for all seven matrices, both digit bases, seven
+  renderings each (digit-concat, spaced, comma, dashed, four letter mappings, total);
+  concatenations across all seven and across faed's six; the seven block totals as their
+  own sum list; the 24-symbol remainder; column-major reads; label-prefixed variants.
+  **No hit.**
+- **campaign_13** (~44k trials): a second structural coincidence — the faed remainder is
+  exactly **24 symbols** and the phase-0 grid has exactly **24 coloured cells** (9 yellow,
+  15 blue). That yields a mask *specified in advance by the puzzle* rather than fitted,
+  which is the standard a mask has to meet to be credible. Tested: selection by colour bit
+  (blue-keep and yellow-keep), zeroing by colour bit (the 2021-12-25 "zeroed out" hint with
+  a pre-specified mask), XOR/add/sub/mul against the bits, the same mask tiled across all
+  seven 91-cell matrices before column-summing, and label-prefixed forms. **No hit.**
+
+The 24 ↔ 24 correspondence is kept as an observation. It may still be the right mask with
+the wrong consumer — the bits were only applied to the remainder and to the matrices, not
+yet to the blob-adjacent material.
+
+Cumulative logged trials: ~15.0M.
