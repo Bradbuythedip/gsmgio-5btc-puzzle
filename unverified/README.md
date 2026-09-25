@@ -13,3 +13,4 @@ This folder contains a list of currently unverified, or unverifiable, solutions 
 | KEY in 7x13 column sums | SalPhaseIon | [7x13 KEY columns](./salphaseion_7x13_key_columns.md) | block shapes (7 matrices of 7x13 + 24) are real and kept; the KEY reading is mask-overfitting |
 | Endgame AES password search | Phase 3.2 / SalPhaseIon | [Password exclusions](./endgame_aes_password_search.md) | pinned decrypt convention + ~14.8M excluded candidates across the four outstanding locks |
 | SalPhaseIon soup grammar | SalPhaseIon | [Soup grammar](./salphaseion_soup_grammar.md) | primary-material reading: yinyang is an output not an input, the prime hint is the matrixsumlist hint, dbbi/faed are high-entropy data |
+| DBBI minus VIC = YOUWON | SalPhaseIon | [DBBI YOUWON](./salphaseion_dbbi_youwon.md) | reproduces, 0/200k in null tests, leaves exactly 64 chars; a planted confirmation marker, not key material |
