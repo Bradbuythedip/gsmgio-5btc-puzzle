@@ -883,3 +883,31 @@ Agreed and filed: `15/9 → O/I → Base58` is analyst-created; the `2,3,5,7` en
 solver's characterisation rather than primary text (the authenticated statements say only
 that primes are required and important); and the π-handle content cannot supply an operand
 unless the account is shown to be creator-controlled.
+
+### Loop tick 26 (2026-09-25) — the proposed pipeline is complete; final stage run
+
+A six-stage pipeline was proposed. Five stages were already executed in this session; the
+sixth (Bitcoin v0.1 constants) was genuinely untested and is now run. Status:
+
+| stage | status | result |
+|---|---|---|
+| Header check (`Salted__`?) | done (tick 20) | **YES** on all locks — and the magic is emitted *only* in password mode, so a password provably exists |
+| Raw AES-256-CBC, no KDF | done (tick 21) | 1,840 direct decrypts, source-derived K/IV — 0 hits |
+| π candidates (ASCII/nibble, offsets, sha256 slices, déjà-vu) | done (tick 22) | **640,480** decrypts — all offsets 0–199 × 0–199, both encodings — 0 hits |
+| Matrix glitch / duplicated values | done (tick 23) | 0 repeated blocks in any blob; 314 not distinguished as index or window |
+| **Bitcoin v0.1 constants** | **new this tick** | genesis hash, merkle root, nonce 2083236893, timestamp 1231006505, bits 0x1d00ffff, version, coinbase string (and its reversed/hex forms as used in phase 2.2 part 6), genesis address, satoshi/nakamoto vocabulary — **13,020 passphrase trials + 792 raw-K/IV decrypts, 0 hits** |
+| Static analysis of binaries | N/A | no binary exists in the corpus; nothing to analyse |
+
+The Bitcoin-constants stage was the best-motivated of the untested ones, since phase 2.2
+part 6 provably used the genesis coinbase message (hex-encoded, reversed). Testing the same
+family again at the endgame was reasonable. It is empty.
+
+**Answer to the proposed immediate check** (`xxd -l 64 p32t.enc`): the file begins
+`53 61 6c 74 65 64 5f 5f` = `Salted__`, followed by salt `b45a5e3d827593ca`, then 80 bytes
+of ciphertext. Per tick 20 that *settles* the branch rather than opening it: raw `-K/-iv`
+mode writes no header at all, so the header's presence is positive evidence of the password
+path, not a reason to pursue raw keys.
+
+Cumulative ~33M logged trials across 23 campaigns. The pipeline is exhausted; the open work
+remains the FAED decoder and the bit-selector reading of yellow/blue implied by
+"First or zero".
