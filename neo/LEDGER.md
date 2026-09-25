@@ -417,3 +417,37 @@ Cumulative logged trials: ~31.6M (plus non-AES structural tests).
 
 Next: faed's operand remains unknown and must be named by primary material before testing;
 `architect_span.txt` (501 letters, IC 1.10) is still unattributed.
+
+### Loop tick 12 (2026-09-25) — OP_RETURN "script VM" hypothesis closed on logic
+
+Proposal: unwrap `6a 47 <71B>` past the OP_RETURN, recurse into the payload (which begins
+ASCII `G` = `0x47` = PUSH71), find it *exactly one byte short*, and borrow the adjacent
+transaction byte — i.e. a puzzle-level state machine with the chain as program counter.
+
+**The shortfall is forced, not a near-miss.** For payload length `L` with first byte `B`,
+shortfall = `B - (L-1)`. Here `L = 71` and `B = ord('G') = 71`, so `L == B` and the shortfall
+is identically **+1** for every such record and can never balance. The whole coincidence is
+that a 71-byte record starts with `G` and `ord('G')`=71 — a fact about the label, not a
+structural signal. JH and BH are the same format at the same length, so that is one
+coincidence seen twice, not two independent ones.
+
+**The carry bytes are inconsistent**: `0x0d` (JH) vs `0x4c` (BH), each the arbitrary first
+byte of the following output amount. A real rule would give the same structural byte in both.
+It also requires crossing the script-length boundary, which Bitcoin's encoding forbids, so
+the rule cannot be inherited from Script — it would have to be asserted to rescue the
+arithmetic.
+
+**The other cited opcodes are ASCII artifacts**: `isolveditwithanabacus` starts `0x69` = `i`,
+`secondanswer` starts `0x73` = `s`. Reading English as script always yields opcodes; that
+they fail immediately is expected.
+
+Correct in the source analysis and worth keeping: Script has no loops or EVAL; v0.1
+OP_RETURN set `pc = pend`; modern Bitcoin errors immediately. No payload self-executes.
+Nothing here is a vulnerability, and the proposed emulator was explicitly offline.
+
+**Provenance caveat**: the authenticated archive lists "OP_RETURN dust" under *Excluded on
+purpose*, so these records are not primary material; their length and first byte are taken
+as given here, not verified.
+
+Closed without needing the emulator. Reopening requires (a) provenance as primary material
+and (b) a carry rule stated in advance giving the same structural byte across all records.
