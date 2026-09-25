@@ -740,3 +740,40 @@ colour bits, doubled salts, and zero.
 So the raw-key model is now tested rather than merely doubted, and it is empty on this
 material. Combined with tick 20's proof that the `Salted__` magic is emitted only in
 password mode, the password path remains the only one with positive evidence behind it.
+
+### Loop tick 22 (2026-09-25) — π as raw key/IV: exhaustively closed
+
+Ran the proposed test as a **superset** of the suggested script. That script checked roughly
+30 combinations (offsets 0/9/15/23/47) and accepted on `unpad` alone — i.e. PKCS#7 only,
+which tick 18 measured at a **1-in-243 false-positive rate**, so it would have reported
+spurious successes at scale.
+
+Instead, exhaustively, with the strict gate:
+
+- π computed locally to 1200 digits (spigot, no external data)
+- both the fractional expansion and the full `3.`-prefixed form
+- both byte interpretations: ASCII digits, and digits packed as nibbles
+- **every** key offset 0–199 × **every** IV offset 0–199, not just the five proposed
+- 4 targets: P32T ciphertext and whole file, cosmic ciphertext, miniA ciphertext
+- plus sha256 of π prefixes at 6 lengths as key, against 5 IV offsets
+
+**640,480 direct decrypts, 0 hits.**
+
+So the family is closed far beyond "simple ASCII π segments": no offset of π, in either
+digit encoding, as key and/or IV, opens any lock.
+
+**Two corrections to the proposed method, both worth keeping:**
+
+1. `unpad`-only acceptance is not a success criterion. Padding alone is a 1-in-243
+   coincidence on these ciphertexts; a sweep of this size would have thrown ~2,600 false
+   "successes" under that rule. The gate must require pad ≥ 4, a ≥4-byte magic, or high
+   printability.
+2. The "re-insert a dummy `Salted__` header and brute-force the password" step **cannot
+   work**, and not merely because P32T already has a real header. The salt is an *input* to
+   `EVP_BytesToKey(password, salt)`. Substituting an invented salt derives a different key,
+   so the original plaintext is unreachable no matter how many passwords are tried; you
+   would additionally have to brute-force the true 8-byte salt (2⁶⁴).
+
+Endorsed without reservation: **do not execute unknown binaries.** Decrypting data is safe;
+running what comes out is not. Static analysis only, and an isolated VM if it ever comes to
+that. Nothing in this repo requires running third-party code.
