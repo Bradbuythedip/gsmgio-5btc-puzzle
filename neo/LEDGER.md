@@ -930,3 +930,31 @@ This was the last well-motivated, source-named decoder hypothesis on the board. 
 negative, the honest state is that **no source-named operand or decoder for faed has been
 found**, and the confirmed dbbi operation (⊖ VIC → YOUWON) is terminal (tick 20). The puzzle
 is not solvable from the material in hand by the systematic methods available in this session.
+
+### Loop tick 1b (2026-09-25) — 2×14 board coordinates vs P32T, preregistered and parked
+
+Ran exactly as preregistered: narrow, P32T-only (salt b45a5e3d827593ca), two fixed boards
+reported separately and never blended, no new vocabulary, strict gate, Cosmic excluded.
+
+Boards (2 rows × 14 cols):
+- A = `FUBCDORA.LETHINGKYMVPS.JQZXW`
+- B = `fubcdora/lethingkymvpszjqwx.`
+
+**Step 1 — removed-material selector** (`KING`, `QUEEN`, duplicate `C`, then `KING||QUEEN||C`
+and `QUEEN||KING||C` only). Coordinates in word order, serialized as: column 0/1-based, row
+bits, interleaved (row,col) 0/1-based, packed coordinate bytes, decimal-ASCII, board-char
+control. Each raw and sha256hex, × EVP-{md5,sha256}.
+
+**Step 2 — checkerboard numbering** (two rows → two straddling-checkerboard branches, columns
+→ 14 positions; both row assignments; digit-ASCII, nibble-packed; no arbitrary digit perms).
+
+Protocol: candidate → {raw, sha256hex} × EVP-{md5,sha256} × P32T only. Strict PKCS#7 +
+structure gate.
+
+**Result: 182 trials per board, 0 hits, 0 near-misses. Both boards negative.**
+
+Per the preregistered stop rule — "if both removed-material coordinates and canonical
+checkerboard numbering miss under this frozen protocol, park the chess-board/P32T branch" —
+**the chess-board/P32T branch is parked.** The 2×14 observation (VIC sentence is 91 chars = the
+dbbi length; the 28-symbol alphabet is 2×14) remains structurally elegant but yields no
+justified next reading rule. Not blended, not widened, not re-run with new vocabulary.
