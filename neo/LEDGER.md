@@ -706,3 +706,37 @@ So stage chaining is closed: the YOUWON output does not key faed. Combined with 
 
 Running total ~32M logged trials. OPEN remains: the exact FAED decoder, and what the
 P0-scoped yellow/blue answer contributes given the provenance pass showed it is not counts.
+
+### Loop tick 21 (2026-09-25) — the π chain verified, quantified, and traced to a dead premise
+
+**Every arithmetic step in the proposed chain is correct.** Verified independently:
+9th prime = 23, 15th prime = 47, π[9] = 3, π[15] = 3, π[23] = 4, π[47] = 7. No errors.
+
+**But π[9] == π[15] is a 10% coincidence.** Among the first 200 fractional digits, equal
+pairs occur 1968/19900 = **9.9%** — π digits are ~uniform, so *any* two positions match about
+one time in ten. "They are both 3" is therefore an ordinary event, and the déjà-vu / glitch
+reading is a narrative fitted after seeing it. The follow-on `π[23]=4, π[47]=7 → "47"`
+recurring as the 15th prime is self-reference selected post hoc: the chain was extended until
+something repeated.
+
+**The load-bearing failure is upstream of all of it.** The chain starts from Yellow = 9,
+Blue = 15 — the *cell counts*. Tick 19's provenance pass found those counts have **no creator
+warrant**: the 2020-05-21 HINT "First or zero" (tagged P0) follows the poem and "answer is
+there", and the colouring independently just restates the URL's own byte LSBs. If "Yellow has
+a number" resolves to **0/1** rather than 9/15, then primes(9), primes(15), π[9] and π[15]
+all inherit nothing. Each step is valid; the input is not established.
+
+**The raw-K/IV experiment — genuinely different, and run.** Not a password battery: direct
+AES-256-CBC(K, IV) with no KDF, no salt derivation, strict gate (padding alone never
+accepted). 23 source-derived 32-byte keys × 20 source-derived 16-byte IVs × 4 targets
+(P32T ciphertext and whole file, cosmic ciphertext, miniA ciphertext) = **1,840 direct
+decrypts, 0 hits.**
+
+Key material drawn only from authenticated two-part objects: sha256 of each decoded token,
+the VIC sentence, the confirmed stage-1 output, dbbi, faed, the 24-bit colour mask and the
+196-bit grid, both 32-byte cosmic halves, and zero. IVs from sha256/md5 of the same, the
+colour bits, doubled salts, and zero.
+
+So the raw-key model is now tested rather than merely doubted, and it is empty on this
+material. Combined with tick 20's proof that the `Salted__` magic is emitted only in
+password mode, the password path remains the only one with positive evidence behind it.
