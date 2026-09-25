@@ -561,3 +561,44 @@ components. **No hit.**
 Worth recording as a near-miss of reasoning rather than of data: the idiom parallel is real
 (the puzzle's phase-1 password was itself a song lyric), but neither the geometry nor the
 lexicon carries it.
+
+### Loop tick 17 (2026-09-25) — Telegram salt re-confirmed; the 24↔24 alignment tested
+
+**The `32656fe0…` salt is not new and not a mistype-only story.** Already analysed in
+tick 3: it differs from the Cosmic salt `2d3f6fe06dc950e6` in the first two bytes only, and
+— the part worth keeping — **its two ciphertexts are literal splices of the public Cosmic
+blob**: `X` = cosmic ct block 8 (offset 144), `Y` = cosmic ct block 18 (offset 304). So it is
+neither a second envelope nor plaintext π; it is cut-and-pasted public bytes with a doctored
+salt. Re-verified this tick.
+
+**The genuinely good structural point**, and it is parameter-free:
+
+```
+dbbi length            = 91
+primes <= 91           = 24   (2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89)
+coloured cells         = 24   (15 blue, 9 yellow)
+```
+
+The 24 colour bits map one-to-one onto the 24 prime positions of dbbi. That is
+`yellowblueprimes` and "some characters need to be zeroed out" as a *single* instruction with
+nothing free to tune — much better motivated than any mask tried so far.
+
+Built it. The only variation is unavoidable convention (index base, which colour zeroes,
+digit base, axis, rendering) plus "add/sub, not replace".
+
+- **The cited strings do not reproduce.** Neither `RUSHMLKVTGIAG` nor `PVYWIAEEYKNAZ`
+  appears under any of the 16 parameter-free variants of this construction. They were
+  computed some other, unstated way, so they are **not** verified operands and the
+  "yin/yang pair" framing around them is not established. The 16 strings this construction
+  actually yields are recorded in the tick output (e.g. base0/zeroY/b1 col A1 →
+  `BFIFXGOHAFXZL`).
+- **campaign_19** (2352 candidates, 409,920 trials): the mask across dbbi and all six faed
+  matrices, both bases, either colour zeroing, both digit bases, zero/add/sub modes, row and
+  column axes, seven renderings. **No hit.**
+
+So the best-motivated mask in the session is enumerated and empty. Recorded because the
+alignment is real and someone will rediscover it; the negative is the useful part.
+
+Also filed per that note, and consistent with this ledger: the 12:00 photo is Reloaded lore
+(the 314-second window, the midnight shift change), not a grid operand, and neither it nor
+the doctored header enters the password battery.
