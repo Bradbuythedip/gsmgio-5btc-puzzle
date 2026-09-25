@@ -381,3 +381,39 @@ Next: the exact zero-mask and sum rendering remain the gap. Since dbbi/faed are
 high-entropy, the sum list is plausibly consumed as key material directly rather than read
 as text. Also worth attacking: `architect_span.txt` as base-26 data, and the 2026 site
 captures (`root_2026-08-19.html`, `followthewhiterabbit_2026-04-18.html`) not yet examined.
+
+### Loop tick 11 (2026-09-25) — 2026 captures examined; faed/VIC pairing closed
+
+**The 2026 site captures contain no puzzle content.** `root_2026-08-19.html` and
+`followthewhiterabbit_2026-04-18.html`: no textareas, no hidden inputs, no meaningful
+comments. More usefully, `followthewhiterabbit_2026-04-18.html` and
+`phase1verification_2023-09-08.html` are **exactly the same byte length (36627)** with
+different hashes — and a byte-diff shows the only differences are a rotating 40-char Laravel
+`csrf-token` and the Cloudflare beacon's version string plus its SRI hash (164 bytes across
+8 runs, all infrastructure). So **gsmg.io/followthewhiterabbit is the phase-1 verification
+page served at a second URL**, not a new door. Closes the "is there a 2026 page" question.
+
+**faed does NOT pair with the tiled VIC sentence.** Stated in advance rather than fished:
+`faed` is 570 = 6×91 + 24 and the VIC plaintext is 91, so tiling VIC across faed is the one
+forced analogue of the dbbi construction. Tested all three directions (faed−VIC, VIC−faed,
+faed+VIC), mod 26.
+
+| | victory words | dictionary words (len 5–9) |
+|---|---|---|
+| faed − VIC | none | **0** |
+| VIC − faed | none | 1 (`ALVAH`) |
+| faed + VIC | none | 1 (`HANDY`) |
+
+Null over 3000 shuffles of faed's own multiset, same rule: dictionary-word count mean 1.1,
+median 1, p95 3, max 7; victory words 0/3000. The real faed output scores **0**, i.e. at or
+below chance. The null also shows the test has power — a planted victory word would stand
+out, as it did for dbbi — so this is a genuine negative, not an inconclusive one.
+
+Conclusion: the dbbi↔VIC pairing does not generalise to faed by tiling. Whatever faed is
+operated against, it is not this. Consistent with tick-10's entropy result that faed carries
+high-entropy data rather than text.
+
+Cumulative logged trials: ~31.6M (plus non-AES structural tests).
+
+Next: faed's operand remains unknown and must be named by primary material before testing;
+`architect_span.txt` (501 letters, IC 1.10) is still unattributed.
