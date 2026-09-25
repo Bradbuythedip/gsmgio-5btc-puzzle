@@ -536,3 +536,28 @@ Closed to date: Bitcoin source/password battery · OP_RETURN-as-secret · single
 faed⊖VIC tiling · 2026 captures · grid prime readings · YOUWON-tail-as-hex.
 Open: an operand for `faed` named by primary material; whether `yellowblueprimes` selects on
 the letter blocks rather than the grid; `architect_span` (unattributed, not to be keyed).
+
+### Loop tick 16 (2026-09-25) — "yellow brick road" reading tested
+
+Prompted by the white-rabbit / yellow-brick-road idiom parallel. Two parts, both negative.
+
+**Geometry.** The 9 yellow cells are not scattered: they contain a clean 4-cell diagonal
+`(4,9)→(5,10)→(6,11)→(7,12)` and a 2-cell diagonal `(9,6)→(10,7)`, with `(0,13)`, `(5,6)`,
+`(12,9)` isolated. A "road" reading is visually tempting.
+
+Null-tested properly — draw 9 of the 24 candidate coloured slots (which themselves lie on
+the spiral, so consecutive slots are often diagonal neighbours; the null inherits that
+geometry). Over 200,000 draws the longest-diagonal distribution is
+`{1: 47900, 2: 106754, 3: 35235, 4: 8418, 5: 1567, 6: 126}`, giving **P(run ≥ 4) = 0.051**.
+So a 4-run occurs about one time in twenty by chance, and this was noticed *post hoc*.
+Suggestive, not significant. **Not promoted.**
+
+**Vocabulary.** campaign_18_oz, 17,850 trials: the full Oz lexicon (yellow brick road and
+follow-variants, Oz/wizard/Dorothy/Toto/Emerald City/Glinda/Scarecrow/Tin Man/Cowardly
+Lion/Munchkin/Kansas, "no place like home", ruby slippers, over the rainbow, the man behind
+the curtain, surrender Dorothy, wicked witch), alone and combined with the authenticated
+components. **No hit.**
+
+Worth recording as a near-miss of reasoning rather than of data: the idiom parallel is real
+(the puzzle's phase-1 password was itself a song lyric), but neither the geometry nor the
+lexicon carries it.
