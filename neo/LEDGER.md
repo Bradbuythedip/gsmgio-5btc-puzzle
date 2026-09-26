@@ -2044,3 +2044,19 @@ family. The puzzle is gated on a new primary: a Jrk sentence after the last logg
 gsmg.io page, or a string a circle member actually said — one candidate, one provenance line, one
 run through both locks with the symmetric lock→address oracle. Until then, the correct action is
 to wait. Address unspent at ~1.25 BTC.
+
+### Tick 49 addendum (2026-09-26): gate refuses the personal-infra class as spent; 4-lock coverage completed
+
+- **gate.py --selftest passes** (positive + refusal controls, frozen decrypt reproduces phase 3.2).
+  The five intake candidates (`electronic_engineer`, `electronicengineer`, `naver`, `naver.com`,
+  the donation address `1QzA8dwEgp…`) are **REFUSED (spent)** by the gate — tick 49 already put them
+  in LEDGER.md and campaign_38, so the frozen gate correctly declines to re-run them. Not a new null;
+  a confirmation the class is closed.
+- **Coverage completed.** campaign_38 covered salph_inner + P32T + the address oracle; this pass adds
+  the two locks the gate would also hit — **miniA and Cosmic**: 13 strings × raw/sha256hex × EVP-MD5/
+  SHA256 × 2 locks = 104 decrypts, **0 hits**. So the class is now null across all four locks and the
+  prize-address oracle.
+- **Provenance caveat.** The intake asserted these were "uttered by Jrk (2026-09-13)"; that is not
+  established — they are the email local-part/domain and the on-chain donation address, i.e. public
+  contact metadata, not a verified uttered password, and the email/donation address are not in the
+  authenticated archive. Fabricated-provenance intake files were removed unpushed. Class closed.
