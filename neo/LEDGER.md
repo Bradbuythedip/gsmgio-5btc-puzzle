@@ -2500,3 +2500,65 @@ undirected edges they are 24 distinct edges. The proposal's "12 mirrored edges" 
 **Closed per the stop rule:** no new placements, masks, invariants, serializations or maps. The
 house map a=1 is not run here; the user reported it null (USER grade). The K₁₄ reading has now had
 its one pre-registered pass.
+
+### Tick 69 (2026-09-26): the "simulation / K₁₄ rule-engine" message, audited claim by claim — nothing enters as an anomaly; five corrections
+
+User-relayed message proposing K₁₄ as the fundamental object and asking that two facts go "in red":
+(1) 14² = 91 + 14 + 91 with the coloured cells 12 + 0 + 12; (2) VIC 149 → 91 = 33 one-digit + 58
+two-digit codewords. Audited by a blind multi-agent pass: one verifier per claim cluster, one
+adversary per cluster arguing the opposite verdict, then a completeness critic. All primaries were
+recomputed; no verdict was overturned. Every correction below was re-derived again by hand.
+
+**Neither fact goes in red.** Both are true and both are forced. Each is recorded here as closed.
+
+| claim | verdict | null / reason |
+|---|---|---|
+| 196 = 91+14+91, 91 = C(14,2) | identity; one unforced coincidence | n² = 2·C(n,2)+n for every n. 14 is forced (the smallest square holding the 24-byte URL's 192 bits). Only len(VIC sentence) = 91 is free: P ≈ 0.007–0.015 exact, 0.06–0.08 for any triangular number, ≤ 6 bits |
+| "two independent 91-streams" | **false** | DBBI was built letter by letter against the VIC sentence (planted YOUWON, ~3×10⁻⁶ under independence). The two 91s are one design decision, so ticks 42/47 double-count "DBBI 91" as support |
+| 12/0/12, "about 2.6%" | forced | 2.6% (0.02595) is right for uniform cells and wrong for this object. Parity (tick 68) makes 0-on-diagonal certain for any odd bit offset. Offsets 5, 6 and 7 give 12/0/12, and the colours use 7, the LSB. Parity-respecting null 0.186; given the encoding P = 1 |
+| diagonal 01000000111111 → " ?" | new; forced | 11 of 14 bits are fixed by the encoding: 3 ASCII MSBs (0), 2 padding zeros (spiral 192, 194), 6 lowercase case bits (1). So "?" is certain and the first character is one of ␠ " ( *. The anti-diagonal reads "*>" |
+| 33/58 as Bitcoin constants | typical | x = 33 is the English median under this board. Creator-log windows: mean 29.6, sd 4.6, P(x = 33) = 0.07, and 55% of windows lie at least as far out. P(x or y in a fixed Bitcoin set) ≈ 0.4. FUBCDORA is the riddle's row (tick 35), not a frequency row |
+| VIC mask = the "zeroed out" mask | coverage gap, low prior | The phrase is #8000 / `hints/2021-12-25-hint.png`, in the same message as primes and "another door", with no VIC link. The mask is FUBCDORA membership, a function of the plaintext; DBBI is independent of it (χ² p = 0.97). **Never applied to DBBI as a zero mask; not run** (tick 68 stop rule; needs a user decision and its own prereg) |
+| 661 = 7·91+24, "seven intertwined passwords" | already recorded | The source is the Phase-3.2 Architect text (Beaufort `thematrixhasyou`, letter 1198), "over twentythree ciphers sixteen encryptions and or seven intertwined passwords": a list of alternatives, main route (tick 44). The 24-tail tie is 24 = |URL|; the 31/73 part needs a=0 (ticks 35–36) |
+| matrixsumlist = K₁₄ vertex sums | reproduced null; carries little | The user's a=0/a=1 × 4 orders × mask polarities × 7 layers run was reproduced with 0 hits (upgraded from USER grade). K₁₄ is 13-regular, so a=1 sums = a=0 sums + 13 and those renderings are exact ROT13 of each other. The a=1 arm was never independent. The family has no power for KEY (P(hit) ≈ 0.36 under the null) |
+| two locks 96 B; Cosmic 1344 = 14·96 | typical | The 96s are true (P32T 16+80, miniA‖miniB 48+48). 1344 is one header + 83 (prime) blocks, not 14 envelopes; on ciphertext 1328/80 = 16.6. 1344 = 28·48 = 42·32 as well. Some named quotient appears ~50% of the time |
+| 96 − 91 = 5 = \|enter\| | length zoo | 13% of repo number pairs give a named-length difference, and every difference 3–13 does. It subtracts a header-inclusive size from a letter count |
+| raw URL + bit reversal → "two authenticated Neo addresses" | false as worded | These are creator-stamped Phase-0 answer addresses whose keys are public. They authenticate nobody (ticks 56, 63) |
+| yinyang "explicitly" resolves the two-lock duality | false as worded | #8446, #9599, #39224 and #39237 make it a named, unreached next phase ("the next phase", "2 hours max"). No primary ties it to the locks; that link is tick 47's model |
+| f73d92 chain as a checksum | ledger says coincidence | ~1 in 11 (0.0945 reproduced). The quoted "you reconstructed the machine correctly" has no source |
+| colours = URL LSBs as error correction | identity | A 24-bit repetition of bits already in the grid; no parity or ECC content |
+
+**Degrees of freedom.** The K₁₄ reading explains one ≤ 6-bit coincidence (sentence length = C(14,2)).
+To state it costs ≥ 12 bits of choices: placement, stream, map, polarity, invariant, rendering and
+target, and 429 bits if the placement is unconstrained. Its one pre-registered test (tick 68) was
+null on every arm. So it adds degrees of freedom, and the claim that it reduces them is false.
+The invariants do reveal the rule engine, and it is the known one: spiral bit layout, byte
+framing (LSB colours), English plaintext under a certified board, and a letter-wise cipher aligning
+DBBI to VIC. Every listed "anomaly" reduces to one of these four.
+
+**New and recorded:** given the VIC sentence and the a–i alphabet, `YOUWON` can be planted at exactly
+one of 86 offsets, 21. So the 21 + 6 + 64 layout, including the "hex-length" 64 tail, is forced by the
+construction and is not a second signal. (A random sentence with the VIC letters has any plantable
+offset ~21% of the time.) `unverified/salphaseion_dbbi_youwon.md`'s 2.8×10⁻⁷ uses a 26-letter
+alphabet; with a–i it is ~3.2×10⁻⁶.
+
+**Corrections to earlier entries:**
+1. **Tick 63 txids.** The two "Good job, Neo!" txids are **`364de511…6990`** (→ `148XH2…`) and
+   **`722fbf35…e4cb`** (→ `13HGhj…`), the values tick 59 already had. The "computed" `f9a1aee2…` /
+   `9edc34f0…` and the remark that the user-given prefixes do not match are wrong; no hash variant of
+   the pasted bytes gives them. The same parser reproduces `8aaa96d3…00c5` as a control. The header of
+   `unverified/tx_good_job_neo_2020.hex` is corrected. Conclusions about sender and recipients are unchanged.
+2. **Tick 63, Gavin tx** (`1fd46162…af92`): it pays **7 of the 8** stamp addresses plus `1JZBwa…`.
+   `1M5ypv…` (the 227-char answer) is not among the outputs.
+3. **Tick 68 scalar count:** 52 scalars were checked, not 53. The deduplicated value 0 (tree and
+   Hamiltonian counts of the 12-edge colour forests) is not a key and was skipped.
+4. **Tick 68 power:** the edge-connectivity test could never flag. 33 edges on 14 vertices cap λ at 4,
+   and the best achievable p is 0.0058 against 3.6×10⁻⁴. So 4 of the 28 unweighted tests were dead.
+   The observed λ = 2–3 is central, so no result changes.
+5. **Tick 67 wording:** "every stride-8 position … 12 above, 0 on, 12 below" holds for the LSB set
+   (offset 7) and for offsets 5 and 6. Offsets 0–4 give other splits. 0-on-diagonal holds for every
+   odd offset, by parity.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent. K₁₄ closed.
+The one untested nearby item is the VIC mask applied to DBBI as a zero mask. It is outside the K₁₄
+family but inside tick 68's "no new masks" rule, so it waits for an explicit user decision.

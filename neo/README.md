@@ -25,7 +25,7 @@ LEDGER.md         append-only session log: findings, campaigns, exclusions
 | `harness/verify_checksum_machine.py` | cold check of the arithmetic over solved objects (tape layout, 31/73, {1,4}, 67\|82, ENTER 191/233, 4943); 26 checks, no AES |
 | `harness/gate.py` | **the only live entry point.** Frozen one-shot gate for new primary material (see below) |
 
-Only dependency is `pycryptodome` (`pip install pycryptodome`). The EC code is pure Python
+Only dependency is `pycryptodome` (`pip install pycryptodome`); `campaign_44_k14.py` also needs numpy and networkx. The EC code is pure Python
 so address results need no native library.
 
 ## Running it

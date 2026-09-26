@@ -106,3 +106,14 @@ stage after a further fixed transformation.
 
 Anything proposed here should be held to the same standard applied above: state the rule and
 the operands in advance, and report the null rate.
+
+## Correction (2026-09-26, LEDGER tick 69)
+
+- The theoretical null above (2.8 × 10⁻⁷) uses a 26-letter alphabet. `dbbi` has only the nine
+  symbols a–i, and at `dbbi`'s own frequencies the rate is about 3.2 × 10⁻⁶. The shuffle result
+  (0 in 200,000) is unaffected.
+- "Neither length was chosen" holds for the analyst, not the creator. Given the VIC letters and the
+  a–i alphabet, `YOUWON` can be planted at exactly one of the 86 offsets, 21. `dbbi` was built
+  against the VIC sentence, so the two 91s are one design decision, and the 21 + 6 + 64 layout is
+  forced by the construction.
+
