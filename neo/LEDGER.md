@@ -3067,3 +3067,27 @@ public corpus is exhausted (curated pool, two- and three-way, null — tick 83);
 exhausted (incl. PBKDF2 — tick 81); the #55/#79/#108 Cosmic chain is non-authentic; no source-named
 rewrite remains. **The next computational event requires new primary creator material through
 `gate.py`.** Prize unspent.
+
+### Tick 86 (2026-09-26): the single-file offline solver, validated end-to-end and committed
+
+User-built `harness/gsmg_offline_solver.py` — a conservative, dependency-light (pycryptodome only)
+single-file consolidation of the Tick-85 frozen state. It generates no candidates and reopens no
+MITM/BSGS; it verifies the three byte-pinned ciphertexts, then runs exactly one supplied string
+through the frozen path. Validated end-to-end here (pycryptodome present):
+- **`audit`**: the three envelopes byte-pin to the tick-85 hashes/salts/last-blocks, and the
+  Issue-#108 base64 positions read J (18) / s (51). PASS.
+- **`selftest`**: audit + the three solved blobs decrypt under sha256hex × EVP-SHA256 + the
+  secp256k1 privkey=1 control. PASS.
+- **`test`**: 12 decrypts (3 locks × {raw, sha256hex} × EVP-{md5, sha256}) with the padding-independent
+  raw-32/hex-64 → prize/17ucy1 oracle, the P32T last-block freeze, and sha256(candidate)/candidate-as-hex
+  scalar checks; per-candidate sha256 dedupe log. Confirmed null on a spent control and REFUSED on a
+  repeat without `--force`.
+- **`opreturn`**: exact-only comparator of a 32-byte payload against supplied nonce-point x/y
+  (big-endian and byte-reversed). Confirmed it flags a true x-match and its byte-reversal and reports
+  no-match otherwise.
+It is the frozen gate as a portable field tool; `neo/harness/gate.py` remains the in-repo entry point.
+No behavioral divergence from the committed harness. Its run log (`offline_solver_attempts.jsonl`) is
+local and gitignored.
+
+**State unchanged:** two locks + Cosmic byte-pinned and closed; corpus exhausted; prize unspent; the
+next computational event requires new primary creator material through the gate.
