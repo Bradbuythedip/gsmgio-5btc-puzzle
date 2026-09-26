@@ -25,6 +25,10 @@ Also checked, all requiring d*G == Q to count:
 
   python3 campaign_45_affine_nonce.py --selftest   plants a trapdoor sig, recovers it, + controls
   python3 campaign_45_affine_nonce.py              the real run; exit 0 null, 10 HIT
+  python3 campaign_45_affine_nonce.py --tx A.hex --tx B.hex
+      the same fixed tests on every prize-key input of the given raw txs (legacy or segwit
+      serialization), pooled across files for the repeated-nonce and pairwise checks.
+      Each signature is ECDSA-verified first. The (a,b) grid is fixed; it is not widened.
 """
 import hashlib, json, os, sys, time
 import btc_addr
@@ -58,7 +62,11 @@ def varint(b, i):
 def enc_varint(n): return bytes([n]) if n < 0xfd else b"\xfd" + n.to_bytes(2, "little")
 
 def parse(tx):
-    ver, i = tx[:4], 4
+    """Return (version, inputs, outputs, locktime) of the legacy serialization. A segwit
+    serialization is accepted; its marker, flag and witnesses are skipped, which is exactly
+    what legacy SIGHASH_ALL of a P2PKH input commits to."""
+    seg = tx[4] == 0 and tx[5] == 1
+    ver, i = tx[:4], (6 if seg else 4)
     n, i = varint(tx, i); ins = []
     for _ in range(n):
         prev = tx[i:i + 36]; i += 36
@@ -68,12 +76,21 @@ def parse(tx):
     n, i = varint(tx, i)
     for _ in range(n):
         i += 8; l, i = varint(tx, i); i += l
-    return ver, ins, tx[o0:i], tx[i:i + 4]
+    outs = tx[o0:i]
+    if seg:
+        for _ in range(len(ins)):
+            m, i = varint(tx, i)
+            for _ in range(m):
+                l, i = varint(tx, i); i += l
+    return ver, ins, outs, tx[i:i + 4]
 
 def pushes(s):
     out, i = [], 0
     while i < len(s):
-        l = s[i]; out.append(s[i + 1:i + 1 + l]); i += 1 + l
+        l = s[i]
+        if l == 0 or l > 75 or i + 1 + l > len(s): raise ValueError("not a <sig> <pubkey> scriptSig")
+        out.append(s[i + 1:i + 1 + l]); i += 1 + l
+    if len(out) != 2: raise ValueError("not a <sig> <pubkey> scriptSig")
     return out
 
 def sighash_all(ver, ins, outs, lt, k, spk, ht):
@@ -110,17 +127,37 @@ def lift_r(r):
             pts += [(x, y), (x, (Pp - y) % Pp)]
     return pts
 
-def load_sigs():
-    raw = bytes.fromhex("".join(l.strip() for l in open(TX) if not l.startswith("#")))
-    ver, ins, outs, lt = parse(raw)
-    sigs, Q = [], None
-    for k, (prev, ss, seq) in enumerate(ins):
-        sig, pub = pushes(ss)
-        Q = pubkey_point(pub)
-        r, s = der_rs(sig[:-1])
-        z = sighash_all(ver, ins, outs, lt, k, b"\x76\xa9\x14" + h160(pub) + b"\x88\xac", sig[-1])
-        sigs.append({"input": k, "z": z, "r": r, "s": s})
-    return Q, sigs, int.from_bytes(lt, "little")
+def verify_sig(Q, z, r, s):
+    if not (1 <= r < N and 1 <= s < N): return False
+    w = pow(s, -1, N)
+    P = btc_addr._add(btc_addr.mul(z * w % N), btc_addr.mul(r * w % N, Q))
+    return P is not None and P[0] % N == r
+
+def load_sigs(paths=(TX,)):
+    """Every input, across all files, whose scriptSig is <sig> <pubkey> with the pubkey
+    hashing to the prize address. Each signature must verify, or the run aborts."""
+    sigs, Q, lts, skipped = [], None, [], 0
+    for path in paths:
+        raw = bytes.fromhex("".join(l.strip() for l in open(path) if not l.startswith("#")))
+        ver, ins, outs, lt = parse(raw)
+        lts.append(int.from_bytes(lt, "little"))
+        for k, (prev, ss, seq) in enumerate(ins):
+            try:
+                sig, pub = pushes(ss)
+            except ValueError:
+                skipped += 1; continue
+            if len(pub) not in (33, 65) or btc_addr.p2pkh(pub) != PRIZE or pub[0] != 4:
+                skipped += 1; continue
+            Qk = pubkey_point(pub)
+            assert Q is None or Qk == Q, "two different prize pubkeys"
+            Q = Qk
+            r, s_ = der_rs(sig[:-1])
+            z = sighash_all(ver, ins, outs, lt, k, b"\x76\xa9\x14" + h160(pub) + b"\x88\xac", sig[-1])
+            assert sig[-1] == 1, f"{path} input {k}: sighash type {sig[-1]} is not SIGHASH_ALL"
+            assert verify_sig(Q, z, r, s_), f"{path} input {k}: signature does not verify; null would mean nothing"
+            sigs.append({"file": os.path.basename(path), "input": k, "z": z, "r": r, "s": s_})
+    assert sigs, "no prize-key input found"
+    return Q, sigs, lts, skipped
 
 def run(Q, sigs):
     hits = []
@@ -139,13 +176,13 @@ def run(Q, sigs):
     for sg in sigs:
         for name, (a, b) in AB.items():
             if is_prize_scalar(d_from_affine(sg["z"], sg["r"], sg["s"], a, b)):
-                hits.append(("affine-to-Q", sg["input"], name))
+                hits.append(("affine-to-Q", sg["file"], sg["input"], name))
     # exact point identity R == f(Q)
     for sg in sigs:
         for R in lift_r(sg["r"]):
             for name, T in Qpts.items():
                 if T is not None and R == T:
-                    hits.append(("point-identity", sg["input"], name))
+                    hits.append(("point-identity", sg["file"], sg["input"], name))
     # pairwise nonce affine: k_j = a k_i + b  => linear in d
     for i in range(len(sigs)):
         for j in range(len(sigs)):
@@ -189,26 +226,36 @@ def selftest():
     Qn = btc_addr.mul(dn)
     normal_hit = any(btc_addr.mul(d_from_affine(z0, rn, sn, a, b) or 0) == Qn for a, b in AB.values())
     chk("a normal signature matches no (a,b)", not normal_hit)
+    # segwit parsing: re-serialize the 2020 tx with marker/flag and empty witnesses
+    raw = bytes.fromhex("".join(l.strip() for l in open(TX) if not l.startswith("#")))
+    ver, ins, outs, lt = parse(raw)
+    body = raw[4:len(raw) - 4]
+    seg = raw[:4] + b"\x00\x01" + body + b"\x00" * len(ins) + raw[-4:]
+    chk("segwit re-serialization parses to the same legacy fields", parse(seg) == (ver, ins, outs, lt))
     print("campaign 45 self-test passed:", ok)
     return ok
 
 def main():
     if "--selftest" in sys.argv:
         sys.exit(0 if selftest() else 1)
+    paths = [sys.argv[i + 1] for i, a in enumerate(sys.argv) if a == "--tx"] or [TX]
     assert selftest(), "self-test failed; a null here would mean nothing"
-    Q, sigs, lt = load_sigs()
-    assert btc_addr.p2pkh(b"\x04" + Q[0].to_bytes(32, "big") + Q[1].to_bytes(32, "big")) == PRIZE
+    Q, sigs, lts, skipped = load_sigs(paths)
     hits = run(Q, sigs)
-    rec = {"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "tx_locktime": lt,
-           "prize_pubkey_x": hex(Q[0]), "n_sigs": len(sigs),
-           "distinct_r": len({s["r"] for s in sigs}), "families_tested": list(AB),
+    out = OUT if paths == [TX] else OUT.replace(".jsonl", "_" + "_".join(
+        os.path.splitext(os.path.basename(p))[0] for p in paths) + ".jsonl")
+    rec = {"ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "files": [os.path.basename(p) for p in paths],
+           "tx_locktimes": lts, "prize_pubkey_x": hex(Q[0]), "n_sigs": len(sigs),
+           "non_prize_inputs_skipped": skipped, "r_prefixes": [hex(x["r"])[2:10] for x in sigs],
+           "distinct_r": len({x["r"] for x in sigs}), "families_tested": list(AB),
            "point_forms": 10, "HIT": bool(hits), "hits": hits}
-    with open(OUT, "w") as f:
+    with open(out, "w") as f:
         f.write(json.dumps(rec) + "\n")
-    print(f"signatures {len(sigs)}  distinct nonces {rec['distinct_r']}  "
-          f"single-sig families {len(AB)}  point forms 10")
-    print("*** HIT ***" if hits else "null: no planted affine-nonce relation. Logged.")
-    print(json.dumps(hits) if hits else "")
+    print(f"files {rec['files']}  locktimes {lts}  prize-key signatures {len(sigs)} (verified)  "
+          f"distinct nonces {rec['distinct_r']}  other inputs skipped {skipped}")
+    print("r prefixes:", rec["r_prefixes"])
+    print("*** HIT ***" if hits else "null: no planted affine-nonce relation and no nonce reuse. Logged to " + os.path.relpath(out, NEO))
+    if hits: print(json.dumps(hits))
     return 10 if hits else 0
 
 if __name__ == "__main__":

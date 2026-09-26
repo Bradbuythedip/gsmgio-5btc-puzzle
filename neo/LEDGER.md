@@ -2622,3 +2622,22 @@ hard one, d·G must hash to the prize address, so nothing can be tuned to a fals
 This complements tick 37 (meet-in-the-middle a+b/a−b/a·b against the prize key, null) and tick 50
 (BSGS declined): the prize key is not recoverable by any small algebraic relation to G or to its
 own nonces. **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+**Tick 71 addendum (2026-09-26): the branch is left ready, not open.**
+- The three 2020 nonces are distinct: r = `dbe31ca9…`, `fce22a0a…`, `776706ca…`. That matches
+  the user's independent read. Nonce reuse (rᵢ = rⱼ ⇒ d = (zᵢ − zⱼ)(sᵢ − sⱼ)⁻¹, then require
+  d·G = Q) is part of the pooled pass and stays the standing check for any later author spend.
+- "Neighbors, half and double" names point operations, not amounts. Tick 52: the four 2021
+  recipients are the uncompressed P2PKH of Q − G, Q/2, 2Q and Q + G. The halving amounts
+  (5 → 2.5 + change in 2020, 1.25 in 2024) belong to the separate `Halving` thread. Either way the
+  caption is not a nonce instruction set: the affine test is empty on exactly those four operations.
+- **Ready on arrival.** `campaign_45_affine_nonce.py --tx A.hex --tx B.hex …` now accepts legacy or
+  segwit serialization. It keeps only inputs whose pubkey hashes to the prize, requires each
+  signature to verify before using it, and pools signatures across files for the repeated-nonce and
+  pairwise checks. Self-test 6/6: the new case is a segwit re-serialization of the 2020 tx. The
+  default re-run reproduces the null. A file with no prize input aborts instead of reporting a null.
+- **The (a,b) grid is closed.** The source set was the four operations (plus opposite and
+  nonce = key). Empty on that set closes the branch; it is not a prompt to try a = 3.
+- **Pending, in order:** the 2024 peel raw hex (locktime 840003); any other author spend from
+  `1GSMG1…` (reuse + affine on arrival, same command); R.y against a 32-byte authenticated
+  OP_RETURN (parked, since no such field exists). AES gates unchanged.
