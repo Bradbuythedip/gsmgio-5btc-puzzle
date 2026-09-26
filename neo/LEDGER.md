@@ -2743,3 +2743,39 @@ User-directed closures. No new branch is opened.
 **Standing work, restated.** A creator-named string, through `gate.py`, on P32T and the SalPhaseIon
 short lock (Cosmic third). Nothing else is queued. **State unchanged:** two locks gated on a new
 primary; corpus exhausted; address unspent.
+
+### Tick 75 (2026-09-26): community issues #79 and #55, already covered; #79's recipe reproduces from the noise file
+
+Sources: `puzzlehunt/gsmgio-5btc-puzzle` #79 (labjay69-jpg, 2026-02-20, "Phase 3 SOLVED – Half &
+Better Half Derived") and #55 (jackdevs66, 2025-08-23, "Finally I Decrypted Cosmic Duality!").
+Community posts, USER grade, read from the public pages. Neither carries a creator-named string.
+
+- **#79 states its recipe in full, and it reproduces exactly.** Take `cosmic_1327b_decrypted.bin`
+  (sha256 `4f7a1e4e…`, in `unverified/drive-2026-05/`), read its first 10,609 bits MSB-first as a
+  103×103 matrix, and compute row_sum[i] + col_sum[(i+7) mod 103]. Subtract 80, read the result as
+  big-endian base-38, and split the 68 bytes 32 + 32 + 4. That gives keys `0423d911…` and `48cc46e6…`,
+  which derive `1JG648…`/`15E3pcDD…` and `145ZQ9…`/`1FhbJnrd…`, all as claimed. The other three bit
+  and digit orientations do not reproduce. So #79 is internally consistent, and that is all it is:
+  - its input is the ~1-in-256 one-byte-pad output of the falsified XOR-of-token-hashes password
+    (addendum at line ~1867; tick 7);
+  - "subtract 80, base 38" are this file's own minimum and range (80–117). Fitting the base to the
+    observed range turns any file into 64 bytes of valid scalars;
+  - so anyone can compute the keys from public data, and the signed messages prove nothing. The
+    issue itself publishes both keys. The keys are not copied here; prefixes only.
+  The addresses are not the prize, and the ARCHIVE-README already excludes "HALF/BETTER-HALF … all
+  issue-derived constructions". Nothing for the gate.
+- **One untraced fact.** #79 says both addresses were funded on 2026-02-05 and spent on
+  2026-02-15. Tick 38's walk followed only vanity counterparties and recorded the two addresses' later
+  spray into the prize. The source of the 2026-02-05 funding was never traced. That is the only fact
+  that could change the reading. Funding from the creator trail (`1EtbTv…`, `3GSMG24T…` or the prize
+  key) would mean the creator acknowledged the construction; any other source keeps it community
+  traffic. Given the raw funding tx, the check runs offline: a prize-key P2PKH input (pubkey
+  `04f4d1bb…`, signature verifiable) or a `3GSMG24T…` witness pubkey (`0205eaf7…`) shows in the hex.
+- **#55 contains no decryption, password or plaintext.** It is a donation request linking
+  `jackdevs66/GSMG5_CDuality`, which lines 24–25 call otherwise junk and
+  `unverified/salphaseion_xor_token_hashes.md` lists as an LLM-generated carrier of the XOR theory.
+  The only thing this repo took from it, the Cosmic base64, is byte-identical to the archive's
+  hash-listed raw capture `materials/primary/cosmic_duality_envelope_1344B.bin` (sha256
+  `b1895055…`). That settles line 25's residual-risk note. Code from that repo is never run.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
