@@ -1275,3 +1275,51 @@ sentence / checkerboard sentence / URL give fragments ("in to this", "case crack
 But the pipeline B feeds (matrixsumlist → index → lastwordsbeforearchichoice) is empty of
 readable output, and slot A still has no named operation. Per step 5 the combine stays illegal
 and no AES campaign runs. The next real move remains a named operator on a named object.
+
+### Loop tick 35 (2026-09-26) — VIC certified; last-words and FAED material closed; the terminal state
+
+**Phase-3.2 VIC digit cipher fully certified.** The straddle-checkerboard with rowheads {1,4}
+and alphabet `FUBCDORA.LETHINGKYMVPS.JQZXW` (28 cells = 26 letters + two dots) takes the
+149-digit string to the 91-char sentence exactly. Three sub-tests settled its status:
+- **alphabet source-forced** by the Phase-3.2 riddle itself (the page gives it), not fitted to a
+  keyword — removes the "reverse-engineered to fit" objection;
+- **{1,4} rowheads are named in the decoded plaintext** ("one for one, four for one") — the stage
+  checks itself, but this does **not** inherit from `matrixsumlist`; the {1,4}↔layer-prime
+  correspondence is an overlay under the a=0 map, not a consequence of VIC;
+- **family check**: the AES envelopes carry no digit stream, so the board has nowhere to apply —
+  VIC is local. `{1,4}` is not a reusable key on the 80-byte locks.
+
+**The 31/73→42 and matrixsumlist→{1,4} results stay map-dependent.** They require a=0…i=8; the
+house map o=0,a=1…i=9 gives 40/88 (composite) and layer primes at {5,7}. Null (tick verified):
+both colour-sums prime ~1 in 18; layer primes exactly at {1,4} ~1 in 90; ~1 in 1600 together —
+stronger than the f73d92 factorization (1 in 11) but not proof, and un-inherited from VIC. Held
+at "strong structural reading," not promoted to key material.
+
+**campaign_32 — the 48/96 last-word construction, closed.** Final 11/21 Architect words = exactly
+48/96 chars (L96 splits 48/48, 2nd half == L48). Tested outside-the-box against miniA (ct 32),
+salph (ct 80), P32T (ct 80): 61 explicit 32-byte privkey candidates (XOR/one-time-pad of the
+strings against the cts and full blobs, sha/window key derivations, half-subtraction) → address
+oracle; derived AES keys → decrypt + PKCS#7 + P32T freeze + 64-hex-in-plaintext → address;
+password form (raw + sha256hex, EVP-MD5/SHA256). **0 address hits, 0 lock opens, 0 structure.**
+Note: the 48/96 byte sizes include OpenSSL's 16-byte header, so miniA's message is ≤31 bytes —
+the length match is partly to container overhead.
+
+**campaign_33 — FAED-derived material, closed.** Layer sums `[331,360,369,421,418,441,396]`
+(decimal concat, spaced, BE/LE 4-byte concat), the 24-char FAED tail and its reverse, the 24-cell
+colour frame (raw/reversed/BY-swapped), `31/73/42` with five joiners, each alone and prefixed
+with `yellowblueprimes`; raw / sha256hex / raw-key forms × EVP-MD5/SHA256 × miniA/salph/P32T.
+28 strings, 62 password-forms, **0 hits.**
+
+**Architecture, after the nulls.** Flat (decrypt = 32-byte key): every tested candidate null.
+Two-stage (decrypt = seed → BIP32 child at a path → key): **untouched**, because the seed would
+live inside an unopened lock — not testable without first opening a lock. The creator's plural
+"the private keys belong to half and better half" fits two locks → two seeds → two keys → one
+combining rule, but that is one decryption away from being testable.
+
+**Terminal state (the honest frontier).** The password for the two real 80-byte locks is the only
+thing between the current state and a forward step; every other channel — outer seeds, VIC reuse,
+last-words, FAED material, colour factorization, salts, git history — is at the noise floor. The
+missing input is not in the creator-authenticated corpus. This matches #66573/#66574 (2026-07-13,
+"my close friends have the best chance … NOTE: that is a hint"): the last step is designed not to
+be derivable from published material. That is a real terminal state, not a failure. The freeze and
+address oracles remain as tooling for any password a fact-from-outside might supply.
