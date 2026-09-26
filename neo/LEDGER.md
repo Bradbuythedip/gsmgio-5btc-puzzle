@@ -1648,3 +1648,26 @@ nobody repeats them:
 
 Nothing in the transcript is a new primary. The live lead remains tick 39: what the
 "Good job, Neo!" team found in April 2020.
+
+### Loop tick 41 (2026-09-26): the 24-prime colour list, verified; two sourced index tests, null
+
+**Verified here:**
+- The LSBs of `gsmg.io/theseedisplanted` are `111101110011110110010010`, exactly the colour
+  string (Y=0, B=1). This is the same 24 bits as the Telegram triplet
+  `11110111 00111101 10010010`, so it is not a new field.
+- Pairing the colour string with the first 24 primes gives **Yellow = 479, Blue = 484**.
+- In the Architect rewrite (the "yourlife…" string in `phase3.2.ipynb`, 1545 letters there,
+  1539 under the user's cut, same prefix), **`PRIVATEKEY` starts at letter 479** (0-based). It
+  occurs again at 1238. Calibration: 23% of offsets are word starts, and the target was
+  chosen after the landing. That makes this a modest pointer (a few percent before
+  selection), and it lands on solved text.
+
+**User-run, sourced tests, both null:**
+1. Self-indexing the 7×13 house-map grid (row+col, 0- and 1-based, digital root) gives more
+   a–i soup: no English, no YOUWON.
+2. The 20 DBBI sums used as indices into the 24 primes, mod 26, give `tjvpdbv…` and
+   `rhtlcvr…`. Not English. The sum totals (751/763) are not 479/484.
+
+**Deliberately not run (unsourced):** the decimal concatenation `55656860…` as a password,
+XOR/permutation of FAED by those numbers, and a 4-state "@/A" reading. The numeric frame
+stays a pointer (479/484 → PRIVATEKEY). The gate stays empty.
