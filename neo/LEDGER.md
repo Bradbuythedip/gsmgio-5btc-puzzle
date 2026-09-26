@@ -1896,3 +1896,18 @@ other real address.
 1/11,316,496, not 1/4.48M. A 1,679,616-pair scan therefore expects 0.15 hits (uncompressed
 only) or 0.30 (both encodings): P(≥1) ≈ 0.14–0.26. The carrier conclusion is unchanged and
 stronger: finding one `1GSMG` in that scan is an ordinary draw.
+
+### Addendum (2026-09-26): the 64-character DBBI⊖VIC suffix is statistically featureless
+
+`XCPKWGBNAXDGJGDUNNVMPABTAFPAAXMJYLZBUWERDNXYDESKUOBXCAMVDJLQTSGA` (after `YOUWON`). Structural
+test only; no key material generated.
+- 24 distinct letters (no H, I); index of coincidence ×26 = **1.03** (English ≈ 1.73, random ≈
+  1.00). Not English and not a transposition of English, so rail-fence/columnar readings are out.
+- Periodic IC over periods 2–16: apparent peaks at 11 (1.58) and 15 (1.62), but a 20,000-shuffle
+  null with look-elsewhere correction gives P(best period ≥ 1.62) = **0.60**. No Vigenère-style
+  period.
+- Earlier closures still apply: not hex or Base58 (it contains `O`), not a letter-encoded key
+  (tick 15), not a stage-2 key for FAED (tick 20), not a password (campaign 15).
+
+Consistent with tick 15: `YOUWON` marks the operation, and the 21 + 64 letters around it are
+residue. Closed.
