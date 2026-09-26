@@ -413,7 +413,7 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
     if not roots:
         why = f"the root `{root_prefix}…` is not among the read history transactions"
         return {"verdict": "FAIL" if full else "UNDETERMINED", "diffs": [why], "fuel": 0, "emissions": []}
-    root, seen, fuel, gaps, unspent = roots[0], set(), {}, [], []   # fuel: outpoint -> its non-split spender
+    root, seen, fuel, gaps, unspent, splits = roots[0], set(), {}, [], [], []   # fuel: outpoint -> non-split spender
     open_q = [(root, n) for n, s, k, a, _ in txs[root][2] if a == addr]
     while open_q:
         op = open_q.pop(0)
@@ -426,6 +426,8 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
         if sp in unread or sp not in txs:
             gaps.append(f"`{op[0][:12]}…:{op[1]}` is spent by `{sp[:12]}…`, whose raw was not read"); continue
         if cls[sp] == "split":
+            if sp not in splits:
+                splits.append(sp)
             open_q += [(sp, n) for n, s, k, a, _ in txs[sp][2] if a == addr]
         else:
             fuel[op] = sp
@@ -460,7 +462,8 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
     if len(emissions) != 10:
         diffs.append(f"{len(emissions)} leaf spends, expected 10")
     verdict = "PASS" if not diffs and not gaps and full else ("UNDETERMINED" if gaps or not full else "FAIL")
-    return {"verdict": verdict, "diffs": gaps + diffs, "fuel": len(fuel), "emissions": emissions, "root": root}
+    return {"verdict": verdict, "diffs": gaps + diffs, "fuel": len(fuel), "emissions": emissions, "root": root,
+            "splits": splits}
 
 def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
     out.append(f"## 4. The complete {label(addr)} fan-out (from its full address history)\n")
@@ -851,6 +854,111 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
                    + "**")
     return verdicts
 
+# ---------- offline transaction audit ----------
+SIGHASH = {1: "ALL", 2: "NONE", 3: "SINGLE", 0x81: "ALL|ANYONECANPAY", 0x82: "NONE|ANYONECANPAY", 0x83: "SINGLE|ANYONECANPAY"}
+
+class DiskOnly(Esplora):
+    """Reads raws already on disk (materials/chain/fetched/); never touches the network."""
+    def _get(self, path):
+        raise Unavailable(f"not on hand (no network in audit mode): {path}")
+
+_PRIMARIES = None
+def raw_on_hand(api, txid):
+    """A raw from the repo's committed primaries (materials/chain/*.hex, checked against the txid) or else from
+    the client (disk cache; in the wrapper's verify mode, the frozen HTTP cache). Never fetches in audit mode."""
+    global _PRIMARIES
+    if _PRIMARIES is None:
+        _PRIMARIES = {t["txid"]: t["raw"] for t in RT.load_saved() if parse_raw(t["raw"])["txid"] == t["txid"]}
+    return _PRIMARIES[txid] if txid in _PRIMARIES and api.fixture is None else api.tx_hex(txid)
+
+def tx_weight(hx):
+    """(weight, stripped size, total size) of a raw transaction."""
+    b, tx = bytes.fromhex(hx), parse_raw(hx)
+    if not tx["segwit"]:
+        return 4 * len(b), len(b), len(b)
+    wit = sum(len(T.varint(len(v["witness"]))) + sum(len(T.varstr(bytes.fromhex(w))) for w in v["witness"]) for v in tx["vin"])
+    stripped = len(b) - 2 - wit
+    return 3 * stripped + len(b), stripped, len(b)
+
+def audit_tx(api, txid, out):
+    """Offline audit of one transaction from raws on hand: each input's spent amount and script (from its parent
+    raw, txid-verified), every signature (sighash type, strict DER, low S, the key it verifies under), the outputs,
+    the fee and the fee rate. Returns {'txid', 'ok' (True: every input valid; False: one invalid; None: something
+    not checkable), 'fee', 'vsize'}."""
+    try:
+        hx = raw_on_hand(api, txid)
+    except Unavailable as e:
+        out.append(f"### `{txid}`\n\n- raw not on hand ({e})\n")
+        return {"txid": txid, "ok": None, "fee": None, "vsize": None}
+    tx = parse_raw(hx)
+    weight, stripped, size = tx_weight(hx)
+    vsize = -(-weight // 4)
+    wtxid = T.dsha(bytes.fromhex(hx))[::-1].hex()
+    out.append(f"### `{txid}`\n")
+    out.append(f"- raw hashes to its txid; wtxid `{wtxid}`; version {tx['version']}, locktime {tx['locktime']}; "
+               f"{size} B, weight {weight}, {vsize} vB")
+    total_in, states = 0, []
+    for i, v in enumerate(tx["vin"]):
+        if v["txid"] == COINBASE:
+            out.append(f"- in {i}: coinbase"); total_in = None; states.append(None); continue
+        try:
+            o = parse_raw(raw_on_hand(api, v["txid"]))["vout"][v["vout"]]
+        except (Unavailable, IndexError) as e:
+            d = T.input_script(v)
+            out.append(f"- in {i} spends `{v['txid']}:{v['vout']}` ({d['kind']}, {label(d['address'])}): parent raw not on hand, "
+                       f"so its amount and signature cannot be checked ({e})")
+            total_in = None; states.append(None); continue
+        spk = bytes.fromhex(o["spk"])
+        r = T.verify_input(tx, i, spk, o["sat"])
+        if total_in is not None:
+            total_in += o["sat"]
+        out.append(f"- in {i} spends `{v['txid']}:{v['vout']}` = {o['sat']} sat → {label(r['address'])} ({r['kind']})")
+        for j, sd in enumerate(r["sigs"]):
+            ht = sd["hashtype"]
+            name = SIGHASH.get(ht, f"{ht:#04x}") if ht is not None else "none (empty)"
+            key = (f"verifies under key {sd['key'] + 1} of {len(r['pubkeys'])} `{r['pubkeys'][sd['key']]}`"
+                   if sd["key"] is not None else "does not verify")
+            out.append(f"  - signature {j + 1}: SIGHASH_{name}, {'strict DER' if sd['strict_der'] else 'NOT strict DER'}, "
+                       f"{ {True: 'low S', False: 'high S (policy only)', None: 'unparseable r/s'}[sd['low_s']] }; {key}")
+        out.append(f"  - input {'VALID' if r['ok'] else 'INVALID' if r['ok'] is False else 'not checked'}: {r['why']}")
+        states.append(r["ok"])
+    total_out = 0
+    for o in tx["vout"]:
+        kind, a, data = script_info(bytes.fromhex(o["spk"]))
+        total_out += o["sat"]
+        out.append(f"- out {o['n']}: " + (f"OP_RETURN {data.decode('latin1')!r}" + (f" ({o['sat']} sat)" if o["sat"] else "")
+                                          if kind == "op_return" else f"{o['sat']} sat → {label(a)} ({kind})"))
+    fee = None if total_in is None else total_in - total_out
+    if fee is None:
+        out.append("- fee: not computable (an input amount is not on hand)")
+    else:
+        out.append(f"- inputs {total_in} sat = outputs {total_out} sat + fee {fee} sat ({fee / vsize:.2f} sat/vB)"
+                   + ("" if fee >= 0 else " — NEGATIVE: outputs exceed inputs"))
+    ok = False if False in states or (fee is not None and fee < 0) else (None if None in states else True)
+    out.append(f"- **every input valid: {ok}**\n")
+    return {"txid": txid, "ok": ok, "fee": fee, "vsize": vsize}
+
+def audit_h1(api, out, max_pages, h1_root=H1_ROOT):
+    """Audit the whole pre-registered 12 -> 12 tree offline: the root's parent(s), the root, every split and every
+    emission, in tree order. Uses the 3GSMG24T history and raws already on hand."""
+    fan = lookup_fanout(api, [], max_pages, h1_root=h1_root)
+    h1 = fan["h1"]
+    out.append(f"## Offline audit of the H1 tree (H1 verdict: {h1['verdict']})\n")
+    if not h1.get("root"):
+        out.append("- the root is not in the history on hand: " + "; ".join(h1["diffs"]))
+        return {"ok": None, "results": []}
+    root_tx = parse_raw(raw_on_hand(api, h1["root"]))
+    chain = list(dict.fromkeys([v["txid"] for v in root_tx["vin"]] + [h1["root"]] + h1["splits"]
+                               + [e["txid"] for e in h1["emissions"]]))
+    res = [audit_tx(api, t, out) for t in chain]
+    ok = False if any(r["ok"] is False for r in res) else (None if any(r["ok"] is None for r in res) else True)
+    tree = {h1["root"], *h1["splits"], *(e["txid"] for e in h1["emissions"])}
+    fees = [r["fee"] for r in res if r["txid"] in tree]
+    out.append(f"**Audited {len(res)} transactions ({len(res) - len(tree)} parent(s) of the root, the root, {len(h1['splits'])} splits, "
+               f"{len(h1['emissions'])} emissions): every input valid: {ok}; fees inside the tree "
+               + (f"{sum(fees)} sat" if None not in fees else "not all computable") + "**\n")
+    return {"ok": ok, "results": res, "h1": h1["verdict"]}
+
 # ---------- run ----------
 def run(api, depth, max_fetch, max_pages=20, full=True):
     out = [f"# Receipt lookups (ticks 88–93), {time.strftime('%Y-%m-%d %H:%M:%SZ', time.gmtime())}\n",
@@ -926,6 +1034,63 @@ def synthetic_fanout(perturb=None, refill=False):
         spend([(R2, 0)], [(5000, _spk_of(QMG))], b"GSMG.io neighbors, half and double")
     return fx, hist, R, btc_addr.p2pkh(fpub)
 
+def _der_sig(d, z, hashtype=1):
+    """Deterministic low-S ECDSA signature by test scalar d over z, DER plus hashtype (selftest fixtures only)."""
+    k = int.from_bytes(T.sha(d.to_bytes(32, "big") + z.to_bytes(32, "big")), "big") % btc_addr.N or 1
+    r = btc_addr.mul(k)[0] % btc_addr.N
+    s_ = pow(k, -1, btc_addr.N) * (z + r * d) % btc_addr.N
+    s_ = min(s_, btc_addr.N - s_)
+    def enc(x):
+        b = x.to_bytes(33, "big").lstrip(b"\x00")
+        b = b"\x00" + b if b[0] & 0x80 else b
+        return b"\x02" + bytes([len(b)]) + b
+    body = enc(r) + enc(s_)
+    return b"\x30" + bytes([len(body)]) + body + bytes([hashtype])
+
+def audit_controls():
+    """A parent paying a 2-of-2 P2SH-P2WSH and a child spending it with two real BIP143 signatures, audited from a
+    fixture; then the signatures swapped, and the parent amount changed; the weight cross-checked against an
+    independent serialization; and the saved 2024 split (one legacy input whose parent is saved)."""
+    d1, d2 = 0x1f1f1f, 0x2e2e2e                           # test scalars; their addresses hold nothing
+    p1, p2 = (bytes([2 + (y & 1)]) + x.to_bytes(32, "big") for x, y in (btc_addr.mul(d1), btc_addr.mul(d2)))
+    ws = b"\x52\x21" + p1 + b"\x21" + p2 + b"\x52\xae"
+    redeem = b"\x00\x20" + T.sha(ws)
+    spk = b"\xa9\x14" + btc_addr.hash160(redeem) + b"\x87"
+    pay = _spk_of(RT.HALF)
+    def build(amount, order=(0, 1)):
+        parent = _raw([("ab" * 32, 0, T.varstr(bytes.fromhex("30" + "00" * 69 + "01")) + T.varstr(p1), [])], [(amount, spk)])
+        pt = parse_raw(parent)["txid"]
+        blank = _raw([(pt, 0, T.varstr(redeem), [b"", b"\x30", b"\x30", ws])], [(60000, pay), (39000, spk)])
+        z = T.sighash_bip143(parse_raw(blank), 0, ws, 100000, 1)
+        sigs = [_der_sig(d1, z), _der_sig(d2, z)]
+        child = _raw([(pt, 0, T.varstr(redeem), [b"", sigs[order[0]], sigs[order[1]], ws])], [(60000, pay), (39000, spk)])
+        return {pt: parent, parse_raw(child)["txid"]: child}, parse_raw(child)["txid"], child
+    fx, ct, child = build(100000)
+    o = []
+    good = audit_tx(Esplora("offline", fixture=fx), ct, o)
+    text = "\n".join(o)
+    w, stripped, size = tx_weight(child)
+    nowit = parse_raw(child)
+    alt = _raw([(v["txid"], v["vout"], bytes.fromhex(v["scriptSig"]), []) for v in nowit["vin"]],
+               [(x["sat"], bytes.fromhex(x["spk"])) for x in nowit["vout"]])
+    fx2, ct2, _ = build(100000, order=(1, 0))
+    swapped = audit_tx(Esplora("offline", fixture=fx2), ct2, [])
+    fx3, ct3, _ = build(100001)
+    amount = audit_tx(Esplora("offline", fixture=fx3), ct3, [])
+    o4 = []
+    split = audit_tx(Esplora("offline", fixture={t["txid"]: t["raw"] for t in RT.load_saved()}), saved("88cdb3cd")["txid"], o4)
+    t4 = "\n".join(o4)
+    checks = {
+        "valid, fee 1000": good["ok"] is True and good["fee"] == 1000,
+        "key order shown": "verifies under key 1 of 2" in text and "verifies under key 2 of 2" in text and "SIGHASH_ALL" in text,
+        "weight = 3*stripped + total": stripped == len(bytes.fromhex(alt)) and w == 3 * stripped + size,
+        "swapped signatures invalid": swapped["ok"] is False,
+        "wrong amount invalid": amount["ok"] is False,
+        "2024 split: 1 valid input, 2 unchecked": t4.count("input VALID") == 1 and t4.count("parent raw not on hand") == 2
+                                                  and split["ok"] is None,
+    }
+    return all(checks.values()), {k: v for k, v in checks.items() if not v} or "all hold"
+
 def _raises(f):
     try:
         f()
@@ -985,6 +1150,10 @@ def selftest():
     print("promotion (iv) and NOT DETERMINED controls:", c,
           {"iv": v4.get(funder, {}).get("states"), "no history": vu.get(funder, {}).get("states")})
     ok &= c
+    c, detail = audit_controls()
+    print("offline audit controls (real-signature 2-of-2 P2SH-P2WSH spend, the 37mh shape; tampers; weight; "
+          "saved 2024 split):", c, detail)
+    ok &= c
     fixture = {t["txid"]: t["raw"] for t in RT.load_saved()}
     halving = describe(fixture[saved("a798905f")["txid"]])
     split = describe(fixture[saved("2aa9a4a9")["txid"]])
@@ -1035,9 +1204,18 @@ def main():
     ap.add_argument("--max-fetch", type=int, default=200)
     ap.add_argument("--max-pages", type=int, default=20, help="address-history pages of 25 transactions")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--verify", nargs="+", metavar="TXID", help="audit these transactions offline from raws on disk")
+    ap.add_argument("--verify-h1", action="store_true", help="audit the whole H1 tree offline from raws and history on disk")
     a = ap.parse_args()
     if a.selftest:
         return 0 if selftest() else 1
+    if a.verify or a.verify_h1:
+        api, out = DiskOnly(a.base), []
+        res = [audit_tx(api, t, out) for t in a.verify or []]
+        if a.verify_h1:
+            res += audit_h1(api, out, a.max_pages)["results"]
+        print("\n".join(out))
+        return 1 if any(r["ok"] is False for r in res) else (6 if any(r["ok"] is None for r in res) else 0)
     api = Esplora(a.base)
     verdicts, text, extra = run(api, a.depth, a.max_fetch, a.max_pages)
     print(text)

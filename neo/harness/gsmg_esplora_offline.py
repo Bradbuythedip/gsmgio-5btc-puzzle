@@ -348,6 +348,7 @@ def build_parser():
         ("sync", "fetch via Esplora, cache exact GET responses, run full analysis"),
         ("offline", "run full analysis from cache only; network forbidden"),
         ("status", "verify/summarize caches"),
+        ("verify", "audit transactions (or the whole H1 tree) offline from the cache: amounts, fee, every signature"),
     ]:
         p = sub.add_parser(name, help=helptext)
         p.add_argument("--repo", type=Path, default=Path("."))
@@ -357,6 +358,11 @@ def build_parser():
             p.add_argument("--max-fetch", type=int, default=DEFAULT_MAX_FETCH)
             p.add_argument("--max-pages", type=int, default=DEFAULT_MAX_PAGES)
             p.add_argument("--delay", type=float, default=0.15)
+        if name == "verify":
+            p.add_argument("txids", nargs="*", help="transaction ids to audit")
+            p.add_argument("--h1", action="store_true", help="audit the whole pre-registered 12 -> 12 tree")
+            p.add_argument("--base", default=DEFAULT_BASE)
+            p.add_argument("--max-pages", type=int, default=DEFAULT_MAX_PAGES)
     return ap
 
 def main(argv=None):
@@ -375,6 +381,22 @@ def main(argv=None):
 
         if a.cmd == "status":
             return cmd_status(repo)
+
+        if a.cmd == "verify":
+            if not a.txids and not a.h1:
+                raise ValueError("verify needs txids and/or --h1")
+            api = make_esplora(RL, repo, a.base, offline=True, delay=0)   # cache only: never fetches
+            out = []
+            res = [RL.audit_tx(api, t, out) for t in a.txids]
+            if a.h1:
+                res += RL.audit_h1(api, out, a.max_pages)["results"]
+            print("\n".join(out))
+            print(f"cache misses: {api.cache_misses}; network requests: {api.fetches}"
+                  + (" (verify never fetches: a miss is a raw the sync did not need, not a reason to sync again)"
+                     if api.cache_misses else ""))
+            if api.fetches:
+                raise RuntimeError("OFFLINE INVARIANT FAILED: a network request occurred")
+            return 1 if any(r["ok"] is False for r in res) else (6 if any(r["ok"] is None for r in res) else 0)
 
         if a.cmd in ("sync", "offline"):
             if a.depth < 1 or a.max_fetch < 1 or a.max_pages < 1:

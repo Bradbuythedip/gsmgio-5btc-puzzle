@@ -307,10 +307,13 @@ def ecdsa_ok(pub, z, sig_der):
     return R is not None and R[0] % N == r
 
 def verify_input(tx, i, prev_spk=None, prev_sat=None):
-    """{'kind', 'address', 'ok': True/False/None, 'why'}. True: valid under today's consensus rules;
-    False: invalid; None: not checkable here, or valid only under rules that a later soft fork removed."""
+    """{'kind', 'address', 'pubkeys', 'ok': True/False/None, 'why', 'sigs'}. True: valid under today's consensus
+    rules; False: invalid; None: not checkable here, or valid only under rules that a later soft fork removed.
+    'sigs' lists each signature examined: its sighash type, strict DER, low S (policy only), and the index of the
+    key it verifies under (None if it verifies under none)."""
     d = input_script(tx["vin"][i], prev_spk)
-    res = {"kind": d["kind"], "address": d["address"], "pubkeys": [p.hex() for p in d["pubkeys"]], "ok": None, "why": ""}
+    res = {"kind": d["kind"], "address": d["address"], "pubkeys": [p.hex() for p in d["pubkeys"]], "ok": None, "why": "",
+           "sigs": []}
     if not d["ok"]:
         res.update(ok=False, why="invalid: " + d["note"]); return res
     if not d["sigs"] or d["script_code"] is None or not d["pubkeys"]:
@@ -327,6 +330,10 @@ def verify_input(tx, i, prev_spk=None, prev_sat=None):
     era = list(d["era"])
     sigs, keys, k = d["sigs"], d["pubkeys"], 0
     for sig in sigs:                                        # OP_CHECKMULTISIG order; single-key is m=1
+        rs = _der(sig[:-1]) if sig else None
+        info = {"hashtype": sig[-1] if sig else None, "strict_der": bool(sig) and strict_der(sig),
+                "low_s": None if rs is None else rs[1] <= N // 2, "key": None}
+        res["sigs"].append(info)
         if not sig:
             res.update(ok=False, why="an empty signature cannot verify"); return res
         if not strict_der(sig):
@@ -340,6 +347,7 @@ def verify_input(tx, i, prev_spk=None, prev_sat=None):
             k += 1
         if k == len(keys):
             res.update(ok=False, why="a signature does not verify"); return res
+        info["key"] = k
         k += 1
     if len(sigs) < (d["m"] or 1):
         res.update(ok=False, why=f"{len(sigs)} of {d['m']} signatures"); return res

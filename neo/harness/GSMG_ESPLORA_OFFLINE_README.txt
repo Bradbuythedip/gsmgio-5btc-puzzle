@@ -48,7 +48,20 @@ Every report carries an "invariant" block: mode, cache_complete,
 network_requests, cache_misses, transient_failures, unavailable_items, prereg_sha256,
 receipt_lookups_sha256.
 
-4. CACHE STATUS
+4. OFFLINE AUDIT OF TRANSACTIONS (never fetches)
+
+  python3 /path/to/gsmg_esplora_offline.py verify --repo . --h1
+  python3 /path/to/gsmg_esplora_offline.py verify --repo . TXID [TXID ...]
+
+For each transaction: the raw is checked against its txid; each input's spent amount and
+script come from its parent raw (from the cache or the repo's committed primaries); every
+signature is shown with its sighash type, strict-DER and low-S status and the key it
+verifies under (in CHECKMULTISIG order); then the outputs, the fee and the fee rate.
+--h1 audits the whole pre-registered 12 -> 12 tree: the root's parent, the root, every
+split and every emission. Exit 0: every input valid; 1: an input is invalid; 6: something
+could not be checked (a parent raw not on hand).
+
+5. CACHE STATUS
 
   python3 /path/to/gsmg_esplora_offline.py status --repo .
 
