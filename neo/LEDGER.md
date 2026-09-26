@@ -1848,3 +1848,38 @@ collapses with it. The verified-but-coincidental items (f73d92 = 2·11·149·pri
 149=VIC length) remain as recorded at tick 32 (a ~1-in-11 factorization coincidence), and the
 103×103 → Half/Better-Half construction inherits the *excluded* 1327-byte blob's unauthenticated
 status (issue #104) and yields non-prize addresses. No change to the standing state.
+
+### Addendum (2026-09-26, research only): prize point, carrier, and the 1327-byte decrypt audited
+
+**Correction of the previous addendum.** Caveat 2 there was wrong. The prize pubkey *is* public:
+the 2020 halving spend (locktime 629998, recorded at tick 37) revealed it. Verified offline:
+`04f4d1bb…3559` lies on secp256k1, hashes to `1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe` uncompressed
+and `1cc6xayvqpeetixmuXDRsGug7GKyoRdxP` compressed. The locktimes 629998/840003 and `3GSMG24T…`
+are on the creator trail (tick 38), not unverified. That caveat is retracted. Caveat 1 is refined
+below.
+
+**Prize coordinates carry nothing.** x mod 4943/661/149 = 4529/195/105; y = 1860/287/46;
+popcounts 122/133 of 256. The vanity lives only in HASH160 of the 65-byte uncompressed encoding.
+
+**U\*D reproduces exactly.** On the 14×14 grid, row_sum+col_sum for the 24 coloured cells in spiral
+order, prime→1, gives `010101010010101001000100` = `U*D`. No downstream consequence; exploratory.
+
+**The 1327-byte Cosmic decrypt is reproducible, not authenticated.** XOR of the seven soup-token
+SHA-256s (`a795de11…0735`) as a raw 32-byte EVP-MD5 password on the byte-verified Cosmic blob
+gives pad 1, 1327 bytes, sha256 `4f7a1e4e…`. So "excluded" concerns the file's provenance, not
+reproducibility. Its only intrinsic evidence is a 1-byte pad (~1 in 256).
+- **103×103 structure:** row_sum[i]+col_sum[(i+7) mod 103] ranges 80–117, mean 100.8 — the random
+  expectation (~103±7); ones fraction 0.4895; no value below 38. "Fitting base-38" therefore needs
+  a chosen reduction rule, after which any 64 output bytes are valid scalars.
+- **Carrier `1GSMG9VD…` (scalar `abc09ead…`, verified):** P(address begins `1GSMG`) ≈ 1 in 4.48M
+  per encoding. A 1,679,616-pair XOR scan over two encodings expects **0.75** chance hits,
+  P(≥1) = **0.53**. The second operand `cosmic_A` is not reproducible from authentic inputs, and
+  `1GSMG9…` appears only in 2023+ "GSMG WITNESS" chalkboard traffic, not on the creator trail.
+  The carrier is not a worked example; it is what a scan that size finds half the time.
+- **Half/Better-Half (`1JG648…`/`145ZQ9…`):** 2026 token spray, not traced to `1EtbTv…` or
+  `3GSMG24T…` (tick 38). Signatures from them prove control by whoever derived them, which is
+  circular. Unauthenticated.
+
+**Net.** The XOR/meet-in-the-middle "demonstration" reading has no authenticated anchor: its
+operand is solver-made, its address is off the creator trail, and its hit rate is chance-level.
+Standing state unchanged; no search run.
