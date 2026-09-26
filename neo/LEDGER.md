@@ -1526,3 +1526,30 @@ re-presented as evidence that the prime-counting function is the missing operato
 checksumming lengths and cuts of decoded text. It emits no string, key or scalar that any lock
 could take, and no source-named next mask exists to feed it. The frozen continuation rule
 stands; the gate stays empty.
+
+### Loop tick 37 (2026-09-26): "better half" is an address, confirmed; meet-in-the-middle ready, blocked on a public key
+
+**A creator CONFIRM the ledger never used.** On 2020-05-11, the halving day, @x7x7x7x6 wrote
+"the half of prize went to better half" and the creator replied **"Well spotted"** (#3902,
+classed CONFIRM). Half the prize had just moved from `1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe` to
+`17ucy1K9ZUAaoY6JVtM932W9jUp5LXfyHa`. So **"better half" = the 17ucy1 address**, and "half" =
+the prize address holding the other half. That makes the VIC sentence ("…THE PRIVATE KEYS
+BELONG TO HALF AND BETTER HALF AND THEY ALSO NEED FUNDS TO LIVE") **meta**: it says what the
+cracked keys are for, two keys for two funded addresses. It is not a recipe for deriving a key.
+- Consequence: it supports P32T holding **two raw 32-byte keys** (64 B content, pad 16). That
+  was the SECONDARY reading in tick 31; it now has creator-anchored motivation. This is not
+  proof, and it does not change the freeze oracle, which already accepts both readings.
+- Consequence: "half and better half" is **not** evidence that one key is the sum of two
+  parts. The additive meet-in-the-middle below is therefore a cheap structural check, not a
+  lead.
+
+**Meet-in-the-middle harness** (`harness/mitm_halves.py`). It tests k = a+b, a−b and a·b (mod n)
+for every pair (a, b) from a 163,354-scalar pool: sha256 of every logged candidate and 1–4-word
+n-gram of the primary texts and creator messages, plus 64-hex strings read as scalars. That is
+about 8×10¹⁰ pairs, done as ~5×10⁵ EC operations in **18 s**. Self-test: planted add/sub/mul
+pairs are recovered, and a random point at full scale gives 0 false matches.
+
+**Blocked.** It needs the prize (or 17ucy1) public key. The prize key is on-chain in the
+scriptSig of the 2020-05-11 spend, but this environment's network policy denies every chain
+API tried (blockstream, mempool.space, blockcypher, blockchain.info). The harness refuses any
+key that does not hash to one of the two addresses.
