@@ -1055,3 +1055,42 @@ last-mile dress of the answer (WIF `5`/`K`/`L`, or `1GSMG1…`/`17ucy1…` from 
 an oracle for a real hit, not a way to brute the blob. What is still missing is unchanged: a
 *further named operation* on `f73d92` (the SAL-scoped primes/zeroing) that yields a
 recognisable object before AES — not another spelling of the label.
+
+### Loop tick 30 (2026-09-26) — the P32T last-block freeze oracle; the two halves; a reading tension
+
+User frame: P32T is 80-byte CT, 5 CBC blocks; the last block `P5 = D_K(C5) XOR C4` depends
+only on K (C4, C5 are known ciphertext), so it is an **IV-free** test. If the plaintext is
+two raw 32-byte keys (64 B content), `P5 == 0x10 * 16` — a 128-bit accept test, far sharper
+than the 1-in-243 PKCS#7 filter. Stop hashing VIC strings; find the *operation* on the two
+named halves (HALF / BETTER HALF = the on-chain `1GSMG1…` and `17ucy1…`), not another spelling.
+
+**Built `neo/harness/p32t_freeze.py`** — the IV-free oracle, self-tested (accepts the key that
+padded a synthetic 64-byte plaintext, rejects a wrong key). `C4 = d9f7ff6e…`, `C5 = 5334de08…`.
+
+**A reading tension the freeze surfaced, and resolved into a fuller oracle.** `0x10*16` tests
+only the 64-byte reading. The repo's own primary reading of P32T is "64 hex chars + a
+newline" = **65** bytes, whose last block is `0x0a || 0x0f*15`, which the `0x10*16` test would
+reject. So a key correct under the hex+LF reading would look like a miss. The oracle now tests
+every IV-free last-block reading: `64B-tworawkeys` (`0x10*16`), `65B-hexkey+LF`
+(`0x0a‖0x0f*15`), `65B-content+pad15`, and any shorter valid PKCS#7 pad (logged, weak).
+
+**campaign_29_halves — K from the two public halves, plus a named-object sweep.** Public
+bytes only (no VIC word strings): `hash160(1GSMG1…) = a9553269…`, `hash160(17ucy1…) =
+4bc46844…`. 42 one-rule keys — `sha256` of the two hash160s / version+hash160 / 25-byte
+payloads / address strings, both orders and space-joined, `sha256(A)⊕sha256(B)`, double-sha,
+raw concatenations trimmed to 32, hex-string forms — plus EVP-{MD5,SHA256} of the address
+strings with the P32T salt. Then 12 named 32-byte objects as `sha256(object)`.
+**50 candidate keys, 0 strong-reading hits, and 0 that produce even a chance valid pad** in
+the last block (random keys give one ~1 in 255, so 0/50 is noise, no signal). Per-candidate
+P5 logged in `neo/attempts/campaign_29_halves.jsonl`.
+
+**Conclusion (the honest revelation, a sharp negative that redirects).** Under a clean,
+reading-aware, IV-free 128-bit oracle, P32T's key is **not** any public-byte formula on the
+two halves, nor `sha256` of any named object, nor (per the user's own runs) any VIC-string
+KDF. Combined with tick-20's proof that `Salted__` is written only in password mode and the
+tick-29 Base58 closure, **P32T is not opened directly from any currently-named object.** The
+arrow reverses: an earlier step (Cosmic, or the still-missing slot-A operation) must name
+P32T's operand first. The missing piece is the operation, and it is now shown not to be a
+public-address derivation either. No AES campaign on P32T or Cosmic is warranted until a
+primary statement names an operand that is not a VIC string — which the archive does not
+currently supply. The freeze oracle stays as reusable tooling for any future K.

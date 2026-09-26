@@ -1,0 +1,50 @@
+{"label": "sha(A||B):h160", "kdf": "raw-K", "p5": "e9be7e6ada7bf12df165437a7fc51c3f", "readings": [], "pad": null}
+{"label": "sha(B||A):h160", "kdf": "raw-K", "p5": "16ed5fd5d99a28a2e8a24dded2e389b6", "readings": [], "pad": null}
+{"label": "sha(A||' '||B):h160", "kdf": "raw-K", "p5": "0d8596b5dd9a57a76493d84552672a7d", "readings": [], "pad": null}
+{"label": "shaA^shaB:h160", "kdf": "raw-K", "p5": "726819f91be54ce65a7f6d0b741a851d", "readings": [], "pad": null}
+{"label": "sha(sha A||B):h160", "kdf": "raw-K", "p5": "2ce23ed46bf0b214dff0bd8d76490299", "readings": [], "pad": null}
+{"label": "sha(A||B):ver21", "kdf": "raw-K", "p5": "55d2f7eddb5838cbb8ae58ceb59b3fda", "readings": [], "pad": null}
+{"label": "sha(B||A):ver21", "kdf": "raw-K", "p5": "2be96f0c049751e71c4a2995eb31036f", "readings": [], "pad": null}
+{"label": "sha(A||' '||B):ver21", "kdf": "raw-K", "p5": "44767923a69736e97b083533724a0676", "readings": [], "pad": null}
+{"label": "shaA^shaB:ver21", "kdf": "raw-K", "p5": "5c8509ecd84eb3ee537164642c3633d1", "readings": [], "pad": null}
+{"label": "sha(sha A||B):ver21", "kdf": "raw-K", "p5": "1394f5b701a07c711799043698e30713", "readings": [], "pad": null}
+{"label": "sha(A||B):pay25", "kdf": "raw-K", "p5": "8312a18445109869b29b5936994060e0", "readings": [], "pad": null}
+{"label": "sha(B||A):pay25", "kdf": "raw-K", "p5": "e8d9387a11f2aaee426b53cc872c8f3f", "readings": [], "pad": null}
+{"label": "sha(A||' '||B):pay25", "kdf": "raw-K", "p5": "f56caa956c6cbbe1f3ea44312c0ce893", "readings": [], "pad": null}
+{"label": "shaA^shaB:pay25", "kdf": "raw-K", "p5": "198c0c1c5fbca599e65fe116fbfbada3", "readings": [], "pad": null}
+{"label": "sha(sha A||B):pay25", "kdf": "raw-K", "p5": "82a90a041ce03bb8343d05b2ae1d41b1", "readings": [], "pad": null}
+{"label": "sha(A||B):addr", "kdf": "raw-K", "p5": "a03e74a981bca6d373206621f132f8cb", "readings": [], "pad": null}
+{"label": "sha(B||A):addr", "kdf": "raw-K", "p5": "03d7b90c3fdfc69a3a5e2a5b9a7d2b42", "readings": [], "pad": null}
+{"label": "sha(A||' '||B):addr", "kdf": "raw-K", "p5": "eb01d08b81de9592028c8a1e2cf0e451", "readings": [], "pad": null}
+{"label": "shaA^shaB:addr", "kdf": "raw-K", "p5": "383b732117f20abc2c1c39e0b3db9483", "readings": [], "pad": null}
+{"label": "sha(sha A||B):addr", "kdf": "raw-K", "p5": "1a1eaf0f0e362559ec48310a8acbfdcb", "readings": [], "pad": null}
+{"label": "h160A||h160B[:32]", "kdf": "raw-K", "p5": "0f84de58123ece2afa6f1fcd97429000", "readings": [], "pad": null}
+{"label": "h160B||h160A[:32]", "kdf": "raw-K", "p5": "7252bb2724345c250716f6775c3e75e8", "readings": [], "pad": null}
+{"label": "h160A||h160B||h160A[:32]", "kdf": "raw-K", "p5": "0f84de58123ece2afa6f1fcd97429000", "readings": [], "pad": null}
+{"label": "h160A^h160B ext", "kdf": "raw-K", "p5": "8fa0498e35eebf59e2def574fd5b0654", "readings": [], "pad": null}
+{"label": "sha(hexA||hexB):h160hex", "kdf": "raw-K", "p5": "335a1a278f5b7ef902411f1fba5e6dfc", "readings": [], "pad": null}
+{"label": "sha(hexB||hexA):h160hex", "kdf": "raw-K", "p5": "c1e12c8d326d1c92ffb859611a7503c0", "readings": [], "pad": null}
+{"label": "EVP-md5:addrA||addrB", "kdf": "raw-K", "p5": "3dfdceecee2bd7e0a71b0e2289ba5aea", "readings": [], "pad": null}
+{"label": "EVP-md5:sha256hex(addrA||addrB)", "kdf": "raw-K", "p5": "93cff4ea2142dc9eff72bdcd4ceb51ac", "readings": [], "pad": null}
+{"label": "EVP-sha256:addrA||addrB", "kdf": "raw-K", "p5": "d7657fa26192a68fb8dc8e76daee5aae", "readings": [], "pad": null}
+{"label": "EVP-sha256:sha256hex(addrA||addrB)", "kdf": "raw-K", "p5": "0501e292a9441d8b2537a27c932c1185", "readings": [], "pad": null}
+{"label": "EVP-md5:addrB||addrA", "kdf": "raw-K", "p5": "4131589f5b5c46e7eeb015895d8fe46d", "readings": [], "pad": null}
+{"label": "EVP-md5:sha256hex(addrB||addrA)", "kdf": "raw-K", "p5": "e889af436d8a70cdb976b5fa1438999e", "readings": [], "pad": null}
+{"label": "EVP-sha256:addrB||addrA", "kdf": "raw-K", "p5": "0e030c8e9072c0131278b63a021f1af5", "readings": [], "pad": null}
+{"label": "EVP-sha256:sha256hex(addrB||addrA)", "kdf": "raw-K", "p5": "a3e05bff6a0cbca718665e910d8f9a86", "readings": [], "pad": null}
+{"label": "EVP-md5:hexA||hexB", "kdf": "raw-K", "p5": "1fd74606799c55304cb584b1ea4f0750", "readings": [], "pad": null}
+{"label": "EVP-md5:sha256hex(hexA||hexB)", "kdf": "raw-K", "p5": "3f8b4f8b352d4b2518bd90ed0b061be7", "readings": [], "pad": null}
+{"label": "EVP-sha256:hexA||hexB", "kdf": "raw-K", "p5": "970c708e190ab5b0df05a53d4f475aff", "readings": [], "pad": null}
+{"label": "EVP-sha256:sha256hex(hexA||hexB)", "kdf": "raw-K", "p5": "d7845d1e33ba45a2acc039c2dffbbd82", "readings": [], "pad": null}
+{"label": "EVP-md5:addrA addrB", "kdf": "raw-K", "p5": "baf2c03221c8e2a47933a8ef5dac67b1", "readings": [], "pad": null}
+{"label": "EVP-md5:sha256hex(addrA addrB)", "kdf": "raw-K", "p5": "d1bda22a8bde5939d02fdf3e2eda9b5e", "readings": [], "pad": null}
+{"label": "EVP-sha256:addrA addrB", "kdf": "raw-K", "p5": "4f9752276f683a9038f823a64e4d73f9", "readings": [], "pad": null}
+{"label": "EVP-sha256:sha256hex(addrA addrB)", "kdf": "raw-K", "p5": "7e730983366646aa2194838b37eea271", "readings": [], "pad": null}
+{"label": "sha256(f73d92)", "kdf": "raw-K", "p5": "0b97bda69d2ca3b1bb8a0779939080b0", "readings": [], "pad": null}
+{"label": "sha256(dbbi)", "kdf": "raw-K", "p5": "b09d41c30c29c0c047aa52fe9782670e", "readings": [], "pad": null}
+{"label": "sha256(faed)", "kdf": "raw-K", "p5": "d43233cb7a773be1e4c637faa67b2f69", "readings": [], "pad": null}
+{"label": "sha256(VIC)", "kdf": "raw-K", "p5": "b6d4472966480614542d8783963663d5", "readings": [], "pad": null}
+{"label": "sha256(matrixsumlist)", "kdf": "raw-K", "p5": "38565df4437915b2aca5d1f1a18816ff", "readings": [], "pad": null}
+{"label": "sha256(yellowblueprimes)", "kdf": "raw-K", "p5": "5c21eedeb5058920aba66fc8331b8cdf", "readings": [], "pad": null}
+{"label": "sha256(lastwordsbeforearchichoice)", "kdf": "raw-K", "p5": "7db6fd0b4a96d618a79dbc98189839b4", "readings": [], "pad": null}
+{"label": "sha256(ciaobellao)", "kdf": "raw-K", "p5": "6cb71be478ec23871e2b3248c276501c", "readings": [], "pad": null}

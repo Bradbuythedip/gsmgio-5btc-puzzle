@@ -33,7 +33,7 @@ same message.
 
 | oracle | passes when | never counts |
 |---|---|---|
-| P32T = `inner96` (salt `b45a5e3d827593ca`, ct 80 B) | ≤79 bytes of clearly structured output (a hex key + newline fits exactly) | PKCS#7 pad 1–3 with garbage |
+| P32T = `inner96` (salt `b45a5e3d827593ca`, ct 80 B) | ≤79 bytes of clearly structured output (a hex key + newline fits exactly). Sharper IV-free test: the last block `P5 = D_K(C5) ⊕ C4` depends only on K; for the 64-byte reading `P5 == 0x10·16`, for the 64-hex-char+newline reading `P5 == 0x0a‖0x0f·15` (`neo/harness/p32t_freeze.py`). No named key passes either (campaign 29) | PKCS#7 pad 1–3 with garbage; a reading-specific test applied to the wrong plaintext length |
 | `salph_inner` = `miniAB` (salt `3ab585348552415d`, ct 80 B) | same | same |
 | Cosmic (salt `2d3f6fe06dc950e6`, ct 1328 B) | large coherent payload, or a 32-byte window deriving to `1GSMG1…` / `17ucy1…` | a `01` pad, printable fragments, locally reproduced hashes |
 | prize address `1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe` (PRIMARY: printed on the genesis image; README) | derived address equals it | a `1GSMG` prefix (58⁴ ≈ 11M work, ledger tick 7) |
