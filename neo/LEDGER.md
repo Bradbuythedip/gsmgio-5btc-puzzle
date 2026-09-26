@@ -2159,3 +2159,26 @@ stop rule excludes case/spacing variants and substrings. Class B (contact infras
 addendum, so no intake files were written.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 54 (2026-09-26): creator on-chain OP_RETURN text, eight verbatim candidates, null
+
+Pre-registered in `intake/2026-09-26-opreturn/PREREG.md` (commit `26ec923`, pushed before the
+run). `harness/campaign_39_opreturn.py` uses the gate's frozen `run_decrypts`/`run_scalars`
+unchanged, plus the P32T freeze oracle and a `17ucy1…` scalar check. It runs outside `gate.py`
+because the gate's spent rule refuses text that is merely *recorded* in LEDGER.md (ticks 38/39)
+even though it was never *tested*. Of this class only `causality` and `Halving` had ever run.
+
+Candidates, whole and verbatim: "GSMG.io: Right, this is causality", "GSMG.io: do you beleive me
+you need it?", "GSMG.io: part of the cipher", "GSMG.io: phase3.2 pass OK", "GSMG.io: are you
+sure?", "GSMG.io: You are here because 227 chars were correct", "Good job, Neo!", "GSMG.io
+neighbors, half and double".
+
+**128 decrypts, 0 passing the strict PKCS#7 + printable gate, 0 freeze-oracle keys, 0 prize or
+`17ucy1…` scalar matches.** Logged in `attempts/campaign_39_opreturn.jsonl`. Byte-exactness is
+user-grade (ledger text plus user-supplied txid prefixes; no raw tx hex in the repo). Stop rule
+applied: no variants, no prefix stripping, no substrings. The creator OP_RETURN class is spent.
+
+**Gate-rule note (not changed):** "recorded ≠ tested". Any future creator text that was recorded
+before it was run needs a pre-registered direct run like this one, not an edit to the frozen gate.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
