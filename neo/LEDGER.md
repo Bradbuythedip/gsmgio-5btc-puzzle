@@ -3219,3 +3219,33 @@ searched at tick 55 (marker test, chance level). Δ² has no anchor and is not r
 - the raw hex of `a82052a2…`: is its signer `3GSMG24T…`'s key `0205eaf7…`?
 
 **State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
+
+### Addendum to tick 88 (2026-09-26): Ijiri's causality + matrix reading; the Grigg mapping made explicit
+
+Re-relayed with sources: the AAA In-Memoriam page for Ijiri; Grigg 2005 (iang.org); Jeffries 2017
+(HackerNoon); Ijiri 1988, *Management Science* 34(2):160. It raises two points tick 88 did not cover.
+
+1. **"causality + matrix + sumlist."** `causality` is already sourced: the phase-2 riddle points to
+   the Merovingian's speech in *Reloaded* ("…the only real truth: causality"), and the answer is
+   hash-confirmed. `matrixsumlist` is the soup's first a/b block. Ijiri's matrix form of double
+   entry gives account totals as the row and column sums of a transaction matrix. That is the
+   ledger's main reading of `matrixsumlist`, and it has been run to exhaustion:
+   - campaign 14, about 16.6M trials;
+   - campaign 30, the 11×11 row/column-sum pipeline;
+   - the tick-8 column sums and their cold re-check;
+   - campaign 26, the grid's row/column sums against all three addresses.
+
+   No new operation follows.
+2. **Grigg's three parts, by family** (from the tick-88 table):
+   - **Checkpoints.** The solver's instruction is off-chain (Telegram, #896/#6497). The creator's
+     single signature is the receipt, and it commits to the answer by hash (payee = H(answer)).
+   - **The 2020 split** has the full two-signature form. 3GSMG24T signs the instruction; HALF
+     executes as Grigg's "Ivan", signing over that instruction's outpoint; BETTER HALF is credited.
+   - **The 2024 split** carries only the executor's signature. Its instruction is unknown (lookup 1).
+
+   So the on-chain layer does two jobs: it registers accepted answers, each committed by hash, and
+   it runs the halving schedule. Neither stores key material. The two receipts whose committed
+   answers are unknown are `1NULY7…` and `17ucy1…`. Every candidate is already checked against both
+   (addr_check), and campaign 26 checked every named object against them.
+
+No compute. **State unchanged.**
