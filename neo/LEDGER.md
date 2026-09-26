@@ -3303,3 +3303,57 @@ The environment's network policy blocks the tool here (mempool.space and blockst
 denied). Run it on an unblocked machine, or after allowing mempool.space.
 
 **State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
+
+### Tick 90 (2026-09-26): Grigg's Ricardian Triple read onto the master hint — it restates the standing recipe and entity model; HASHTHETEXT verified as the creator's one hash→identifier step; no new operation
+
+User-relayed from another assistant; the source was not fetched here. Grigg 2015 ("The Sum of All
+Chains", the Ricardian Triple):
+- an object is code + text + parameters, packaged, then hashed into an identifier;
+- "First Class Persons" hold keys, code, accounts and capital;
+- entities on one axis and characteristics on the other make a table;
+- "binary metrics mapped as a matrix and totalled up".
+
+Proposed mapping onto GSMG:
+- `yellowblueprimes` = parameters, `matrixsumlist` = code, `lastwordsbeforearchichoice` = text,
+  `yinyang` = the pairing;
+- the VIC sentence is an entity model, keyOf(Half) and keyOf(BetterHalf), not two pieces of one key.
+
+Checked against the record:
+1. **The typed reading is the standing recipe model** and comes from the creator's own hints (tick
+   ~15, lines 350–356): `yinyang` is an output ("It's the next phase"); the master hint yields three
+   inputs; the prime hint is the matrixsumlist hint; the soup grammar types each token by position.
+   It is also the most-searched family, all null:
+   - campaign 14 (~16.6M trials): prime-derived zero masks → matrix sums → wrapped with the other
+     two components;
+   - campaigns 17 and 19: `yellowblueprimes` as the prime subset and the 24-prime alignment;
+   - campaign 30: the sums as indices into the last words;
+   - campaigns 32 and 52: the last words;
+   - the phase-0 grid's own row and column sums (`610876654997879` / `8108108736759668`, the
+     "binary matrix totalled up"): campaigns 01–10, 28 and 29.
+2. **The entity reading of the VIC sentence has been the standing model since tick 37**: the
+   sentence "says what the cracked keys are for, two keys for two funded addresses; not a recipe".
+   Tick 47 refined it into two complementary 80-byte locks (P32T ↔ half, salph_inner ↔ better half,
+   → YINYANG); tick 61 added the halving split; tick 88 showed the halves transact and never
+   co-sign. The additive MITM was run once, as a cheap structural check, and closed.
+3. **What instantiated each entity** (the investigation the user proposed), from the record:
+   - **HALF** = `1GSMG1…`, funded 2019-04-13 by `1EtbTv…` (5 BTC). Its address carries the
+     six-character vanity prefix `1GSMG1`, about 1 in 6.6×10⁸ (tick 76). A hash of any fixed
+     package lands on that prefix with that probability, so Half's key cannot "fall out" of
+     H(package) unless the package contains a grinding nonce. It must be carried instead, e.g. as
+     raw bytes inside an 80-byte lock (64 B = two 32-byte keys; ticks 31 and 37).
+   - **BETTER HALF** = `17ucy1…`, funded 2020-05-11 by the prize key's split (signed over
+     3GSMG24T's "Halving" instruction) and again in 2024. It has never signed and exposes no public
+     key. It has no vanity prefix, so that argument does not constrain it; but no package is named
+     for it, and every candidate is already checked against it.
+4. **HASHTHETEXT, verified:** sha256("GSMGIO5BTCPUZZLECHALLENGE1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe")
+   = `89727c598b9c…`, the SalPhaseIon URL. The creator's one solved "hash the text → identifier" step
+   produced a *location* (the next page), not a key or a password. If the endgame reuses that
+   grammar, H(package) would name the next object ("yinyang … is the next phase"). The domain has
+   been parked since 2026-07-07. The wayback archive captured 12 hex paths: 10 are the SPA shell, one
+   is the SalPhaseIon page, and one is a 2026 solver guess (`4f7a1e4e…`). No other hex page is on
+   record.
+
+**Verdict.** The Ricardian Triple reading independently converges on the ledger's model. It adds a
+vocabulary, not an operation. No compute.
+
+**State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
