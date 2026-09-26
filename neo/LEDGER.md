@@ -2260,3 +2260,35 @@ The solved stages' salts are not fingerprints of their own known passwords, so t
 salts behave as ordinary random OpenSSL salts. The salt-fingerprint route is closed.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 59 (2026-09-26): the 2020-03-24 OP_RETURN recipients are answer brainwallets, not people
+
+Checked offline (`prior-sessions/…S1S4/btc.py` + tick 57). Every recipient of the 2020-03-24 series
+is the **compressed P2PKH of sha256(stage answer)**:
+
+| OP_RETURN | recipient | = compressed P2PKH of sha256( … ) |
+|---|---|---|
+| Right, this is causality | `1Jqq37…` | `causality` (phase 2) |
+| do you beleive me you need it? | `1GyT5W…` | `1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe` |
+| part of the cipher | `18Cchr…` | the 149-digit VIC string |
+| phase3.2 pass OK | `1K23RS…` | `jacquefresco…uncertaintyprinciple` (phase 3.2) |
+| are you sure? | `1AD2wf…` | `theflowerblossomsthroughwhatseemstobeaconcretesurface` |
+| You are here because 227 chars were correct | `1M5ypv…` | the 227-char phase-2.2 string |
+
+Consequences:
+- There are no "six people". The creator marked each solved answer at an address derived from it.
+  Anyone who knows the public answer holds the key, so the 2025 "Yes" replies from `1AD2wf…` and
+  `1GyT5W…` authenticate nobody. There is no live channel to the creator's trial group here.
+- **Creator convention (new, useful):** a confirmed answer X ↦ OP_RETURN dust to
+  compressed-P2PKH(sha256(X)). So the recipients of the 2020-04-03 "Good job, Neo!" outputs are
+  probably answer addresses of a stage past 3.2, and so is `1NULY7…` (already in `addr_check`). If
+  the two recipients are known (txids `364de511…`/`722fbf35…`), they join the offline address oracle
+  as zero-cost checks for any future candidate. `prior-sessions/…/btc.py` also expects
+  `148XH2…` (seed, raw-padded) and `13HGhj…` (seed, bit-reversed), which fits the same pattern but is
+  unconfirmed as the "Good job, Neo!" pair.
+- **546 sat is Bitcoin's P2PKH dust limit**, the smallest standard output anyone can send; it is
+  not a creator signature. The 2025-09-09 named-vanity tx (`3775e974…`) is post-2023 traffic with no
+  shown link to `3GSMG24T…`/`1EtbTv…` inputs (paying *to* `1EtbTv…` proves nothing), so it is
+  unauthenticated. Identifying real people behind name-vanities is out of scope.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
