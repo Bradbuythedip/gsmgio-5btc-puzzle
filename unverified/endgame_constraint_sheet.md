@@ -155,16 +155,24 @@ choice passage at all; unpunctuated, it ends
 `…goodluckneverthelessireallyhopeyouretheoneciaobellao`. That the film's two-door choice
 comes *after* the point where the puzzle text stops is film knowledge, not repo material.
 
+**Boundary pinned (`endgame_provenance_page.md`, step 2):** the text has no door/choice at
+all, so the choice boundary is the **end of the text**; C's whole set is the byte-derived
+closing span, at most three strings.
+
 | id | value | grade | why it is allowed |
 |---|---|---|---|
-| C0 | literal `lastwordsbeforearchichoice` | DECODED | the label may be the value |
-| C1 | `ireallyhopeyouretheone` | READING | a segmentation of the unpunctuated ending that drops `goodlucknevertheless` before it and `ciaobellao` after it |
-| C2 | `hopeitisthequintessentialhumandelusionsimultaneouslythesourceofyourgreateststrengthandyourgreatestweakness` | LORE, **explicit exception** | #3390 2020-04-08 (tagged LORE; #3391 "not a hint btw, just fooling around"), normalised: letters only, lower case, leading "Humph." dropped. Kept at the user's instruction as the one exception to the LORE rule; in the film the line is spoken *after* Neo's choice (film knowledge); lowest-graded row |
-| C3 | `ciaobellao` | READING | the last ten letters of the unpunctuated text, which the notebook author splits as "ciao bella o"; the row assumes the choice boundary is the end of the text |
+| C-i | `ciaobellao` | READING | the literal final token; sits before the cut |
+| C-ii | `ireallyhopeyouretheone` | READING | the last sentence before the sign-off tail |
+| C-iii | `goodluckneverthelessireallyhopeyouretheoneciaobellao` | READING | the full closing span, the "last words" as one unit |
 
-Test record (NEGATIVE): C0 standalone in campaigns 01 and 16; C1 standalone in campaign 16
-only; C2 (exactly this string) standalone in campaign 01 only; C3 standalone in campaigns
-01 and 16. Campaigns 05 and 14 only ever wrapped C rows inside products. Same remark as for B.
+Label-only hypothesis kept separately: C0 `lastwordsbeforearchichoice` (the label may be the
+value). **Dropped:** the "quintessential human delusion" line (#3390, LORE, disclaimed by
+#3391) — it is not before this cut; it is a mid-film line quoted elsewhere.
+
+Test record (NEGATIVE): C0 standalone in campaigns 01 and 16; `ireallyhopeyouretheone`
+standalone in campaign 16; `ciaobellao` standalone in campaigns 01 and 16. The C-iii span has
+not been tested standalone. All slot-C tests to date were standalone or inside products; none
+was the combine of §6. Same remark as for B.
 
 ## 6. What is missing, per slot
 

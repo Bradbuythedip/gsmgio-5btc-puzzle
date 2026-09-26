@@ -1205,3 +1205,34 @@ The matrixsumlist pipeline in its most-motivated instantiation (11×11 from `DBB
 positions) is closed; broader matrixsumlist readings on the 14×14 grid were already closed
 (campaigns 12–19). The live gap is unchanged: an authenticated statement naming the operation,
 or the lost S0 seed. Neither is in hand.
+
+### Loop tick 33 (2026-09-26) — provenance page: name the operand for each slot (no AES)
+
+Per the standing plan (no campaign until two slots hold source-forced values). Wrote
+`unverified/endgame_provenance_page.md`: for each slot, the one primary sentence that names its
+operand, or blank.
+
+- **A** operand named (the 24 yellow/blue colour cells → `f73d92`, #1710 + #8446); **operation
+  not named** — "primes" is SAL-scoped to `matrixsumlist`, and no sentence aims prime/zero/DEL
+  at the colour value. A stays the number `f73d92`, not expanded (tick 32 closed the factorize
+  route).
+- **B** operand **not uniquely named** — #8446 gives the token, but no sentence says which
+  matrix (14×14 grid vs 7×13 `DBBI` blocks) or which cells.
+- **C** operand named (the Architect speech) and **boundary pinned from the bytes**: the phase-3.2
+  plaintext contains no `door`/`choice`/`choose`/`left`; it ends
+  `…goodluckneverthelessireallyhopeyouretheoneciaobellao`, so the choice boundary is the end of
+  the text. C's whole byte-derived set (≤3): `ciaobellao`, `ireallyhopeyouretheone`,
+  `goodluckneverthelessireallyhopeyouretheoneciaobellao`. The quintessential-delusion line
+  (#3390) is **dropped** — not before this cut, and disclaimed by #3391.
+- **D** is an output/checkpoint (#9599/#39224/#39237), not an operand.
+
+**Retrieval inventory** (step 4): `HASHTHETEXT` is present (`decentraland.ipynb`);
+`/followthewhiterabbit` was examined (tick 11, = the phase-1 verification page, no puzzle
+content); S0 / the original S1–S4 script is absent from the archive **and** all git history
+(tick 31) and is the uninvertible SHA256 preimage of head S1 — a genuine hole but not
+retrievable, only re-derivable from the lost script. No retrievable hole remains.
+
+**State.** Two slots still lack source-forced concrete values: C reaches a 3-string candidate
+set, but A has no named operation, B's matrix is unnamed, D is an output. `combine` stays
+illegal; no AES campaign. The next real move is a **named operand or operator** from a new
+authenticated statement.
