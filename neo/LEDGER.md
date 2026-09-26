@@ -2942,3 +2942,30 @@ password. Ruling this out needs an independent re-capture of the SalPhaseIon pag
 unblocked host.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 82 (2026-09-26): correction — the community "XOR-of-seven = solved" claim is the falsified padding hit; three locks kept distinct
+
+A web-sourced "known solution" (jackdevs66 lineage) was relayed: seven tokens → SHA-256 → XOR →
+MD5-EVP on Cosmic → the 1327-byte payload (`4f7a1e4e…`), presented as the solved SalPhaseIon stage
+with a "Half and Better Half protocol" plaintext. **This is the XOR-of-token-hashes theory already
+falsified here (tick 7; `unverified/salphaseion_xor_token_hashes.md`; archive "Excluded on purpose:
+cosmic_A, cc/1327-byte decrypt").** Re-confirmed this tick:
+- The XOR reproduces (`a795de11…0735` → decrypt sha256 `4f7a1e4e…`), but the payload is **noise**:
+  entropy **7.870 bits/byte** (≈ urandom), and the only evidence is a **1-byte PKCS#7 pad** (ct 1328 →
+  pt 1327), the cheapest chance success on an 1328-byte blob. It is not plaintext; the "Matrix
+  narrative / Half & Better Half protocol" read off it is fanfiction on high-entropy bytes.
+- **Accept predicate:** the prize `1GSMG1…` is unspent. jackdevs66 (#55) said themselves they did not
+  find the key; the later "SOLVED" issues (#69 etc.) produced no spend (ticks 75, 79).
+- **Three distinct 80-byte-class locks, not to be conflated** (verified salts/sizes):
+  SalPhaseIon short `3ab585348552415d` (ct 80), Phase-3.2 trailing / P32T `b45a5e3d827593ca` (ct 80),
+  Cosmic `2d3f6fe06dc950e6` (ct 1328). `b45a…` is a separate authenticated file (the phase-3.2 trailing
+  envelope), **not** a mis-transcription of Cosmic. The pasted 7-token list
+  (`…thispassword, matrixsumlist, yourlastcommand, secondanswer`) is itself community-invented — it
+  double-lists `matrixsumlist` and coins tokens the master hint does not name (yellowblueprimes,
+  matrixsumlist, lastwordsbeforearchichoice, yinyang).
+- The tick-81 short-lock re-capture item still stands and is unrelated to this: it concerns the
+  `3ab5…` / Cosmic base64 transcription, not the XOR method.
+
+**Do not treat `4f7a1e4e…` as plaintext or KDF output.** Standing work unchanged: a creator-named
+candidate through `gate.py` on the correct envelope (`3ab5…` short, `b45a…` trailing, Cosmic
+separately). Prize unspent; corpus exhausted; two locks gated on a new primary.
