@@ -2893,3 +2893,19 @@ too", plus the 👀). "Jacque was quite an inspiring lad" (#60303) is praise, no
   It stays a user decision; not posted.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+**Tick 80 addendum (2026-09-26, user run + framing).** Salts verified: `salph_inner`/miniA
+`3ab585348552415d` (ct 32 B; miniA‖miniB = 96 B, same header salt), `P32T` `b45a5e3d827593ca` (ct 80 B).
+- **User ran the title-grade set** — `lookingforward` / `Looking Forward` / `LookingForward` /
+  `looking forward`, `itsinfrontofyoureyesbutyourenotseeingit`, `No hints, only free will` /
+  `only free will` / `freewill` / `free will` — raw / sha256-raw / sha256-hex × MD5/SHA256 EVP × the
+  three envelopes. **162 decrypts, zero pad≠garbage, zero hex-key / high-printable bodies.** USER-grade;
+  corroborates the corpus-spent status of these strings. The book title is null on both 80-byte locks.
+- **Provenance, stated precisely:** the #60312 "Bingo" → *Looking Forward* attribution holds only if
+  the JSON export shows that exact reply threading. The screenshot leaves it ambiguous (tick 60 read
+  the Bingo as the Cartman quote, immediately preceding it). Until the export, both readings are USER-grade.
+- **Disposition:** Fresco is the already-used phase-4 password plus, at most, a confirmed reading
+  direction — not a KDF input. The Venus-Project bibliography is adjacent (Matrix-n-gram class) and is
+  not added beyond the 12 already run null. The public ask stays unposted: those checkpoint strings
+  are already public, so it buys nothing. Watch `1GSMG1…`; the next compute event is a new sentence,
+  not a Fresco corpus.
