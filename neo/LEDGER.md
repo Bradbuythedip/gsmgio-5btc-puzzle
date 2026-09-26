@@ -1718,3 +1718,27 @@ inconsistent:** 32+32+4 = 68 bytes is not a valid AES-CBC plaintext length for P
 ciphertext = 64 B content + a 16-byte pad block). Treated as a hallucinated citation. The
 stop rule is unchanged, nothing was run, and XOR constructions on f7/3d/92 or the sums stay
 excluded.
+
+### Loop tick 44 (2026-09-26): the "prime basics" sentence read as an ordered recipe (recorded, not run)
+
+Source (the phase-3.2 Architect rewrite, verbatim): "...the function of the you is now to
+return to the source codes allowing a temporary dissemination of the code you hopefully carry
+reinserting the prime basics after which you will be required to select from over twentythree
+ciphers sixteen encryptions and or seven intertwined passwords...".
+
+**Already closed:** `reinsertingtheprimebasics` as a password (single_t_mutation,
+endgame_aes_password_search); reinserting 2,3,5,7 at prime positions into the row sums (tick
+4/5); blue-prime zeroing, the inverse operation (tick 42).
+
+**The untried reading is the ordering.** The sentence gives a sequence: (1) return to the source
+codes → (2) reinsert the prime basics → (3) only then select among 23 ciphers / 16 encryptions /
+7 intertwined passwords. Taken literally, prime reinsertion is a **preprocessing step that
+precedes** any cipher choice, and "seven intertwined passwords" is the output stage (seven,
+like the seven 7×13 matrices). This fixes the order of operations but still names **neither
+the object** the primes go back into nor the exact reinsertion rule. It remains the same
+unnamed-operation gap, so no test was run and the gate stays empty. If a source names the
+object ("the source codes" = which blob or tape?), this becomes a single admissible test:
+reinsert, then the P32T `0x10`×16 check.
+
+Also recorded: two ChatGPT screenshots (2026-09-26). Both used personal_context or read this
+repo. Neither shows a source for the "XOR triangle" line (tick 43 stands).
