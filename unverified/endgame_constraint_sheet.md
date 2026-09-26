@@ -109,18 +109,24 @@ Neither frame is revived here.
 
 ## 4. Representation rows (encodings the creator has actually used)
 
-| encoding | where it is attested |
-|---|---|
-| bits → 8-bit ASCII, spiral order | phase 0 |
-| **bit-reversed then byte-reversed** binary | #8446 (the master hint itself) |
-| a/b → 0/1 → ASCII | soup bin1 (`matrixsumlist`), bin2 (`enter`) |
-| letters o=0, a=1 … i=9 → decimal digits → integer → hex → ASCII | soup agda, cfob |
-| sha256hex of the human answer, then EVP | phases 2, 3, 3.2 |
-| EBCDIC cp1141, Beaufort (`thematrixhasyou`), VIC (digits 1,4; `fubcdora/lethingkymvpszjqwx.`) | phase 3.2 |
-| hex-encoded, reversed genesis coinbase string | phase 2.2 part 6 |
-| mod-26 letter subtraction | `dbbi ⊖ VIC` (DERIVED, null-tested; not creator-attested) |
+| encoding | grade | where it is attested |
+|---|---|---|
+| bits → 8-bit ASCII, spiral order | PRIMARY | phase 0 (`phase0.ipynb`) |
+| **whole bit-string reversed** (equivalently: each byte bit-reversed, then byte order reversed) | AUTH (#8446) | the full 161-byte binary is in `hints/2023-02-23.png` (32 rows × 5 bytes + 1); the transcript row #8446 holds only a 33-byte truncation, which reverses to `rylaststepisatruegiveawaypromised`. The archive's `hint_2023-02-23_binary.txt` was not copied into `neo/materials/primary`, so the full decode currently rests on the image |
+| a/b → 0/1 → ASCII | DECODED | soup bin1 (`matrixsumlist`), bin2 (`enter`) |
+| letters o=0, a=1 … i=9 → decimal digits → integer → hex → ASCII | DECODED | soup agda, cfob; lineage: the Decentraland spectrogram carried hex byte values → ASCII (`HASHTHETEXT`, `decentraland.ipynb`) |
+| passphrase = lowercase sha256hex(answer); EVP_BytesToKey(SHA-256, 1 round); aes-256-cbc | PRIMARY + creator page text | phases 2, 3, 3.2 (three positive controls; EVP-MD5 does *not* open them); the puzzle pages state it: "Ciphered with aes-256-cbc /w base64 sha-256(password)" (`phase2.ipynb`), "a sha256 pw, yet again" (`phase3.ipynb`). "Answer" is loose for phase 3, whose password is a seven-part concatenation with prescribed casing |
+| sha256hex as an offline checkpoint | AUTH (#225) | the phase-1 password's digest published so candidates could be tested offline |
+| sha256hex as a URL path | PRIMARY | the SalPhaseIon page lives at `gsmg.io/89727c59…a32` = sha256 of `GSMGIO5BTCPUZZLECHALLENGE1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe` |
+| EBCDIC cp1141 (cp273 decodes identically; the choice rests on "one for one, four for one"), Beaufort (`thematrixhasyou`), VIC (digits 1,4; `fubcdora/lethingkymvpszjqwx.`) | PRIMARY | phase 3.2 |
+| a 5-bit binary written as ASCII digits (`11110`), a FEN string, and case/spacing directives (`/(aaa, connected enf)`) as password components | PRIMARY | phase 2.2 parts 5 and 7, phase 3 |
+| `0x`-prefixed upper-case hex of the byte-reversed genesis coinbase string | PRIMARY, **copied external literal** | phase 2.2 part 6 is a verbatim literal from Bitcoin v0.1 `main.cpp:1616` ("raw data after 4 on row 1616"); the reversal and hex form are Satoshi's, not a creator-chosen encoding; the `0x` and the case are part of the attested value |
 
-Any proposed representation outside this table is a new assumption and must be labelled as one.
+`dbbi ⊖ VIC` (mod-26 subtraction, dbbi a=1…i=9 minus VIC A=1…Z=26, rendered A=0) is **not**
+in this table: it is DERIVED and null-tested, not creator-attested (§2).
+
+Any proposed representation outside this table and outside the solved notebooks is a new
+assumption and must be labelled as one. The table is not claimed to be exhaustive.
 
 ## 5. Frozen candidate sets for B and C
 
