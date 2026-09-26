@@ -4,8 +4,9 @@
 The two terminal locks, salph_inner (A = miniA‖miniB) and P32T (B = inner96), are combined byte for byte by the
 pre-registered complementarity family: 4 operations (xor, sub, rsub, add, mod 256) × 11 cells (neither door turned, or
 one door turned by rev, bitrev, hswap, brev or ibrev) × 2 representations (R1 the 96-byte envelopes, R2 the 80-byte
-ciphertexts) = 88 outputs, each read 4 ways (fwd, rev, ~fwd, ~rev). Every read is scanned by six exact detectors:
-(a) marker, (b) raw key, (b') hex key, (b'') WIF key, (c) nested envelope, (d) verbatim target.
+ciphertexts) = 88 outputs, each read 6 ways (fwd, rev, bitrev, ~fwd, ~rev, ~bitrev). Every read is scanned by six
+exact detectors: a (marker), b (raw key), b_hex (hex key), b_wif (WIF key), c (nested envelope), d (verbatim target).
+Every scan runs to completion and lists every event; a HIT only means nothing follows it without the user.
 
 No AES, no gate: no output, window or substring is ever used as a candidate. Output bytes are never written or printed.
 The record keeps each output's sha256, the coverage counts, a digest of the derived hash160s, and each hit's location;
@@ -47,7 +48,7 @@ PRIZE_TX = "neo/materials/chain/tx_halving_spend.hex"
 OPS = ("xor", "sub", "rsub", "add")
 TURNS = ("rev", "bitrev", "hswap", "brev", "ibrev")
 CELLS = ("id",) + tuple(f"{d}.{g}" for g in TURNS for d in "AB")
-READS = ("fwd", "rev", "~fwd", "~rev")
+READS = ("fwd", "rev", "bitrev", "~fwd", "~rev", "~bitrev")
 REPS = (("R1", 0), ("R2", 16))
 LABELS = tuple(f"{r}/{o}/{c}" for r, _ in REPS for o in OPS for c in CELLS)
 MARKERS = [b"HALF"]
@@ -57,14 +58,31 @@ NESTED = (b"Salted__", b"U2FsdGVkX1")
 HEX_RUN = re.compile(rb"[0-9A-Fa-f]{64,}")
 B58_RUN = re.compile(rb"[1-9A-HJ-NP-Za-km-z]{51,}")
 MIRROR = np.array([int(f"{b:08b}"[::-1], 2) for b in range(256)], dtype=np.uint8)
-DETECTORS = ("a", "b", "b'", "b''", "c", "d")
-PINNED_COVERAGE = {"outputs": 88, "reads": 352, "bytes": 30976, "marker_positions": 483296, "raw_windows": 20064,
-                   "h160_windows": 24288, "address_positions": 19360, "salted_positions": 28512,
-                   "b64_positions": 27808}
-MUTATIONS = (["no_rev_read", "no_not_read", "no_A_cells", "r2_from_0", "no_compressed", "no_uncompressed",
-              "no_last_marker_pos", "no_last_window", "no_casefold", "nul_stop", "no_hex", "no_wif", "no_nested",
-              "no_verbatim"] + [f"drop_marker:{i}" for i in range(len(MARKERS))])
-CAL_PAIRS, CAL_EXPECT, CAL_TOL = 10000, 18691.4, 1184
+DETECTORS = ("a", "b", "b_hex", "b_wif", "c", "d")
+# The PREREG's coverage record, in its order. None = data-dependent (reported and compared, not pinned).
+COVERAGE_KEYS = ("outputs", "reads", "bytes", "a_positions", "a_half_positions", "b_windows", "b_invalid",
+                 "b_hex_windows", "b_hex_invalid", "b_wif_windows", "b_wif_decoded", "d_h160_windows",
+                 "d_addr_positions_prize", "d_addr_positions_17ucy1", "d_addr_positions_1NULY7",
+                 "c_salted_positions", "c_b64_positions")
+PINNED_COVERAGE = dict(zip(COVERAGE_KEYS, (88, 528, 46464, 724944, 44880, 30096, None, None, None, None, None, 36432,
+                                           29040, 29040, 29040, 42768, 41712)))
+TURN_KAT = {  # sha256 of turn(00 01 .. L-1): the PREREG's known answers
+    96: {"rev": "b2d9996f81492a827ed4fe7c36ff83960b49071835fd1dda377d80497f5360df",
+         "bitrev": "4632963b5ac8fc1bef565eb9a26f164b586d6961fe674f05811f3236e17a81a7",
+         "hswap": "d41d559270b9ee078d6d46f1f63547172173b3ba1df4f00c77bde438807dbf98",
+         "brev": "ec518b4bfd733a0b679f60768ae1802cad302ec9ca1670d2a43866e97633b4e9",
+         "ibrev": "dedc02e27b32f48b38a0705180e635b0fbded4983e32581306a140280a2574a2"},
+    80: {"rev": "939fc6c065bfdd55219a2fc10652ae08c8b92c4df7d4ff5f5b28706b263d803e",
+         "bitrev": "b42ad22f5cb8a8652f6f0c3aa05bb765c4daf36c427fb08677dfd31d79a52b0f",
+         "hswap": "686bd663b458f24f9971da499ef56a2aa4f741b668bb1e17f3b93d5be4ce9034",
+         "brev": "ed2ad0fa3e299e35c3d6c35d0c8fca853a00b7abdd55312fa72d73819e58f7d1",
+         "ibrev": "b0c9caac8dc07824d1486ab900ff61d19e912d2ad21197bec3577b0f1a20c36e"},
+}
+N1_MANIFEST = "a5103f89230d11dbfba3fe688a8a2482957820a24954f454e516deb843a96233"
+MUTATIONS = (["no_rev_read", "no_bitrev_read", "no_not_read", "no_A_cells", "r2_from_0", "no_compressed",
+              "no_uncompressed", "no_last_marker_pos", "no_last_window", "no_casefold", "nul_stop", "no_hex", "no_wif",
+              "no_nested", "no_verbatim"] + [f"drop_marker:{i}" for i in range(len(MARKERS))])
+CAL_PAIRS, CAL_EXPECT, CAL_TOL = 10000, 27998.046875, 1449   # 2867/1024 per pair; 5 sd with a 3x variance allowance
 
 
 # ---------------------------------------------------------------------------------------------------------- primitives
@@ -172,9 +190,13 @@ def outputs(a, b, mut=frozenset()):
 
 
 def reads(z, mut=frozenset()):
-    out = [("fwd", z), ("rev", z[::-1]), ("~fwd", ~z), ("~rev", ~z[::-1])]
+    """The six reads, in order: fwd, rev, bitrev (byte j = m(Z[L-1-j])), then each complemented (255 - b)."""
+    br = MIRROR[z[::-1]]
+    out = [("fwd", z), ("rev", z[::-1]), ("bitrev", br), ("~fwd", ~z), ("~rev", ~z[::-1]), ("~bitrev", ~br)]
     if "no_rev_read" in mut:
-        out = [r for r in out if "rev" not in r[0]]
+        out = [r for r in out if r[0].lstrip("~") != "rev"]
+    if "no_bitrev_read" in mut:
+        out = [r for r in out if r[0].lstrip("~") != "bitrev"]
     if "no_not_read" in mut:
         out = [r for r in out if not r[0].startswith("~")]
     return out
@@ -182,30 +204,35 @@ def reads(z, mut=frozenset()):
 
 # ---------------------------------------------------------------------------------------------------------- detectors
 def target_map(extra=None):
-    """hash160 bytes -> address, for the real targets plus any test targets."""
+    """hash160 bytes -> address: the three real targets in table order, then any test targets."""
     t = {bytes.fromhex(h): a for a, h in TARGETS.items()}
     for h in (extra or []):
-        t[h] = p2pkh(h)
+        t.setdefault(h, p2pkh(h))
     return t
 
 
 def scan(a, b, targets, only=None, mut=frozenset(), markers=None, detectors=DETECTORS):
-    """Scan the family on the envelopes a, b. Returns manifest, coverage, detector digest, hits, invalid windows."""
-    markers = [m for i, m in enumerate(MARKERS if markers is None else markers) if f"drop_marker:{i}" not in mut]
+    """Scan the whole family (or one output) of the envelopes a, b. The scan always runs to completion.
+
+    Returns the manifest and its hash, the coverage record (PREREG order), the detector digest, the canonical hit
+    list [(label, read, detector, offset, item)] and the invalid raw windows."""
+    mlist = MARKERS if markers is None else markers
+    keep = [(i, m) for i, m in enumerate(mlist) if f"drop_marker:{i}" not in mut]
     cf = "no_casefold" not in mut
-    pats = [(m, m.lower() if cf else m) for m in markers]
-    addr_pats = [(h, addr.encode()) for h, addr in targets.items()]
-    cov = {k: 0 for k in ("outputs", "reads", "bytes", "marker_positions", "raw_windows", "raw_invalid",
-                          "hex_windows", "wif_windows", "h160_windows", "salted_positions", "b64_positions")}
-    cov["address_positions"] = {}
+    pats = [(i, m, m.lower() if cf else m) for i, m in keep]
+    tlist = list(targets.items())                       # (hash160, address) in table order, test targets last
+    tindex = {h: n for n, (h, _) in enumerate(tlist)}
+    real_addr = list(TARGETS)
+    cov = dict.fromkeys(COVERAGE_KEYS, 0)
     manifest, hits, invalid = [], [], []
     dig = hashlib.sha256()
 
-    def keyhits(label, rname, off, det, pair):
-        if "no_compressed" not in mut and pair[0] in targets:
-            hits.append((label, rname, off, det, "compressed:" + targets[pair[0]]))
-        if "no_uncompressed" not in mut and pair[1] in targets:
-            hits.append((label, rname, off, det, "uncompressed:" + targets[pair[1]]))
+    def keyhits(label, rname, det, off, pair, extra=""):
+        for form, h in (("compressed", pair[0]), ("uncompressed", pair[1])):
+            if f"no_{form}" in mut or h not in targets:
+                continue
+            hits.append((label, rname, det, off, f"{form}:{targets[h]}{extra}",
+                         (0 if form == "compressed" else 1, tindex[h])))
 
     for label, z in outputs(a, b, mut):
         if only is not None and label != only:
@@ -221,80 +248,87 @@ def scan(a, b, targets, only=None, mut=frozenset(), markers=None, detectors=DETE
             cov["bytes"] += L
             if "a" in detectors:
                 low = r.lower() if cf else r
-                for m, pm in pats:
+                for mi, m, pm in pats:
                     last = L - len(m) - (1 if "no_last_marker_pos" in mut else 0)
-                    cov["marker_positions"] += max(0, last + 1)
-                    i = low.find(pm)
-                    while 0 <= i <= last:
-                        hits.append((label, rname, i, "a", m.decode()))
-                        i = low.find(pm, i + 1)
+                    cov["a_positions"] += max(0, last + 1)
+                    if m == b"HALF":
+                        cov["a_half_positions"] += max(0, last + 1)
+                    k = low.find(pm)
+                    while 0 <= k <= last:
+                        hits.append((label, rname, "a", k, m.decode(), (mi,)))
+                        k = low.find(pm, k + 1)
             if "b" in detectors:
-                nwin = L - 31 - (1 if "no_last_window" in mut else 0)
-                for off in range(max(0, nwin)):
+                for off in range(max(0, L - 31 - (1 if "no_last_window" in mut else 0))):
                     w = r[off:off + 32]
-                    cov["raw_windows"] += 1
+                    cov["b_windows"] += 1
                     k = int.from_bytes(w, "big")
                     if 1 <= k < N:
                         pair = h160_pair(w)
                         dig.update(pair[0] + pair[1])
-                        keyhits(label, rname, off, "b", pair)
+                        keyhits(label, rname, "b", off, pair)
                     else:
-                        cov["raw_invalid"] += 1
+                        cov["b_invalid"] += 1
                         invalid.append((label, rname, off))
                         dig.update(bytes(40))
-            if "b'" in detectors and "no_hex" not in mut:
+            if "b_hex" in detectors and "no_hex" not in mut:
                 for mt in HEX_RUN.finditer(r):
                     for j in range(mt.start(), mt.end() - 63):
-                        cov["hex_windows"] += 1
+                        cov["b_hex_windows"] += 1
                         k = int(r[j:j + 64], 16)
                         if 1 <= k < N:
-                            keyhits(label, rname, j, "b'", h160_pair(k.to_bytes(32, "big")))
-            if "b''" in detectors and "no_wif" not in mut:
+                            keyhits(label, rname, "b_hex", j, h160_pair(k.to_bytes(32, "big")))
+                        else:
+                            cov["b_hex_invalid"] += 1
+            if "b_wif" in detectors and "no_wif" not in mut:
                 for mt in B58_RUN.finditer(r):
                     for j in range(mt.start(), mt.end()):
-                        c0 = r[j]
-                        for want, n in ((b"5"[0], 51), (b"K"[0], 52), (b"L"[0], 52)):
-                            if c0 != want or j + n > mt.end():
-                                continue
-                            cov["wif_windows"] += 1
-                            pl = b58decode_check(r[j:j + n].decode(), n - 51 + 37)
-                            if pl is None or pl[0] != 0x80 or (n == 52 and pl[33] != 1):
-                                continue
-                            k = int.from_bytes(pl[1:33], "big")
-                            if 1 <= k < N:
-                                keyhits(label, rname, j, "b''", h160_pair(k.to_bytes(32, "big")))
+                        n = {ord("5"): 51, ord("K"): 52, ord("L"): 52}.get(r[j])
+                        if n is None or j + n > mt.end():
+                            continue
+                        cov["b_wif_windows"] += 1
+                        pl = b58decode_check(r[j:j + n].decode(), 37 if n == 51 else 38)
+                        if pl is None or pl[0] != 0x80 or (n == 52 and pl[33] != 1):
+                            continue
+                        cov["b_wif_decoded"] += 1
+                        k = int.from_bytes(pl[1:33], "big")
+                        if 1 <= k < N:
+                            keyhits(label, rname, "b_wif", j, h160_pair(k.to_bytes(32, "big")), f":{n}")
             if "c" in detectors:
-                cov["salted_positions"] += max(0, L - 7)
-                cov["b64_positions"] += max(0, L - 9)
+                cov["c_salted_positions"] += max(0, L - 7)
+                cov["c_b64_positions"] += max(0, L - 9)
                 if "no_nested" not in mut:
-                    for pat in NESTED:
-                        i = r.find(pat)
-                        while i >= 0:
-                            hits.append((label, rname, i, "c", pat.decode()))
-                            i = r.find(pat, i + 1)
+                    for pi, pat in enumerate(NESTED):
+                        k = r.find(pat)
+                        while k >= 0:
+                            hits.append((label, rname, "c", k, pat.decode(), (pi,)))
+                            k = r.find(pat, k + 1)
             if "d" in detectors:
-                cov["h160_windows"] += max(0, L - 19)
-                for h, ab in addr_pats:
-                    addr = targets[h]
-                    cov["address_positions"][addr] = cov["address_positions"].get(addr, 0) + max(0, L - len(ab) + 1)
+                cov["d_h160_windows"] += max(0, L - 19)
+                for h, addr in tlist:
+                    ab = addr.encode()
+                    if addr in real_addr:
+                        key = ("d_addr_positions_prize", "d_addr_positions_17ucy1",
+                               "d_addr_positions_1NULY7")[real_addr.index(addr)]
+                        cov[key] += max(0, L - len(ab) + 1)
                     if "no_verbatim" in mut:
                         continue
-                    for pat, kind in ((h, "hash160"), (ab, "address")):
-                        i = r.find(pat)
-                        while i >= 0:
-                            hits.append((label, rname, i, "d", f"{kind}:{addr}"))
-                            i = r.find(pat, i + 1)
-    text = "".join(f"{lab} {h}\n" for lab, h in manifest)
+                    for kind_i, (pat, kind) in enumerate(((h, "hash160"), (ab, "address"))):
+                        k = r.find(pat)
+                        while k >= 0:
+                            hits.append((label, rname, "d", k, f"{kind}:{addr}", (kind_i, tindex[h])))
+                            k = r.find(pat, k + 1)
+    oi = {lab: n for n, lab in enumerate(LABELS)}
+    ri = {nm: n for n, nm in enumerate(READS)}
+    di = {nm: n for n, nm in enumerate(DETECTORS)}
+    hits.sort(key=lambda h: (oi[h[0]], ri[h[1]], di[h[2]], h[3], h[5]))
+    text = "".join(f"{lab} {hx}\n" for lab, hx in manifest)
     return {"manifest": manifest, "manifest_sha256": sha(text.encode()), "coverage": cov,
-            "detector_digest": dig.hexdigest(), "hits": hits, "invalid": invalid}
+            "detector_digest": dig.hexdigest(), "hits": [h[:5] for h in hits], "invalid": invalid}
 
 
 def coverage_ok(cov):
-    bad = {k: cov.get(k) for k, v in PINNED_COVERAGE.items() if k != "address_positions" and cov.get(k) != v}
-    for addr in TARGETS:
-        if cov["address_positions"].get(addr) != PINNED_COVERAGE["address_positions"]:
-            bad["address_positions:" + addr] = cov["address_positions"].get(addr)
-    return bad
+    """Mismatches against the pinned coverage (data-dependent entries are not pinned)."""
+    return {k: cov.get(k) for k, v in PINNED_COVERAGE.items() if v is not None and cov.get(k) != v}
 
 
 # ------------------------------------------------------------------------------------------------------------ inputs
@@ -320,16 +354,33 @@ def startup_assertions():
         assert raw[0] == 0 and hashlib.sha256(hashlib.sha256(raw[:21]).digest()).digest()[:4] == raw[21:], addr
         assert raw[1:21].hex() == h and p2pkh(bytes.fromhex(h)) == addr, addr
     hx = open(os.path.join(ROOT, PRIZE_TX)).read().strip()
-    m = re.search("4104f4d1bb([0-9a-f]{122})", hx)
-    assert m and hash160(bytes.fromhex("04f4d1bb" + m.group(1))).hex() == TARGETS["1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe"]
+    i = hx.find("04f4d1bb")                        # first occurrence; all three in the tx are equal
+    assert i >= 0 and hash160(bytes.fromhex(hx[i:i + 130])).hex() == TARGETS["1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe"]
     hc, hu = h160_pair((1).to_bytes(32, "big"))
     assert p2pkh(hc) == "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH" and p2pkh(hu) == "1EHNa6Q4Jz2uvNExL497mE43ikXhwF6kZm"
-    assert len(MARKERS) == 17 and len(LABELS) == 88
+    for L, kat in TURN_KAT.items():
+        s = np.arange(L, dtype=np.uint8)
+        for g, want in kat.items():
+            assert sha(turn(g, s).tobytes()) == want, f"turn {g} L={L} fails its known answer"
+    assert len(MARKERS) == 17 and len(LABELS) == 88 and len(READS) == 6
     return True
 
 
 # ---------------------------------------------------------------------------------------------------------- controls
+BASE_READ = {"fwd": lambda z: z, "rev": lambda z: z[::-1], "bitrev": lambda z: MIRROR[z[::-1]]}
+
+
+def read_of(rname, z):
+    return ~BASE_READ[rname[1:]](z) if rname.startswith("~") else BASE_READ[rname](z)
+
+
+def read_preimage(rname, p):
+    """The output whose read `rname` is p (every base read is an involution)."""
+    return BASE_READ[rname[1:]](~p) if rname.startswith("~") else BASE_READ[rname](p)
+
+
 def case_pattern(m, c):
+    """c mod 3: 0 upper, 1 lower, 2 alternating over letters only (even lower, odd upper; separators kept)."""
     if c % 3 == 0:
         return m
     if c % 3 == 1:
@@ -344,8 +395,43 @@ def case_pattern(m, c):
     return bytes(out)
 
 
+def build_pair(label, rname, base, suffix, plants_fn):
+    """A synthetic (A, B) whose output `label`, read `rname`, is a planted read P (PREREG control 1).
+
+    Tags: <base>/A/<suffix>, <base>/P/<suffix>, <base>/S/<suffix>. In the R1 id cells the output's bytes 0-7 are fixed
+    to op(Salted__, Salted__), P carries their read outside the free region, and the synthetic B begins with Salted__.
+    plants_fn(P, f0, f1) writes the plants into the bytearray P inside [f0, f1) and returns what it planted."""
+    rep, o, cell = label.split("/")
+    L = 96 if rep == "R1" else 80
+    a = HDR + stream(f"{base}/A/{suffix}", 88)
+    X = np.frombuffer(a if rep == "R1" else a[16:], dtype=np.uint8)
+    P = bytearray(stream(f"{base}/P/{suffix}", L))
+    f0, f1 = 0, L
+    if rep == "R1" and cell == "id":
+        hdr = np.frombuffer(HDR, dtype=np.uint8)
+        zt = np.zeros(L, dtype=np.uint8)
+        zt[:8] = op(o, hdr, hdr)
+        pt = read_of(rname, zt).tobytes()
+        if rname in ("fwd", "~fwd"):
+            P[0:8], f0 = pt[0:8], 8
+        else:
+            P[L - 8:L], f1 = pt[L - 8:L], L - 8
+    planted = plants_fn(P, f0, f1)
+    Z = read_preimage(rname, np.frombuffer(bytes(P), dtype=np.uint8))
+    if cell == "id":
+        Y = inv(o, X, Z)
+    else:
+        d, g = cell.split(".")
+        Y = turn(g, inv(o, X, Z)) if d == "B" else inv(o, turn(g, X), Z)
+    b = Y.tobytes() if rep == "R1" else HDR + stream(f"{base}/S/{suffix}", 8) + Y.tobytes()
+    if rep == "R1" and cell == "id":
+        assert b[:8] == HDR, "synthetic B of an R1 id cell must carry the Salted__ header"
+    return a, b, planted
+
+
 def control1(c, mut=frozenset()):
-    label, rname = LABELS[c // 4], READS[c % 4]
+    """Per-cell positive control c = 6 x output index + read index (0..527): a marker and a key in one read."""
+    label, rname = LABELS[c // 6], READS[c % 6]
     M = MARKERS[c % 17]
     Mc = case_pattern(M, c)
     t = int.from_bytes(stream(f"twodoor/ctl/k/{c}", 32), "big") % (N - 1) + 1
@@ -357,49 +443,22 @@ def control1(c, mut=frozenset()):
         P[ok:ok + 32] = tb
         return om, ok
 
-    a, b, (om, ok) = build_pair_tags(label, rname, "twodoor/ctl", str(c), plants)
+    a, b, (om, ok) = build_pair(label, rname, "twodoor/ctl", str(c), plants)
     hc, hu = h160_pair(tb)
     form, th = ("compressed", hc) if c % 4 in (0, 1) else ("uncompressed", hu)
     tm = target_map([th])
     res = scan(a, b, tm, only=label, mut=mut)
-    want_a = (label, rname, om, "a", M.decode())
-    want_b = (label, rname, ok, "b", f"{form}:{tm[th]}")
-    return want_a in res["hits"] and want_b in res["hits"], res["hits"]
+    return ((label, rname, "a", om, M.decode()) in res["hits"]
+            and (label, rname, "b", ok, f"{form}:{tm[th]}") in res["hits"]), res["hits"]
 
 
-def build_pair_tags(label, rname, base, suffix, plants_fn):
-    """A synthetic (A, B) whose output `label`, read `rname`, is a planted read P (PREREG control 1).
-
-    Tags follow the PREREG: <base>/A/<suffix>, <base>/P/<suffix>, <base>/S/<suffix>. plants_fn(P, f0, f1) writes the
-    plants into the bytearray P inside the free region [f0, f1) and returns what it planted."""
-    rep, o, cell = label.split("/")
-    L = 96 if rep == "R1" else 80
-    a = HDR + stream(f"{base}/A/{suffix}", 88)
-    X = np.frombuffer(a if rep == "R1" else a[16:], dtype=np.uint8)
-    P = bytearray(stream(f"{base}/P/{suffix}", L))
-    f0, f1 = 0, L
-    if rep == "R1" and cell == "id":
-        h = op(o, np.frombuffer(HDR, dtype=np.uint8), np.frombuffer(HDR, dtype=np.uint8))
-        fixed = {"fwd": h, "rev": h[::-1], "~fwd": ~h, "~rev": (~h)[::-1]}[rname].tobytes()
-        if rname in ("fwd", "~fwd"):
-            P[0:8], f0 = fixed, 8
-        else:
-            P[L - 8:L], f1 = fixed, L - 8
-    planted = plants_fn(P, f0, f1)
-    Pn = np.frombuffer(bytes(P), dtype=np.uint8)
-    Z = {"fwd": Pn, "rev": Pn[::-1], "~fwd": ~Pn, "~rev": (~Pn)[::-1]}[rname]
-    if cell == "id":
-        Y = inv(o, X, Z)
-    else:
-        d, g = cell.split(".")
-        Y = turn(g, inv(o, X, Z)) if d == "B" else inv(o, turn(g, X), Z)
-    b = Y.tobytes() if rep == "R1" else HDR + stream(f"{base}/S/{suffix}", 8) + Y.tobytes()
-    return a, b, planted
+PLANT_DET = ("b_hex", "b_wif", "b_wif", "c", "c", "d", "d")
 
 
 def control2(p, t, mut=frozenset()):
+    """Per-detector control: plant type t (hex, WIF-c, WIF-u, Salted__, U2FsdGVkX1, hash160, address) for pair p."""
     rep, o = REPS[p // 4][0], OPS[p % 4]
-    label, rname = f"{rep}/{o}/{CELLS[(p + t) % 11]}", READS[(p + t) % 4]
+    label, rname = f"{rep}/{o}/{CELLS[(p + t) % 11]}", READS[(p + t) % 6]
     k = int.from_bytes(stream(f"twodoor/ctl2/k/{p}/{t}", 32), "big") % (N - 1) + 1
     hc, hu = h160_pair(k.to_bytes(32, "big"))
     plant = [format(k, "064x").encode(), wif(k, True).encode(), wif(k, False).encode(), NESTED[0], NESTED[1],
@@ -410,74 +469,49 @@ def control2(p, t, mut=frozenset()):
         P[off:off + len(plant)] = plant
         return off
 
-    a, b, off = build_pair_tags(label, rname, "twodoor/ctl2", f"{p}/{t}", plants)
-    tm = target_map([hc, hu])
-    res = scan(a, b, tm, only=label, mut=mut)
-    det = ["b'", "b''", "b''", "c", "c", "d", "d"][t]
-    ok = False
-    for h in res["hits"]:
-        if h[:4] != (label, rname, off, det):
-            continue
-        if t in (3, 4) and h[4] != plant.decode():
-            continue
-        if t == 5 and h[4] != "hash160:" + p2pkh(hc):
-            continue
-        if t == 6 and h[4] != "address:" + p2pkh(hc):
-            continue
-        ok = True
-    return ok, res["hits"]
+    a, b, off = build_pair(label, rname, "twodoor/ctl2", f"{p}/{t}", plants)
+    res = scan(a, b, target_map([hc, hu]), only=label, mut=mut)
+    want = {3: NESTED[0].decode(), 4: NESTED[1].decode(), 5: "hash160:" + p2pkh(hc), 6: "address:" + p2pkh(hc)}
+    return any(h[:4] == (label, rname, PLANT_DET[t], off) and (t not in want or h[4] == want[t])
+               for h in res["hits"]), res["hits"]
 
 
-NEAR = [("HALG", 0), ("HAL", -3), ("LF|HA", None), ("YIN.YANG", 0), ("YOU  WON", 0), ("0|n|max", None)]
+NEAR = ("HALG", "HAL@end", "LF@0+HA@end", "YIN.YANG", "YOU  WON", "k=0", "k=n", "k=2^256-1")
 
 
-def control_n2(i):
+def control_n2(j):
+    """Near miss j (0..7) in R1/xor/B.rev, fwd read, real targets: nothing may be reported."""
     label, rname = "R1/xor/B.rev", "fwd"
-    name, pos = NEAR[i]
 
     def plants(P, f0, f1):
         L = len(P)
-        if name == "LF|HA":
+        if j == 1:
+            P[L - 3:L] = b"HAL"
+        elif j == 2:
             P[0:2], P[L - 2:L] = b"LF", b"HA"
-        elif name == "0|n|max":
-            P[0:32], P[32:64], P[64:96] = bytes(32), N.to_bytes(32, "big"), b"\xff" * 32
+        elif j >= 5:
+            P[0:32] = (0, N, 2 ** 256 - 1)[j - 5].to_bytes(32, "big")
         else:
-            s = name.encode()
-            off = pos if pos >= 0 else L + pos
-            P[off:off + len(s)] = s
-        return None
+            s = NEAR[j].encode()
+            P[0:len(s)] = s
 
-    a, b, _ = build_pair_tags(label, rname, "twodoor/n2", str(i), plants)
+    a, b, _ = build_pair(label, rname, "twodoor/neg2", str(j), plants)
+    assert a[:8] == HDR and len(a) == len(b) == 96
     res = scan(a, b, target_map(), only=label)
     ok = not res["hits"]
-    if name == "0|n|max":
-        ok = ok and all((label, "fwd", o) in res["invalid"] for o in (0, 32, 64))
+    if j >= 5:
+        ok = ok and (label, "fwd", 0) in res["invalid"]
     return ok, res["hits"]
 
 
-def run_controls(mut=frozenset(), stop_early=False):
-    fails = []
-    for c in range(352):
-        ok, _ = control1(c, mut)
-        if not ok:
-            fails.append(f"ctl1:{c}")
-            if stop_early:
-                return fails
-    for p in range(8):
-        for t in range(7):
-            ok, _ = control2(p, t, mut)
-            if not ok:
-                fails.append(f"ctl2:{p}/{t}")
-                if stop_early:
-                    return fails
+def run_controls(mut=frozenset()):
+    fails = [f"ctl1:{c}" for c in range(528) if not control1(c, mut)[0]]
+    fails += [f"ctl2:{p}/{t}" for p in range(8) for t in range(7) if not control2(p, t, mut)[0]]
     return fails
 
 
 def negative_n1():
-    a = HDR + stream("twodoor/neg/A", 88)
-    b = HDR + stream("twodoor/neg/B", 88)
-    res = scan(a, b, target_map())
-    return res
+    return scan(HDR + stream("twodoor/neg/A", 88), HDR + stream("twodoor/neg/B", 88), target_map())
 
 
 def calibration():
@@ -502,9 +536,8 @@ def mutation_check():
     _EC_CACHE = {}
     table = []
     try:
-        for s in MUTATIONS:
-            f = run_controls(frozenset([s]))
-            table.append({"switch": s, "failing_controls": len(f)})
+        for sw in MUTATIONS:
+            table.append({"switch": sw, "failing_controls": len(run_controls(frozenset([sw])))})
     finally:
         _EC_CACHE = None
     return table
@@ -523,7 +556,7 @@ def prereg_state():
 
 
 def fmt_hit(h):
-    return f"{h[0]} {h[1]} @{h[2]} ({h[3]}) {h[4]}"
+    return f"{h[0]} {h[1]} {h[2]}@{h[3]} {h[4]}"
 
 
 def main():
@@ -531,58 +564,76 @@ def main():
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--selftest", action="store_true")
     g.add_argument("--run", action="store_true")
+    ap.add_argument("--peer-n1", metavar="DIGEST",
+                    help="with --run: the second implementation's N1 detector digest; the real inputs are combined "
+                         "only if ours equals it (PREREG, Execution: Order)")
     args = ap.parse_args()
+    if args.run and not args.peer_n1:
+        sys.exit("refusing --run without --peer-n1: the implementations must agree on N1 before the real inputs")
     t0 = time.time()
     rec = {"campaign": 55, "prereg": prereg_state(), "script_sha256": sha(open(__file__, "rb").read())}
     if args.run and not (rec["prereg"]["clean"] and rec["prereg"]["frozen"] and rec["prereg"]["last_commit"]):
         sys.exit(f"refusing --run: the PREREG must be committed, clean and frozen ({rec['prereg']})")
 
     rec["startup_assertions"] = startup_assertions()
-    load_inputs()   # hashes only; nothing is combined before the controls pass
+    load_inputs()   # hashes only; nothing is combined before every check passes
     rec["inputs"] = {"files": FILE_SHA, "A_sha256": A_SHA, "B_sha256": B_SHA, "A_salt": A_SALT, "B_salt": B_SALT}
-    print("[55] startup assertions: pass", flush=True)
+    print("[55] startup assertions (inputs, targets, prize key, k=1, turn known answers): pass", flush=True)
 
     fails = run_controls()
-    rec["controls"] = {"ctl1": {"n": 352, "failed": [f for f in fails if f.startswith("ctl1")]},
+    rec["controls"] = {"ctl1": {"n": 528, "failed": [f for f in fails if f.startswith("ctl1")]},
                        "ctl2": {"n": 56, "failed": [f for f in fails if f.startswith("ctl2")]}}
-    print(f"[55] controls 1-2: {408 - len(fails)}/408 pass", flush=True)
-    n2 = [control_n2(i) for i in range(len(NEAR))]
-    rec["controls"]["n2"] = {"n": len(NEAR), "failed": [NEAR[i][0] for i, (ok, _) in enumerate(n2) if not ok]}
+    print(f"[55] controls 1-2: {584 - len(fails)}/584 pass", flush=True)
+    n2 = [control_n2(j) for j in range(len(NEAR))]
+    rec["controls"]["n2"] = {"n": len(NEAR), "failed": [NEAR[j] for j, (ok, _) in enumerate(n2) if not ok]}
     n1 = negative_n1()
     bad = coverage_ok(n1["coverage"])
-    rec["controls"]["n1"] = {"manifest_sha256": n1["manifest_sha256"], "detector_digest": n1["detector_digest"],
-                             "coverage": n1["coverage"], "coverage_mismatch": bad, "hits": [fmt_hit(h) for h in n1["hits"]]}
-    print(f"[55] N1: hits {len(n1['hits'])}, coverage mismatches {bad or 'none'}; N2 near misses failed: "
-          f"{rec['controls']['n2']['failed'] or 'none'}", flush=True)
-    ctl_ok = not fails and not rec["controls"]["n2"]["failed"] and not n1["hits"] and not bad
+    rec["controls"]["n1"] = {"manifest_sha256": n1["manifest_sha256"], "manifest_as_pinned": n1["manifest_sha256"] == N1_MANIFEST,
+                             "detector_digest": n1["detector_digest"], "coverage": [n1["coverage"][k] for k in COVERAGE_KEYS],
+                             "coverage_mismatch": bad, "hits": [fmt_hit(h) for h in n1["hits"]]}
+    print(f"[55] N1: manifest {'as pinned' if n1['manifest_sha256'] == N1_MANIFEST else 'NOT AS PINNED'}, digest "
+          f"{n1['detector_digest']}, hits {len(n1['hits'])}, coverage mismatches {bad or 'none'}; "
+          f"N2 near misses failed: {rec['controls']['n2']['failed'] or 'none'}", flush=True)
+    ctl_ok = (not fails and not rec["controls"]["n2"]["failed"] and not n1["hits"] and not bad
+              and n1["manifest_sha256"] == N1_MANIFEST)
 
     table = mutation_check()
     mut_ok = all(r["failing_controls"] > 0 for r in table)
     rec["mutation"] = {"table": table, "pass": mut_ok}
-    print(f"[55] mutation check: {sum(r['failing_controls'] > 0 for r in table)}/{len(table)} switches caught", flush=True)
+    print(f"[55] mutation check: {sum(r['failing_controls'] > 0 for r in table)}/{len(table)} switches caught",
+          flush=True)
 
     cal = calibration()
     rec["calibration"] = cal
-    print(f"[55] calibration: observed {cal['observed']} vs expected {CAL_EXPECT} ± {CAL_TOL}: "
+    print(f"[55] calibration: observed {cal['observed']} vs expected {CAL_EXPECT} +/- {CAL_TOL}: "
           f"{'pass' if cal['pass'] else 'FAIL'} (batch sd {cal['batch_sd']})", flush=True)
 
     ok = ctl_ok and mut_ok and cal["pass"]
     rec["checks_pass"] = ok
+    if args.run:
+        rec["controls"]["n1"]["peer_digest"] = args.peer_n1
+        rec["controls"]["n1"]["peer_agrees"] = args.peer_n1 == n1["detector_digest"]
+        print(f"[55] N1 digest vs the second implementation: "
+              f"{'agree' if rec['controls']['n1']['peer_agrees'] else 'DISAGREE'}", flush=True)
+        ok = ok and rec["controls"]["n1"]["peer_agrees"]
     if not args.run:
         print(f"[55] selftest {'PASS' if ok else 'FAIL'} in {time.time() - t0:.0f}s")
         return 0 if ok else 1
     if not ok:
         rec["verdict"] = "VOID"
-        json.dump(rec, open(OUT, "w"), indent=1)
+        with open(OUT, "w") as f:
+            json.dump(rec, f, indent=1)
         sys.exit("[55] VOID: a check failed; the real inputs were not combined")
 
     a, b = load_inputs()
-    real = scan(a, b, target_map())
+    real = scan(a, b, target_map())        # always runs to completion; every event is listed
     bad = coverage_ok(real["coverage"])
     verdict = "VOID" if bad else ("HIT" if real["hits"] else "NULL")
-    rec["real"] = {"manifest": real["manifest"], "manifest_sha256": real["manifest_sha256"],
-                   "coverage": real["coverage"], "coverage_mismatch": bad, "detector_digest": real["detector_digest"],
-                   "hits": [{"label": h[0], "read": h[1], "offset": h[2], "detector": h[3], "detail": h[4]}
+    rec["real"] = {"manifest": [{"label": lab, "sha256": hx} for lab, hx in real["manifest"]],
+                   "manifest_sha256": real["manifest_sha256"],
+                   "coverage": dict(zip(COVERAGE_KEYS, [real["coverage"][k] for k in COVERAGE_KEYS])),
+                   "coverage_mismatch": bad, "detector_digest": real["detector_digest"],
+                   "hits": [{"label": h[0], "read": h[1], "detector": h[2], "offset": h[3], "item": h[4]}
                             for h in real["hits"]]}
     rec["verdict"] = verdict
     rec["seconds"] = round(time.time() - t0, 1)
