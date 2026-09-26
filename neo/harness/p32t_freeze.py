@@ -83,3 +83,24 @@ def reading_hits(K: bytes):
     if p is not None and p < 15:
         out.append(f"validpad{p}(weak)")
     return out
+
+
+# ---- canonical readings (tick 31): the repo asserts the hex-key+newline reading ----
+# README/sheet: P32T's 80-byte CT "fits a 64-character hex private key plus a newline".
+# That is 65 bytes content -> pad 15 -> P5 == 0x0a || 0x0f*15. PRIMARY.
+# The two-raw-keys reading (64 bytes -> P5 == 0x10*16) is the SECONDARY check.
+PRIMARY_P5 = bytes([0x0a]) + bytes([0x0f]) * 15
+SECONDARY_P5 = bytes([0x10]) * 16
+
+def primary_ok(K: bytes) -> bool:
+    return p5(K) == PRIMARY_P5
+
+def secondary_ok(K: bytes) -> bool:
+    return p5(K) == SECONDARY_P5
+
+def accept(K: bytes):
+    """Canonical accept order: primary reading first, then secondary, then any valid pad."""
+    if primary_ok(K): return "primary:hexkey+LF"
+    if secondary_ok(K): return "secondary:tworawkeys"
+    p = last_block_pad(K)
+    return f"weak:validpad{p}" if p is not None else None

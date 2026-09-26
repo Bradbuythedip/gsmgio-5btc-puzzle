@@ -1104,3 +1104,53 @@ within the ~11% birthday chance for 8 bytes). The salts are ordinary random Open
 they carry no operand. (Re-confirmed the TG-doctored salt differs from cosmic only in bytes
 0–1, tail `6fe06dc950e6` shared — a splice, as tick 3 found.) So "the salt names the next
 step" is closed.
+
+### Loop tick 31 (2026-09-26) — forensic/provenance round: five channels audited, all dry
+
+Per the standing plan (no more AES batteries; find the named operation or a new artifact):
+
+**1. P32T reading made canonical.** The repo asserts the **hex-key+newline** reading (README:
+the 80-byte CT "fits a 64-character hex private key plus a newline") = 65 B content, pad 15,
+so PRIMARY `P5 == 0x0a‖0x0f*15`; the two-raw-keys reading (64 B, `0x10*16`) is SECONDARY.
+`p32t_freeze.accept(K)` now checks primary, then secondary, then any valid pad. No future key
+will be rejected for the wrong length assumption.
+
+**2. `4943` audit — coincidence, closed.** `f73d92 = 2·11·149·4943`; `4943` was the only
+unexplained residue. It is prime; it appears **literally nowhere** in any authenticated text;
+**no puzzle object is even 4943 bytes long** (page 2150, soup 2149, architect 501, cosmic
+1344, phase-3.2 2422), so offset/line/index-4943 readings do not apply; modular coords
+(mod 196 = 43, mod 91 = 29, mod 58 = 13, mod 24 = 23, mod 14 = 1) name nothing. A 24-bit
+colour field's prime factorisation carries no puzzle meaning. Closed as coincidence; not hashed.
+
+**3. Named-operation audit — no statement names an endgame operand.** Every HINT/CONFIRM with
+an operation verb (hash #225/#226, the giveit fix #867, HASHTHETEXT/Decentraland, zeroing
+#8000, binary reversal #8446, split half/better-half, index {1,4,21}/primes) attaches to a
+solved or upstream stage. **No authenticated statement names P32T, salph_inner, inner96, the
+envelope, or the Cosmic blob as the object of an operation**, nor any operation that produces
+32-byte material from an already-named object. The Cosmic HINT/CONFIRMs (#8311/#8315/#8328)
+point at the Time-Life "Cosmic Duality" book cover being "scary specific", not at an operation
+on the blob. The live gap (an earlier step must name P32T's operand) is unfilled by the archive.
+
+**4. Git forensics for S0 — not recoverable.** One branch, no stashes/tags; deleted files in
+all history are only the untracked `__pycache__` bytecode and two old `phase2.png`/`phase3.png`.
+A full blob scan of every object in history finds seed material only in the already-known
+parked `neo/prior-sessions/2026-09-25-S1S4/` files; no hidden or deleted S0. S0 remains the
+uninvertible SHA256 preimage of head S1 — confirmed unrecoverable, as the parked ledger stated.
+
+**5. Matrix oddities — unnamed, kept as markers.** No primary sentence names the near-white
+`#FEFEFE` cell (7,4) or the 4-bit spiral residue `0000`. "White" occurs only in the poem's
+"Roses are White" line; the creator explicitly claims **no hidden picture** in the rabbit
+(#23200 "Squares and a rabbit?… no hidden picture"); the one gaze theory (#2905 "rabbit
+looking to this point") got a non-committal "Interesting 😜". Both oddities stay markers.
+(Observation, not promoted: the rabbit is drawn in cells cols 6–9/rows 6–8 and `#FEFEFE` sits
+at (7,4), to its left; a left-facing rabbit would "look toward" it. Post-hoc geometry, and the
+creator was non-committal — recorded, not elevated.)
+
+**6. Salt exclusion** recorded in tick 30 addendum: six real salts, no ASCII/reversal/XOR/
+structure, no pointer. Reusable closure of the salt channel.
+
+**7. Stop.** All six forensic channels are dry and no new operand appeared. Per the plan, no
+further AES campaign is run: the measured false-positive regime would manufacture noise, not
+answers. The impasse breaks only with a new authenticated artifact naming the operation, or
+the lost S0 seed — neither available. The freeze oracle and the address oracle remain as
+tooling for any future candidate key.
