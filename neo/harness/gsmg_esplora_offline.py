@@ -26,7 +26,11 @@ GET-only. No transaction signing/broadcasting, key search, BSGS, nonce attack,
 or AES candidate generation.
 
 Exit codes: 0 ok; 2 bad input; 3 cache integrity failure (status) or selftest failure;
-4 offline run incomplete (a required endpoint was not cached; reports are not written).
+4 offline run incomplete (a required endpoint was not cached; reports are not written);
+5 sync incomplete (a transient failure left an endpoint uncached; reports written, invariant
+cache_complete=false; rerun sync to fill the gap).
+Definitive negative responses (HTTP 404/400) are pinned and replayed verbatim offline, so an
+offline rerun reproduces the sync report byte for byte (header timestamp aside).
 The HTTP cache is frozen at first acquisition: a later sync serves cached endpoints without
 refetching them. Delete neo/materials/chain/fetched/esplora_http/ to re-acquire.
 """
@@ -36,7 +40,9 @@ import argparse, hashlib, importlib, json, os, sys, time
 from pathlib import Path
 from typing import Dict, Optional
 
-VERSION = "2026-09-26.2"
+VERSION = "2026-09-26.3"
+# .3: definitive negative responses (HTTP 404/400) are pinned in the cache and replayed offline, so a
+#    sync that met one can still be reproduced; every report carries an explicit "invariant" block.
 # .2 (repo, tick 93): offline mode now hard-fails on any cache miss and leaves existing reports untouched
 #    (receipt_lookups records Unavailable as an "unavailable" line, so .1 exited 0 with a degraded report);
 #    a re-sync serves cached endpoints without refetching, so the first acquisition is frozen.
@@ -81,6 +87,16 @@ class EndpointCache:
 
     def data_path(self, path: str) -> Path:
         return self.root / (self.key(path) + ".bin")
+
+    def negative(self, path: str) -> Optional[dict]:
+        """The pinned definitive negative response (404/400) for a path, else None."""
+        rec = self.index.get(self.key(path))
+        return rec if rec and rec.get("status") else None
+
+    def put_negative(self, path: str, status: int, base: str, message: str):
+        self.index[self.key(path)] = {"path": path, "base": base.rstrip("/"), "status": status, "message": message,
+                                      "cached_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+        self.flush()
 
     def get(self, path: str) -> Optional[bytes]:
         p = self.data_path(path)
@@ -132,6 +148,8 @@ class EndpointCache:
     def verify_all(self):
         bad, total, nbytes = [], 0, 0
         for key, rec in self.index.items():
+            if rec.get("status"):
+                continue                                   # pinned negative response: no body
             p = self.root / (key + ".bin")
             if not p.is_file():
                 bad.append((rec.get("path"), "missing file"))
@@ -155,8 +173,13 @@ def make_esplora(RL, repo: Path, base: str, offline: bool, delay: float):
             self.cache_hits = 0
             self.cache_misses = 0
             self.missing_paths = []
+            self.failed_paths = []
 
         def _get(self, path):
+            neg = self.endpoint_cache.negative(path)
+            if neg:
+                self.cache_hits += 1
+                raise RL.Unavailable(neg["message"])            # replayed verbatim: offline == sync
             hit = self.endpoint_cache.get(path)
             if hit is not None:
                 self.cache_hits += 1
@@ -168,7 +191,14 @@ def make_esplora(RL, repo: Path, base: str, offline: bool, delay: float):
                     f"offline cache miss: {path}. "
                     f"Run sync once with the same bounds."
                 )
-            data = super()._get(path)
+            try:
+                data = super()._get(path)
+            except RL.Unavailable as e:
+                if "HTTP Error 404" in str(e) or "HTTP Error 400" in str(e):
+                    self.endpoint_cache.put_negative(path, 404 if "404" in str(e) else 400, self.base, str(e))
+                else:
+                    self.failed_paths.append(path)         # transient: the cache stays incomplete
+                raise
             self.endpoint_cache.put(path, data, self.base)
             return data
 
@@ -181,7 +211,7 @@ def prereg_info(repo: Path):
     b = p.read_bytes()
     return {"present": True, "path": str(p), "bytes": len(b), "sha256": sha256hex(b)}
 
-def write_run_manifest(repo: Path, mode: str, api, depth: int, max_fetch: int, max_pages: int):
+def write_run_manifest(repo: Path, mode: str, api, depth: int, max_fetch: int, max_pages: int, invariant=None):
     out = repo / "neo" / "materials" / "chain" / "fetched" / "esplora_run_manifest.json"
     cache = EndpointCache(endpoint_cache_root(repo))
     n, nb, bad = cache.verify_all()
@@ -200,6 +230,7 @@ def write_run_manifest(repo: Path, mode: str, api, depth: int, max_fetch: int, m
             "network_requests_this_run": getattr(api, "fetches", None),
         },
         "prereg": prereg_info(repo),
+        "invariant": invariant,
     }
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(doc, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -225,7 +256,20 @@ def run_analysis(RL, repo: Path, mode: str, base: str, depth: int, max_fetch: in
         print(f"WARNING: the report contains {unavailable} 'unavailable' item(s); see RECEIPT_LOOKUPS.md",
               file=sys.stderr)
     (chain / "RECEIPT_LOOKUPS.md").write_text(text + "\n", encoding="utf-8")
+    invariant = {
+        "mode": mode,
+        "cache_complete": not getattr(api, "failed_paths", []) and not (mode == "offline" and api.cache_misses),
+        "network_requests": getattr(api, "fetches", 0),
+        "cache_misses": getattr(api, "cache_misses", 0),
+        "transient_failures": len(getattr(api, "failed_paths", [])),
+        "unavailable_items": unavailable,
+        "prereg_sha256": prereg_info(repo).get("sha256"),
+        "receipt_lookups_sha256": sha256hex(Path(RL.__file__).read_bytes()),
+    }
+    if mode == "offline" and invariant["network_requests"] != 0:
+        raise RuntimeError("OFFLINE INVARIANT FAILED: a network request occurred")
     report = {
+        "invariant": invariant,
         "verdicts": verdicts,
         **extra,
         "wrapper": {
@@ -242,7 +286,7 @@ def run_analysis(RL, repo: Path, mode: str, base: str, depth: int, max_fetch: in
         json.dumps(report, indent=2, sort_keys=True, default=str) + "\n",
         encoding="utf-8",
     )
-    manifest = write_run_manifest(repo, mode, api, depth, max_fetch, max_pages)
+    manifest = write_run_manifest(repo, mode, api, depth, max_fetch, max_pages, invariant)
 
     print(text)
     print("\n== wrapper summary ==")
@@ -254,9 +298,14 @@ def run_analysis(RL, repo: Path, mode: str, base: str, depth: int, max_fetch: in
     print("written:", chain / "RECEIPT_LOOKUPS.md")
     print("written:", chain / "receipt_lookups.json")
     print("manifest:", manifest)
+    print("invariant:", json.dumps(invariant, sort_keys=True))
 
     if mode == "offline" and getattr(api, "fetches", 0) != 0:
         raise RuntimeError("OFFLINE INVARIANT FAILED: a network request occurred")
+    if not invariant["cache_complete"]:
+        print("SYNC INCOMPLETE: transient failures on " + ", ".join(api.failed_paths[:10]) + "; rerun sync",
+              file=sys.stderr)
+        return 5
     return 0
 
 def cmd_status(repo: Path):

@@ -38,7 +38,12 @@ Disconnect networking if desired, then use the SAME API base and bounds:
     --max-pages 20
 
 If any required endpoint was not cached, offline mode exits 4, lists the missing
-endpoints and leaves the existing reports untouched (version .2). It never fetches.
+endpoints and leaves the existing reports untouched. It never fetches. A sync hit by a
+transient failure exits 5 (invariant cache_complete=false); rerun sync to fill the gap.
+HTTP 404/400 answers are pinned and replayed verbatim, so offline reproduces sync byte
+for byte. Every report carries an "invariant" block: mode, cache_complete,
+network_requests, cache_misses, transient_failures, unavailable_items, prereg_sha256,
+receipt_lookups_sha256.
 
 4. CACHE STATUS
 
