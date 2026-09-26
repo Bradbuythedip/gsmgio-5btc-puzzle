@@ -1693,3 +1693,15 @@ stays a pointer (479/484 → PRIVATEKEY). The gate stays empty.
 
 The gate stays empty. The missing object is still the two short words behind
 yellowblueprimes and yinyang, which need a named rule to print them.
+
+**Tick 42 correction (board string).** The overlay is row-major with rank 8 on the top row,
+but the letters depend on one layout choice. **Keeping the board's two `.` cells** (the 28-cell
+VIC alphabet, rows `FUBCDORA/.LETHING/KYMVPS.J/QZXW`) gives `FRALGMX`. **Dropping them**
+(26 letters, rows `FUBCDORA/LETHINGK/YMVPSJQZ/XW`) gives `FRAEKV`; the user replayed this
+independently. Neither is a soup token or a named password. The closure stands (no AES) under
+both.
+
+**What is still independently named on two sides:** yellow 479 / blue 484 (colour frame ×
+first 24 primes); DBBI 91 / FAED 570; P32T 80 B / SalPhaseIon 80 B; HALF / BETTER HALF (VIC
+sentence). None of these pairs has a named operation that turns both sides into words. The
+table in tick 42 supplies no string, so the gate stays empty.
