@@ -2714,3 +2714,32 @@ it, and its blockwise analogues ran at ticks 11 and 20. The VIC-mask zero test (
 is **dropped by user decision**. The π-digit branch stays closed (tick 22).
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 74 (2026-09-26): closures — #8569 / #8000, the Genesis-42 readings, and the bare "42" (already spent)
+
+User-directed closures. No new branch is opened.
+- **#8569 and #8000 are closed as recovery targets.** #8569's parent is gone (tick 66): parked. #8000
+  needs nothing recovered; its full text is in `hints/2021-12-25-hint.png` (tick 69). Neither is
+  reopened.
+- **The Genesis nonce is 2083236893.** It was already in the v0.1-constants stage (tick 26). The
+  "first 42 odd primes" and "42 = 2×21 halvings" readings have no source and are not adopted: the
+  same class as the Murray and Gao items.
+- **42.** It is not among the v0.1 constants. Byte 0x2a exists in Script only as the generic
+  "push the next 42 bytes" data push, never as a named operation. Jrk's bare "42" (#8385) is
+  Hitchhiker / theory-of-everything atmosphere and names no gate.py operation.
+- **The bare "42" as a passphrase: already run, so skipped per the rule.** campaign_06 ran
+  `try_family("42")` (raw "42", sha256hex, SHA256HEX, sha256(sha256hex), sha256d) against every
+  target framing, including miniA, miniAB, P32T (inner96) and Cosmic, under all six KDF modes,
+  including EVP-MD5 and EVP-SHA256. That is a strict superset of the gate's frozen 16 decrypts, with
+  the same decrypt and check functions. Campaign 10 repeated it. Result: no hit. The one logged
+  record (`attempts/campaign_06.jsonl`) is pad-1 noise on miniA/MD5, printable 0.29. `gate.py`
+  refuses "42" outright: "exact string already in attempts/*.jsonl". **Closed.**
+- **yellowblueprimes / yinyang do not qualify as "still untested".** `gate.py` refuses every label
+  form (yinyang, yingyang, yin yang, ying yang, YINYANG, yellowblueprimes, yellow blue primes) as
+  corpus-spent. The yinyang literals were decrypt-tested in campaigns 01, 03–07 and 10;
+  yellowblueprimes was used as a token in the frames of campaigns 14, 16 and 17. They re-enter only
+  as a source-named value, never as the label.
+
+**Standing work, restated.** A creator-named string, through `gate.py`, on P32T and the SalPhaseIon
+short lock (Cosmic third). Nothing else is queued. **State unchanged:** two locks gated on a new
+primary; corpus exhausted; address unspent.
