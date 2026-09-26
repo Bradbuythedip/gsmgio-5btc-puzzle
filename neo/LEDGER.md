@@ -1807,3 +1807,22 @@ SalPhaseIon short) need the same independently named X.
 
 **Answer to any request for work:** there is no next tick until a page names the next rewrite
 (of the 20 sums, or of the two ingredient values). New primaries enter only through `gate.py`.
+
+### Addendum (2026-09-26, user-directed): third-door short list, and two provenance caveats
+
+Corroborates the standing "sourced queue empty" state; does not reopen it.
+
+**Third door short list — null.** `campaign_34_thirddoor.py`: `sha256(X)` (plus 5 other fixed
+encodings) → compressed/uncompressed P2PKH vs `1NULY7DhzuNvSDtPkFzNo6oRTZQWBqXNE9`, prize, and
+second, with X drawn only from named leftovers (`31, 73, 42, {1,4,21}, {1,4}, 331, 421, YOUWON,
+629998, 840003`, the VIC sentence and its `theyalsoneedfundstolive` tail, both layer-sum concats).
+42 values, 416 addresses, **0 matches.** Per the step-3 rule, the list is not grown; a preimage
+for `1NULY7…` still counts only if published (matching the standing gate).
+
+**Two items in a pasted "frozen" list are NOT authenticated and must not be built on:**
+1. **"Cosmic first layer = XOR of seven SHA-256s (EVP-MD5) → 1327 B (4f7a1e4e…)"** is the
+   XOR-of-token-hashes theory falsified at tick 7 and is on the archive's *Excluded on purpose*
+   list (`cc/1327-byte decrypt`). Not an input for any "Cosmic second layer."
+2. **"Prize pubkey 04f4d1bb…"**: `1GSMG1JC9…` is unspent, so only its hash160 is public — the
+   uncompressed pubkey is not revealed until a spend. Any quoted prize pubkey is solver-claimed.
+   Likewise `3GSMG24T…`, the `1GSMG1CLx…` dust, and locktimes `629998`/`840003` are unverified.
