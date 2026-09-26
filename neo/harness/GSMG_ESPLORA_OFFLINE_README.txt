@@ -43,10 +43,11 @@ transient failure exits 5 (invariant cache_complete=false); rerun sync to fill t
 HTTP 404/400 answers are pinned and replayed verbatim, so offline replays every response
 sync saw. The report text can differ only in its timestamp and in a signature tag where
 offline, holding the whole cache from the start, finds a parent that sync fetched in a later
-section ("unchecked: parent not fetched" becomes "verified"); verdicts do not depend on it.
+section ("unchecked: parent not fetched" becomes a checked result, normally "verified");
+verdicts do not depend on it.
 Every report carries an "invariant" block: mode, cache_complete,
-network_requests, cache_misses, transient_failures, unavailable_items, prereg_sha256,
-receipt_lookups_sha256.
+network_requests, cache_misses, transient_failures, unavailable_items (every "unavailable"
+line plus each unread 3GSMG24T history raw), prereg_sha256, receipt_lookups_sha256.
 
 4. OFFLINE AUDIT OF TRANSACTIONS (never fetches)
 

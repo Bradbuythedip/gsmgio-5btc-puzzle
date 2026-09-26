@@ -40,7 +40,9 @@ import argparse, hashlib, importlib, json, os, sys, time
 from pathlib import Path
 from typing import Dict, Optional
 
-VERSION = "2026-09-26.3"
+VERSION = "2026-09-26.4"
+# .4: invariant.unavailable_items also counts the fan-out's unread history raws (review finding OR-1); no request
+#    changes, so a .3 cache replays unchanged.
 # .3: definitive negative responses (HTTP 404/400) are pinned in the cache and replayed offline, so a
 #    sync that met one can still be reproduced; every report carries an explicit "invariant" block.
 # .2 (repo, tick 93): offline mode now hard-fails on any cache miss and leaves existing reports untouched
@@ -249,10 +251,14 @@ def run_analysis(RL, repo: Path, mode: str, base: str, depth: int, max_fetch: in
             print("  missing:", p, file=sys.stderr)
         print("Run `sync` once with the same --base and bounds, then rerun `offline`.", file=sys.stderr)
         return 4
-    unavailable = text.count("unavailable")
+    # The fan-out lists an unreadable history raw as "[raw not read]" / "Unavailable transactions:", which the
+    # lowercase count does not see, so its unread list is added from the structured result (review finding OR-1).
+    fan_unread = len(((extra or {}).get("fanout") or {}).get("unread") or [])
+    unavailable = text.count("unavailable") + fan_unread
     if unavailable:
-        print(f"WARNING: the report contains {unavailable} 'unavailable' item(s); see RECEIPT_LOOKUPS.md",
-              file=sys.stderr)
+        print(f"WARNING: the report contains {unavailable} unavailable item(s)"
+              + (f", {fan_unread} of them unread 3GSMG24T history raw(s)" if fan_unread else "")
+              + "; see RECEIPT_LOOKUPS.md", file=sys.stderr)
     (chain / "RECEIPT_LOOKUPS.md").write_text(text + "\n", encoding="utf-8")
     invariant = {
         "mode": mode,
