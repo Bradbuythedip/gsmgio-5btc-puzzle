@@ -2641,3 +2641,76 @@ own nonces. **State unchanged:** two locks gated on a new primary; corpus exhaus
 - **Pending, in order:** the 2024 peel raw hex (locktime 840003); any other author spend from
   `1GSMG1…` (reuse + affine on arrival, same command); R.y against a 32-byte authenticated
   OP_RETURN (parked, since no such field exists). AES gates unchanged.
+
+### Tick 72 (2026-09-26): the 2024 peel, signature-verified; affine-nonce and reuse checks null on all six prize signatures
+
+User-pasted raw hex, saved as `materials/chain/tx_halving2024_spend.hex`. txid `88cdb3cd…9df3`,
+version 2, **locktime 840003**, sequence 0xfffffffd on every input.
+- Inputs: `2aa9a4a9…1b13:0` (the 2020 spend's change), `81d35929…:0`, `f28b0b68…:0`. Outputs:
+  **1.25 BTC → `17ucy1…`**, 1.253243 BTC back to `1GSMG1…`. Tick 38's account is confirmed.
+- All three inputs are signed by the prize key `04f4d1bb…`, and each signature verifies. So 840003,
+  like 629998 (tick 70), is now bound to the key holder's signatures. That it was mined, and at
+  which height, is still unverified here (network).
+- `campaign_45_affine_nonce.py --tx` ran as pre-registered, unchanged grid. 2024 alone: r =
+  `1df5cf84…`, `4c18f2f2…`, `429e4e8f…`, null. **Pooled 2020 + 2024: six prize-key signatures, six
+  distinct nonces, no repeated nonce, no single-signature or pairwise affine relation, no point
+  identity.** The branch is closed on every prize-key signature known. It reopens only for a new
+  author spend, with the same command.
+
+### Tick 73 (2026-09-26): "π is the prime-counting operator", audited — forced or look-elsewhere throughout; three corrections
+
+User-relayed message. Blind workflow: 6 verifiers, 6 adversaries, 1 critic, all primaries recomputed,
+no verdict overturned. The corrections were re-derived by hand. The reading is not new: the tick 36
+addendum is titled with it and priced its length zoo.
+
+- **The recursive prime-position sieve is forced by the operation (new theorem).** Keeping
+  prime-indexed positions repeatedly leaves one survivor. Its original position is always the
+  largest term ≤ N of the primeth recurrence a(k+1) = p_{a(k)} (OEIS A007097: 1, 2, 3, 5, 11, 31,
+  127, 709, …), with ancestry a(0)…a(k). Proved by induction and brute-forced for N ≤ 2000 with 0
+  mismatches. **The survivor is 127 for every N from 127 to 708.** So FAED (570) and a 128-char
+  base64 lock both give 127 whatever their content; 127 enters through the sieve itself. The
+  survivor characters are 'g' (FAED's commonest symbol, 18.8%) and 'v'/'j' (ciphertext bits of the
+  last AES block, 1/64 each; they change with framing).
+- **ASCII 127** is #32613 (2024-11-29, LORE): Jrk answering "What character do I have to imagine
+  myself as?", i.e. DEL, a joke. π(127) = 31 holds because 127 = p₃₁. Consecutive A007097 members
+  in the number zoo: a pair 10–16%, a triple 0.5–1.3% (8–12% allowing π-closure). 709 occurs nowhere.
+- **(31,73): the identities are true, but the uniqueness claim is false.** B − Y = Y + π(Y) = 2π(B)
+  has **five** solutions: (22,52), (23,55), (25,59), (27,63), (31,73), and none above B = 1134.
+  (31,73) is the only one with both members prime, and the largest. Every π identity listed
+  (π(Y) = 11, π(B) = 21, 42, "π and one half") follows from that single pair, so they are not
+  independent evidence. The pair exists only under a=0. The soup's attested map o=0, a=1…i=9 gives
+  (40,88), with no relation and Y+B = 128.
+- **π(570) = 104 = |bin1| is new, at 2.2–3.7% (≤ 5 bits before look-elsewhere).** Y + B = 104 was
+  already recorded (tick 36). "Tail sum 104 and difference 42" jointly just is the pair.
+- **Length network.** π(91) = π(96) = 24 because both lie in [89, 97). π(24) = 9 = yellow was
+  rejected at tick 14. π(15) = 6 is in the tick-36 zoo. Iterated-π chains share a value > 2 half
+  the time. π(48) = 15 and π(96) = 24 add nothing beyond campaign 32. Aggregate over the structural
+  lengths: 10 distinct zoo targets hit against a null mean of 9.5 (p = 0.49).
+- **The 104-char / 8×13 prime-filtered FAED.** "Never run" is false: campaign_02 made
+  single-level prime-position keeps on FAED (lines 92–94), and deeper levels are nested subsets.
+  Fixed descriptive test, statistics set before computing (20,000 random 104-subsets, seed 20260926):
+  every statistic falls between the 12th and 82nd percentile (min two-sided p = 0.31), and the
+  YOUWON-rule planted-word scan finds 0 targets. FAED_π is an ordinary FAED sample. In
+  91 + 104 + 1 = 196, the +1 is ad hoc.
+- **Banter sources carry 0 bits.** √−1 → i → I → 73 is #8353 ("At least higher than sqrt(-1)",
+  answering "are chances less than 2^-256?"); 88% of letters reach some named number by such routes.
+  "Theory of everything" (#8354) names no number. **New provenance:** #8385 (2023-01-25) is a bare
+  "42" from Jrk, glossed in the log as an emoji and with no reply context. It is a weak echo of the
+  Hitchhiker reading, and it names no operation.
+- **User runs** (64 decrypts: the last-words 96-char string with the colours at prime positions;
+  16 decrypts: the 0x1f delimiter). Zero padding in both, USER grade. That is the expected outcome
+  under the null (P(no pad) = 0.78 and 0.94).
+
+**Corrections:**
+1. **Line 161** reads "prime part uses 2,3,5,7; 'too many combinations'". In
+   `hints/2021-03-01-primes.png` both phrases are the solver's (Janusz Baran: "just say which primes
+   2,3,5,7 we need use", "there are too many combinations"). Jrk wrote only "You are at the prime
+   part already???" and "Oh wait, shouldn't have said that. That might have been a hint".
+2. The uniqueness claim for (31,73), as above: five solutions.
+3. The creator-log gloss for #8385 ("emoji … without text") contradicts its message text, "42".
+
+**Dispositions.** Not pre-registered: the cellwise FAED_π (8×13) − DBBI (7×13) test. No source names
+it, and its blockwise analogues ran at ticks 11 and 20. The VIC-mask zero test (open since tick 69)
+is **dropped by user decision**. The π-digit branch stays closed (tick 22).
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
