@@ -1925,3 +1925,21 @@ forms and the last-block check.
 Plan status: step 1 (constraint sheet) exists; step 2 empty; step 3 (third door, campaign 34)
 empty; step 4 has no survivor to test. Stop rule met. The public corpus is exhausted; the next
 input must be a new creator sentence or page.
+
+### Addendum (2026-09-26): 64-suffix parked for good; vanity-start caveat; corpus exhausted
+
+- **DBBI⊖VIC is position-dependent** (21 distinct shifts, one per VIC letter), so no single
+  Vigenère/Caesar key can explain the 64-char suffix. The three admissible running keys (the VIC
+  sentence, `THEMATRIXHASYOU`, the 21-letter prefix) already read non-English (prior addendum).
+  With IC ≈ random and no period (look-elsewhere P = 0.60), the 64 is **leftover, parked** — no
+  more ciphers on it. The missing H,I is one statistic on a residue, not an oracle.
+- **Vanity-start caveat.** `d_prize = d0 + i` with small `i` is only a *verification* when `d0` is
+  a **named** grind start (as `gsmg.io/theseedisplanted` was named). No token supplies one:
+  `yellowblueprimes` and `yinyang` have no value on the constraint sheet, and `matrixsumlist` /
+  `lastwordsbeforearchichoice` are soup labels, not scalars. So there is no `d0` chain to check,
+  and a ±2^38 BSGS/kangaroo against `Q_prize` is discrete-log on a funded key — not built, not run
+  (the standing boundary; the one such script was withdrawn unrun). Shor/42/π are readings of the
+  July-2026 notes, not grind origins.
+- **Standing state:** the two locks stay gated on a new primary; the third door opens only from a
+  pre-registered 2020 colour rule; new creator text enters one candidate at a time. Public corpus
+  exhausted; prize key not deduced; address unspent.
