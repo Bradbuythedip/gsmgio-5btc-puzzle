@@ -1323,6 +1323,7 @@ missing input is not in the creator-authenticated corpus. This matches #66573/#6
 "my close friends have the best chance … NOTE: that is a hint"): the last step is designed not to
 be derivable from published material. That is a real terminal state, not a failure. The freeze and
 address oracles remain as tooling for any password a fact-from-outside might supply.
+
 ### Regime change (2026-09-26) — corpus parked; one frozen gate for new primaries only
 
 The lock-battery regime is over. Campaigns through 33, the 240 BIP32 derivations, VIC reuse and
