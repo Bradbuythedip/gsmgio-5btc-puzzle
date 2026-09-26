@@ -16,9 +16,14 @@ byte-verified across ≥3 independent sources (see §3), and byte-pinned by enve
 | P32T / inner96 | 96 B | `291dfd6f3e759ec2e272b35a00c24907da70c3e7a9291b4c13605c7b0b4f3de9` | `5334de08884878aaed7c99d0b4340bf8` |
 | Cosmic | 1344 B | `b18950551a4dd0cb8a9378f0906ba18c03a15f0ee83eb98c6bc90165c5f79805` | `5bbf983669ed922eb12dff1dcc3f6fc6` |
 
+**Canonical offline baseline** (tick 91, commit `99c08c3`): `neo/harness/gsmg_offline_solver.py`
+2026-09-26.2. From the repo root, run `doctor`, `audit --repo .` and `selftest --repo .`. All three must
+pass before any null is trusted. The uploaded .1 is superseded: its phase-3 control could never pass, and
+it skipped key material on decrypts with invalid padding.
+
 ---
 
-## 1. Do-not-repeat inventory (ticks 1–89)
+## 1. Do-not-repeat inventory (ticks 1–91)
 
 | class | status | where |
 |---|---|---|
@@ -34,6 +39,7 @@ byte-verified across ≥3 independent sources (see §3), and byte-pinned by enve
 | On-chain trail — locktimes 629998 (signed) & 840003, "neighbors half and double" = points, Good-job-Neo brainwallets, Half/Better = solver dust (NONE creator-funded); **receipt topology**: the halves transact (2020/2024 splits, the 2020 one signed over the `3GSMG24T` "Halving" memo), never co-sign; `17ucy1` receive-only | **null** | 37–38, 52–53, 59, 63, 77, 79, 88 |
 | Community "solutions" — jackdevs66 XOR-of-seven = 7.87-bit noise / 1-byte pad; Issue #79 keys from that noise; Murray not Genesis; Issue #108 "two typos" a non-issue | falsified | 7, 75, 78, 82, 85 |
 | **Ricardian reading** (Grigg: the hash of the whole document is the identifier) — 6 whole, byte-exact documents (three solved-stage plaintexts, the phase-3.2 prose before P32T, the pinned soup) | **null**, 96 decrypts + 48 addresses | 89 / `campaign_54` |
+| **OP_RETURN = nonce coordinate** — no saved creator tx carries a 32-byte OP_RETURN (the memos are 7–53 B of ASCII); parked for the existing corpus, kept as a future-event detector (`opreturn`/`txscan` + `materials/chain/nonce_points_prize.json`) | **no object** | 91 |
 | **Dates** — Satoshi's P2P birth date / EO 6102 / gold (no creator anchor → unlicensed); **Neo's passport expiry 11 Sep 2001** (the creator's only named date, #8048/#8516), 51 pre-registered forms | **null**, 816 decrypts | 87 / `campaign_53` |
 
 ## 2. What the audit found and CLOSED (three escape-hatches)
