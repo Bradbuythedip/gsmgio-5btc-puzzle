@@ -2205,3 +2205,26 @@ coincidence. The 49-string is **not run**: "derived_candidate" is not an admissi
 the precondition failed. Recorded so it is not re-derived.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 56 (2026-09-26): the "Neo wallet" tx is signed with the Phase-0 seed as a raw key, so it authenticates nobody
+
+User-pasted raw tx (saved to `unverified/tx_8aaa96d3_neo_wallet.hex`), txid `8aaa96d3…00c5`
+(computed), locktime 897359 (~May 2025):
+- in0 `263d6313…:0`, in1 `f7783baa…:0`, both spent by `148XH2YBmLr4oAJXQcG84FpNYoBmqnVPHQ`
+  (pubkey `030a31a3…bf69`); the two r values differ;
+- out0 OP_RETURN `Neo wallet bc1qyw9qv8qntl48rqdfa4g5szzrlaq4d4cn6zhrmg`;
+- out1 666 sat → `3GSMG24T…` (the creator's funding vanity);
+- out2 2256 sat → `148XH2…` (change).
+
+**Verified:** `030a31a3…` is the public key of the private key `b"gsmg.io/theseedisplanted"`
+left-padded to 32 bytes (`addr_check` "rawpad"; also in `prior-sessions/…S1S4/btc.py`). That key is
+derivable by anyone who solved Phase 0, so this tx proves only knowledge of the public seed trick,
+not membership of the April-2020 "Good job, Neo!" team. **Tick 39 is downgraded:** the "Neo wallet"
+self-identification is unauthenticated.
+
+**Open (needs a primary):** were the 2020-04-03 "Good job, Neo!" outputs (txids user-given as
+`364de511…`/`722fbf35…`) paid to `148XH2…`? If so, "Good job, Neo!" congratulates the Phase-0
+raw-key door, not an unpublished stage past 3.2, and tick 39's lead dissolves. The raw-padded
+encoding of puzzle strings vs `1NULY7…` is already covered by `addr_check` (ticks ~1011/1816/2016).
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
