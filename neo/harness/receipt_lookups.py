@@ -884,12 +884,13 @@ def audit_tx(api, txid, out):
     """Offline audit of one transaction from raws on hand: each input's spent amount and script (from its parent
     raw, txid-verified), every signature (sighash type, strict DER, low S, the key it verifies under), the outputs,
     the fee and the fee rate. Returns {'txid', 'ok' (True: every input valid; False: one invalid; None: something
-    not checkable), 'fee', 'vsize'}."""
+    not checkable), 'fee', 'vsize'} plus the full structured record (wtxid, sizes, inputs with their signatures,
+    outputs, totals, fee rate) that save_audit writes to JSON."""
     try:
         hx = raw_on_hand(api, txid)
     except Unavailable as e:
         out.append(f"### `{txid}`\n\n- raw not on hand ({e})\n")
-        return {"txid": txid, "ok": None, "fee": None, "vsize": None}
+        return {"txid": txid, "ok": None, "fee": None, "vsize": None, "raw_on_hand": False, "why": str(e)}
     tx = parse_raw(hx)
     weight, stripped, size = tx_weight(hx)
     vsize = -(-weight // 4)
@@ -897,17 +898,20 @@ def audit_tx(api, txid, out):
     out.append(f"### `{txid}`\n")
     out.append(f"- raw hashes to its txid; wtxid `{wtxid}`; version {tx['version']}, locktime {tx['locktime']}; "
                f"{size} B, weight {weight}, {vsize} vB")
-    total_in, states = 0, []
+    total_in, states, ins, outs_rec = 0, [], [], []
     for i, v in enumerate(tx["vin"]):
         if v["txid"] == COINBASE:
-            out.append(f"- in {i}: coinbase"); total_in = None; states.append(None); continue
+            out.append(f"- in {i}: coinbase"); total_in = None; states.append(None)
+            ins.append({"index": i, "coinbase": True, "ok": None}); continue
         try:
             o = parse_raw(raw_on_hand(api, v["txid"]))["vout"][v["vout"]]
         except (Unavailable, IndexError) as e:
             d = T.input_script(v)
             out.append(f"- in {i} spends `{v['txid']}:{v['vout']}` ({d['kind']}, {label(d['address'])}): parent raw not on hand, "
                        f"so its amount and signature cannot be checked ({e})")
-            total_in = None; states.append(None); continue
+            total_in = None; states.append(None)
+            ins.append({"index": i, "spends": f"{v['txid']}:{v['vout']}", "parent_raw_on_hand": False, "kind": d["kind"],
+                        "address": d["address"], "ok": None, "why": str(e)}); continue
         spk = bytes.fromhex(o["spk"])
         r = T.verify_input(tx, i, spk, o["sat"])
         if total_in is not None:
@@ -922,10 +926,19 @@ def audit_tx(api, txid, out):
                        f"{ {True: 'low S', False: 'high S (policy only)', None: 'unparseable r/s'}[sd['low_s']] }; {key}")
         out.append(f"  - input {'VALID' if r['ok'] else 'INVALID' if r['ok'] is False else 'not checked'}: {r['why']}")
         states.append(r["ok"])
+        ins.append({"index": i, "spends": f"{v['txid']}:{v['vout']}", "parent_raw_on_hand": True, "amount_sat": o["sat"],
+                    "spent_script": o["spk"], "kind": r["kind"], "address": r["address"], "pubkeys": r["pubkeys"],
+                    "signatures": [{"sighash": SIGHASH.get(sd["hashtype"], sd["hashtype"]), "strict_der": sd["strict_der"],
+                                    "low_s": sd["low_s"],
+                                    "key_index": None if sd["key"] is None else sd["key"] + 1,
+                                    "pubkey": None if sd["key"] is None else r["pubkeys"][sd["key"]]} for sd in r["sigs"]],
+                    "ok": r["ok"], "why": r["why"]})
     total_out = 0
     for o in tx["vout"]:
         kind, a, data = script_info(bytes.fromhex(o["spk"]))
         total_out += o["sat"]
+        outs_rec.append({"n": o["n"], "sat": o["sat"], "kind": kind, "address": a, "script": o["spk"],
+                         "op_return": data.decode("latin1") if kind == "op_return" else None})
         out.append(f"- out {o['n']}: " + (f"OP_RETURN {data.decode('latin1')!r}" + (f" ({o['sat']} sat)" if o["sat"] else "")
                                           if kind == "op_return" else f"{o['sat']} sat → {label(a)} ({kind})"))
     fee = None if total_in is None else total_in - total_out
@@ -936,7 +949,10 @@ def audit_tx(api, txid, out):
                    + ("" if fee >= 0 else " — NEGATIVE: outputs exceed inputs"))
     ok = False if False in states or (fee is not None and fee < 0) else (None if None in states else True)
     out.append(f"- **every input valid: {ok}**\n")
-    return {"txid": txid, "ok": ok, "fee": fee, "vsize": vsize}
+    return {"txid": txid, "ok": ok, "fee": fee, "vsize": vsize, "raw_on_hand": True, "wtxid": wtxid,
+            "version": tx["version"], "locktime": tx["locktime"], "size": size, "weight": weight, "inputs": ins,
+            "outputs": outs_rec, "total_in": total_in, "total_out": total_out,
+            "fee_rate_sat_vb": None if fee is None else round(fee / vsize, 4)}
 
 def audit_h1(api, out, max_pages, h1_root=H1_ROOT):
     """Audit the whole pre-registered 12 -> 12 tree offline: the root's parent(s), the root, every split and every
@@ -946,18 +962,47 @@ def audit_h1(api, out, max_pages, h1_root=H1_ROOT):
     out.append(f"## Offline audit of the H1 tree (H1 verdict: {h1['verdict']})\n")
     if not h1.get("root"):
         out.append("- the root is not in the history on hand: " + "; ".join(h1["diffs"]))
-        return {"ok": None, "results": []}
+        return {"ok": None, "results": [], "h1": h1["verdict"], "diffs": h1["diffs"], "fuel_outputs": h1.get("fuel"),
+                "fees_in_tree": None}
     root_tx = parse_raw(raw_on_hand(api, h1["root"]))
     chain = list(dict.fromkeys([v["txid"] for v in root_tx["vin"]] + [h1["root"]] + h1["splits"]
                                + [e["txid"] for e in h1["emissions"]]))
     res = [audit_tx(api, t, out) for t in chain]
+    roles = {h1["root"]: "root", **{t: "split" for t in h1["splits"]}, **{e["txid"]: "emission" for e in h1["emissions"]}}
+    for r in res:
+        r["role"] = roles.get(r["txid"], "parent of the root")
     ok = False if any(r["ok"] is False for r in res) else (None if any(r["ok"] is None for r in res) else True)
     tree = {h1["root"], *h1["splits"], *(e["txid"] for e in h1["emissions"])}
     fees = [r["fee"] for r in res if r["txid"] in tree]
     out.append(f"**Audited {len(res)} transactions ({len(res) - len(tree)} parent(s) of the root, the root, {len(h1['splits'])} splits, "
                f"{len(h1['emissions'])} emissions): every input valid: {ok}; fees inside the tree "
                + (f"{sum(fees)} sat" if None not in fees else "not all computable") + "**\n")
-    return {"ok": ok, "results": res, "h1": h1["verdict"]}
+    return {"ok": ok, "results": res, "h1": h1["verdict"], "diffs": h1["diffs"], "fuel_outputs": h1["fuel"],
+            "fees_in_tree": None if None in fees else sum(fees)}
+
+def audit_ok(results):
+    """True only when something was audited and every input of every transaction is valid."""
+    if any(r["ok"] is False for r in results):
+        return False
+    return None if not results or any(r["ok"] is None for r in results) else True
+
+def audit_stem(txids, h1):
+    """Default output name: VERIFY_H1, VERIFY_<first 8 hex of each txid>, or both joined."""
+    parts = [t[:8] for t in txids[:3]] + ([f"plus{len(txids) - 3}"] if len(txids) > 3 else []) + (["H1"] if h1 else [])
+    return os.path.join(CHAIN, "VERIFY_" + "_".join(parts))
+
+def save_audit(stem, lines, results, h1=None, meta=None):
+    """Write the audit as <stem>.md (the report as printed) and <stem>.json (every structured record)."""
+    os.makedirs(os.path.dirname(os.path.abspath(stem)), exist_ok=True)
+    ok = audit_ok(results)
+    head = [f"# Offline transaction audit, {time.strftime('%Y-%m-%d %H:%M:%SZ', time.gmtime())}\n",
+            f"Every input valid: **{ok}**. Raws from the frozen cache or the repo's committed primaries; nothing fetched.\n"]
+    if meta:
+        head.append("Invariant: `" + json.dumps(meta, sort_keys=True) + "`\n")
+    open(stem + ".md", "w").write("\n".join(head + lines) + "\n")
+    json.dump({"all_inputs_valid": ok, "meta": meta or {}, "h1": h1, "transactions": results},
+              open(stem + ".json", "w"), indent=1, sort_keys=True, default=str)
+    return stem + ".md", stem + ".json"
 
 # ---------- run ----------
 def run(api, depth, max_fetch, max_pages=20, full=True):
@@ -1080,7 +1125,14 @@ def audit_controls():
     o4 = []
     split = audit_tx(Esplora("offline", fixture={t["txid"]: t["raw"] for t in RT.load_saved()}), saved("88cdb3cd")["txid"], o4)
     t4 = "\n".join(o4)
+    stem = os.path.join(tempfile.mkdtemp(), "VERIFY_test")
+    md, js = save_audit(stem, o, [good])
+    saved_json = json.load(open(js))
     checks = {
+        "saved .md and .json": open(md).read().count("verifies under key") == 2 and saved_json["all_inputs_valid"] is True
+                               and saved_json["transactions"][0]["inputs"][0]["signatures"][1]["key_index"] == 2
+                               and saved_json["transactions"][0]["fee"] == 1000,
+        "an empty audit is not 'valid'": audit_ok([]) is None,
         "valid, fee 1000": good["ok"] is True and good["fee"] == 1000,
         "key order shown": "verifies under key 1 of 2" in text and "verifies under key 2 of 2" in text and "SIGHASH_ALL" in text,
         "weight = 3*stripped + total": stripped == len(bytes.fromhex(alt)) and w == 3 * stripped + size,
@@ -1206,16 +1258,22 @@ def main():
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--verify", nargs="+", metavar="TXID", help="audit these transactions offline from raws on disk")
     ap.add_argument("--verify-h1", action="store_true", help="audit the whole H1 tree offline from raws and history on disk")
+    ap.add_argument("--out", help="output path stem for the audit (.md and .json); default materials/chain/VERIFY_…")
     a = ap.parse_args()
     if a.selftest:
         return 0 if selftest() else 1
     if a.verify or a.verify_h1:
         api, out = DiskOnly(a.base), []
         res = [audit_tx(api, t, out) for t in a.verify or []]
-        if a.verify_h1:
-            res += audit_h1(api, out, a.max_pages)["results"]
+        h1 = audit_h1(api, out, a.max_pages) if a.verify_h1 else None
+        if h1:
+            res += h1["results"]
         print("\n".join(out))
-        return 1 if any(r["ok"] is False for r in res) else (6 if any(r["ok"] is None for r in res) else 0)
+        for f in save_audit(a.out or audit_stem(a.verify or [], a.verify_h1), out, res,
+                            h1 and {k: v for k, v in h1.items() if k != "results"},
+                            {"mode": "disk-only", "network_requests": api.fetches}):
+            print("written:", f)
+        return {False: 1, None: 6, True: 0}[audit_ok(res)]
     api = Esplora(a.base)
     verdicts, text, extra = run(api, a.depth, a.max_fetch, a.max_pages)
     print(text)

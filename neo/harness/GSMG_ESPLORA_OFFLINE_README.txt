@@ -59,7 +59,16 @@ signature is shown with its sighash type, strict-DER and low-S status and the ke
 verifies under (in CHECKMULTISIG order); then the outputs, the fee and the fee rate.
 --h1 audits the whole pre-registered 12 -> 12 tree: the root's parent, the root, every
 split and every emission. Exit 0: every input valid; 1: an input is invalid; 6: something
-could not be checked (a parent raw not on hand).
+could not be checked (a parent raw not on hand, or nothing to audit).
+
+Everything is also saved, as printed and as structured data:
+  neo/materials/chain/VERIFY_H1.md / VERIFY_H1.json            (--h1)
+  neo/materials/chain/VERIFY_<txid8>_….md / .json               (txids; both: …_H1)
+  --out PATH/STEM to choose the name. The JSON holds, per transaction: txid, wtxid, sizes,
+  every input (spent outpoint, amount, script, kind, address, pubkeys, each signature's
+  sighash / strict DER / low S / key index and pubkey, verdict), every output, totals, fee,
+  fee rate and, under --h1, its role; plus the H1 verdict and an invariant block
+  (network_requests 0, cache misses, receipt_lookups/txscript/PREREG sha256).
 
 5. CACHE STATUS
 

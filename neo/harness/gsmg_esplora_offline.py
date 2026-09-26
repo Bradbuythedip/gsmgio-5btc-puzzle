@@ -361,6 +361,7 @@ def build_parser():
         if name == "verify":
             p.add_argument("txids", nargs="*", help="transaction ids to audit")
             p.add_argument("--h1", action="store_true", help="audit the whole pre-registered 12 -> 12 tree")
+            p.add_argument("--out", help="output path stem (.md and .json); default neo/materials/chain/VERIFY_…")
             p.add_argument("--base", default=DEFAULT_BASE)
             p.add_argument("--max-pages", type=int, default=DEFAULT_MAX_PAGES)
     return ap
@@ -388,15 +389,24 @@ def main(argv=None):
             api = make_esplora(RL, repo, a.base, offline=True, delay=0)   # cache only: never fetches
             out = []
             res = [RL.audit_tx(api, t, out) for t in a.txids]
-            if a.h1:
-                res += RL.audit_h1(api, out, a.max_pages)["results"]
+            h1 = RL.audit_h1(api, out, a.max_pages) if a.h1 else None
+            if h1:
+                res += h1["results"]
             print("\n".join(out))
+            meta = {"mode": "verify (cache only)", "network_requests": api.fetches, "cache_misses": api.cache_misses,
+                    "receipt_lookups_sha256": sha256hex(Path(RL.__file__).read_bytes()),
+                    "txscript_sha256": sha256hex((Path(RL.__file__).parent / "txscript.py").read_bytes()),
+                    "prereg_sha256": prereg_info(repo).get("sha256"), "wrapper_version": VERSION}
+            stem = str(a.out) if a.out else os.path.join(str(repo), "neo", "materials", "chain",
+                                                          os.path.basename(RL.audit_stem(a.txids, a.h1)))
+            for f in RL.save_audit(stem, out, res, h1 and {k: v for k, v in h1.items() if k != "results"}, meta):
+                print("written:", f)
             print(f"cache misses: {api.cache_misses}; network requests: {api.fetches}"
                   + (" (verify never fetches: a miss is a raw the sync did not need, not a reason to sync again)"
                      if api.cache_misses else ""))
             if api.fetches:
                 raise RuntimeError("OFFLINE INVARIANT FAILED: a network request occurred")
-            return 1 if any(r["ok"] is False for r in res) else (6 if any(r["ok"] is None for r in res) else 0)
+            return {False: 1, None: 6, True: 0}[RL.audit_ok(res)]
 
         if a.cmd in ("sync", "offline"):
             if a.depth < 1 or a.max_fetch < 1 or a.max_pages < 1:
