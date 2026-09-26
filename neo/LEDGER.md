@@ -2021,3 +2021,26 @@ X, 288 addresses, 0 matches.** No 31/73/42 or layer-sums (wrong year). Rule froz
 `bestofeverything`/max-layer mutants; extracting operators from the later "everything/best/chance"
 hints (those say *why* the public bytes are insufficient, they are not new combinators). The next
 compute event is one new-primary candidate through both envelopes with the address oracle.
+
+### Loop tick 49 (2026-09-26): creator personal-infrastructure class, one pass, null
+
+**Sharper reading of #66573/66574** ("close friends have the best chance… but they don't have the
+skills some of you do"): a few close friends already *tried and failed*, so the missing input is
+not a bare personal referent (a friend would know a nickname/date). It is something a friend would
+**recognize as a direction** but lacks the skill to **apply** — public info, personal recognition,
+technical execution, three conditions, none sufficient alone.
+
+**The one untested non-Matrix creator-personal class — run and null.** `campaign_38`: his
+self-description / contact infra — `electronic_engineer`, `electronicengineer`, `naver`,
+`naver.com`, `electronic_engineer@naver.com`, the donation address `1QzA8dwEgp…`, case/separator
+variants. Against both locks (EVP-MD5/SHA256, raw + sha256hex, harness gate + P32T freeze) and the
+address oracle (sha256 + 5 encodings vs prize/second/1NULY7): **13 candidates, 0 lock hits, 126
+addresses, 0 matches.** **Provenance caveat:** the email and donation address are USER-supplied and
+are **not** in this repo's authenticated archive; treat this as a USER-grade class, now spent.
+
+**State:** the personal-infra class is closed. No further reading of existing material is
+justified — not OP_RETURN n-grams (the refused vocabulary sweep), not the 64-tail, not a new
+family. The puzzle is gated on a new primary: a Jrk sentence after the last logged message, a new
+gsmg.io page, or a string a circle member actually said — one candidate, one provenance line, one
+run through both locks with the symmetric lock→address oracle. Until then, the correct action is
+to wait. Address unspent at ~1.25 BTC.
