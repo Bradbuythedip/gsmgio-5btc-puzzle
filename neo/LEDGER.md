@@ -1625,3 +1625,26 @@ The congratulated team therefore exists and still identifies itself as "Neo".
 channel. It means asking that team, through public channels (the GSMG Telegram, or an
 on-chain reply to the address they published), what "Good job, Neo!" confirmed. No wallet
 tracing, no attribution of people, no key search.
+
+### Loop tick 40 (2026-09-26): nulls reported from a parallel session (USER grade, not re-run here)
+
+A pasted transcript of another assistant session reports these nulls. They are recorded so
+nobody repeats them:
+- **VIC internals as a raw AES key for P32T.** K = SHA256(s) for the board string, "14",
+  the 149 digits, the 91-letter plaintext, HALF, BETTERHALF, the DBBI⊖VIC header, YOUWON,
+  VIC, HALFANDBETTERHALF, "1", "4". The last-block P5 test fails on every one; none even has a
+  valid pad byte.
+- **HASHTHETEXT** as "your last command" into miniA: sha256hex + EVP-SHA256 and EVP-MD5, bad
+  padding.
+- **Address-derived keys for P32T:** SHA256 of the prize and 17ucy1 addresses, of their
+  hash160s and of the XOR of those; h160‖h160 truncated to 32 bytes; EVP of the address
+  strings. The P5 test fails on all.
+- **SHA256(HALF) ⊕ SHA256(BETTERHALF)** and the 64-letter DBBI tail as two raw keys: no P5
+  pad, and not the prize address.
+- **f73d92 factor forms** (4943; 2111494943 with and without separators), alone and as
+  A‖B‖C with the frozen B/C rows: 1,020 decrypts, four pad-01 events of garbage, and no P5
+  `0x10`×16 hit.
+- Also noted: the complement 08C26D = 574061 is prime. Recorded as a curiosity only.
+
+Nothing in the transcript is a new primary. The live lead remains tick 39: what the
+"Good job, Neo!" team found in April 2020.
