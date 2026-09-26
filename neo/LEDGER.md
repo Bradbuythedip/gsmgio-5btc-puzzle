@@ -2446,3 +2446,20 @@ in-group search and screenshot. Correction to item B: Cosmic is a contaminated f
 (ledger), not an established "claim object".
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 67 (2026-09-26): K₁₄ reading — both "anomalies" are forced by construction
+
+User-relayed K₁₄ proposal (14×14 = 91 + 14 + 91; two 91-streams as edge labels). Checked
+(`materials/primary/matrix_grid_spiral_colors.json`, `phase3.2.txt`):
+- **12 / 0 / 12 coloured-cell split is forced, not ~2.6%.** The 24 coloured cells are exactly
+  spiral indices 7, 15, …, 191, i.e. the last bit of each URL byte on the ccw spiral. Every stride-8
+  position on that spiral falls 12 above the diagonal, 0 on it and 12 below. Given the encoding,
+  P = 1.
+- **VIC 33 / 58 is arithmetic.** 149 digits → 91 tokens forces x + y = 91, x + 2y = 149, so 33
+  one-digit and 58 two-digit codes (verified). The "33-byte pubkey / Base58" reading is numerology
+  on a forced pair.
+- 661 = 7·91 + 24 is already recorded (seven layers + tail).
+No source names a graph operation, so the K₁₄ family is not opened. The DOUBLE DOWN / 48+48 half
+of the same message is tick 65.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
