@@ -53,8 +53,17 @@ def b58encode(b):
     return '1' * (len(b) - len(b.lstrip(b'\0'))) + s
 
 
+def ripemd160(b):
+    """RIPEMD-160 from hashlib, or from pycryptodome where the Python/OpenSSL 3 build lacks it."""
+    try:
+        return hashlib.new('ripemd160', b).digest()
+    except ValueError:
+        from Crypto.Hash import RIPEMD160
+        return RIPEMD160.new(b).digest()
+
+
 def hash160(b):
-    return hashlib.new('ripemd160', hashlib.sha256(b).digest()).digest()
+    return ripemd160(hashlib.sha256(b).digest())
 
 
 def p2pkh(pub):

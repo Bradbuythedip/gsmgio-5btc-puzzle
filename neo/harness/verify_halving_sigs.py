@@ -19,7 +19,7 @@ PRIZE = "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe"
 N = btc_addr.N
 
 def dsha(b): return hashlib.sha256(hashlib.sha256(b).digest()).digest()
-def h160(b): return hashlib.new("ripemd160", hashlib.sha256(b).digest()).digest()
+def h160(b): return btc_addr.hash160(b)
 
 def varint(b, i):
     x = b[i]

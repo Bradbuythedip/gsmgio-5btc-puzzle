@@ -16,8 +16,8 @@ byte-verified across ≥3 independent sources (see §3), and byte-pinned by enve
 | P32T / inner96 | 96 B | `291dfd6f3e759ec2e272b35a00c24907da70c3e7a9291b4c13605c7b0b4f3de9` | `5334de08884878aaed7c99d0b4340bf8` |
 | Cosmic | 1344 B | `b18950551a4dd0cb8a9378f0906ba18c03a15f0ee83eb98c6bc90165c5f79805` | `5bbf983669ed922eb12dff1dcc3f6fc6` |
 
-**Canonical offline baseline** (tick 91, commit `99c08c3`): `neo/harness/gsmg_offline_solver.py`
-2026-09-26.2. From the repo root, run `doctor`, `audit --repo .` and `selftest --repo .`. All three must
+**Canonical offline baseline** (tick 91; RIPEMD-160 fallback added after `99c08c3`): `neo/harness/gsmg_offline_solver.py`
+2026-09-26.3. From the repo root, run `doctor`, `audit --repo .` and `selftest --repo .`. All three must
 pass before any null is trusted. The uploaded .1 is superseded: its phase-3 control could never pass, and
 it skipped key material on decrypts with invalid padding.
 

@@ -56,7 +56,7 @@ RECORDED_ONLY = [
     ("pre-2024", "?", "?", "81d35929…:0 and f28b0b68…:0, consumed by the 2024 split; parents not saved", "72"),
 ]
 
-def h160(b): return hashlib.new("ripemd160", hashlib.sha256(b).digest()).digest()
+def h160(b): return btc_addr.hash160(b)
 
 def point_addrs(P):
     x, y = P

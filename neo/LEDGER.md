@@ -3401,3 +3401,15 @@ OP_RETURN-as-nonce idea has no in-repo target.
 
 No candidates were tested beyond the controls. **State unchanged:** three locks byte-pinned; corpus
 exhausted; `1GSMG1…` unspent.
+
+### Addendum to tick 91 (2026-09-26): RIPEMD-160 portability fallback before the user's local run
+
+Every address derivation called `hashlib.new('ripemd160')`, which some Python/OpenSSL 3 builds do
+not provide. On such a machine, `selftest` and `receipt_lookups.py` would crash. `btc_addr.hash160`
+now falls back to pycryptodome's RIPEMD160, which is already required through `aes_try`.
+`receipt_topology`, `verify_halving_sigs` and `chain_flows` route through it. The standalone solver
+carries the same fallback, becomes 2026-09-26.3, and `doctor` now reports which one is in use.
+
+Verified in both modes, with `hashlib` refusing ripemd160 simulated: doctor, selftest, the
+`receipt_lookups` self-test (with its positive controls) and the halving-signature check all pass.
+`receipt_topology.py` output is byte-identical between the modes. No results change.

@@ -148,8 +148,12 @@ Python 3.9+ and ONE of:
 
 No network access is used by the script.
 
-REPO NOTES (ledger tick 91, version 2026-09-26.2)
+REPO NOTES (ledger tick 91, version 2026-09-26.3)
 -------------------------------------------------
+
+.3: RIPEMD-160 falls back to pycryptodome when hashlib lacks it (some Python/OpenSSL 3 builds);
+`doctor` reports which one is in use. Install with: pip install pycryptodome
+
 
 Validated against this checkout: doctor, audit and selftest all pass. Three fixes from .1:
   * the phase-3 solved control used a 220-char password (FEN rank "1P2P2P/" missing), so

@@ -99,7 +99,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-VERSION = "2026-09-26.2"
+VERSION = "2026-09-26.3"
+# .3: RIPEMD-160 falls back to pycryptodome when hashlib lacks it (some OpenSSL 3 builds).
 # .2 (repo validation, ledger tick 91): phase-3 control password restored to the verified 227-char
 #    string (the 7th FEN rank "1P2P2P/" was missing, so selftest always failed); key-material check
 #    runs on every raw decrypt again, not only PKCS#7-valid ones (tick 83 / campaign 51, as the
@@ -404,11 +405,33 @@ def b58encode(b: bytes) -> str:
     return "1" * (len(b) - len(b.lstrip(b"\0"))) + s
 
 
-def hash160(b: bytes) -> bytes:
+def ripemd160(b: bytes) -> bytes:
+    """RIPEMD-160 from hashlib, or from pycryptodome where the Python/OpenSSL 3 build lacks it."""
     try:
-        return hashlib.new("ripemd160", hashlib.sha256(b).digest()).digest()
-    except ValueError as e:
-        raise RuntimeError("RIPEMD160 is unavailable in this Python/OpenSSL build") from e
+        return hashlib.new("ripemd160", b).digest()
+    except ValueError:
+        try:
+            from Crypto.Hash import RIPEMD160  # type: ignore
+        except ImportError as e:
+            raise RuntimeError("RIPEMD160 unavailable: this Python/OpenSSL build lacks it; "
+                               "`pip install pycryptodome` provides a fallback") from e
+        return RIPEMD160.new(b).digest()
+
+
+def ripemd160_backend() -> str:
+    try:
+        hashlib.new("ripemd160", b"")
+        return "hashlib"
+    except ValueError:
+        try:
+            from Crypto.Hash import RIPEMD160  # type: ignore  # noqa: F401
+            return "pycryptodome fallback"
+        except ImportError:
+            return "MISSING (pip install pycryptodome)"
+
+
+def hash160(b: bytes) -> bytes:
+    return ripemd160(hashlib.sha256(b).digest())
 
 
 def p2pkh(pub: bytes) -> str:
@@ -1229,7 +1252,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print("python:", sys.version.replace("\n", " "))
             print("AES backend:", aes_backend())
             print("openssl:", shutil.which("openssl"))
-            print("ripemd160:", "yes" if "ripemd160" in hashlib.algorithms_available else "unknown/no")
+            print("ripemd160:", ripemd160_backend())
             ok = aes_known_answer_test() and secp_selftest() and p32t_synthetic_selftest()
             print("doctor passed:", ok)
             return 0 if ok else 3

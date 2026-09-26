@@ -23,6 +23,8 @@ to disk:
 Outputs: ../materials/chain/flows.json and ../materials/chain/FLOWS.md
 """
 import argparse, hashlib, json, os, re, sys, time, urllib.request, urllib.error
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from btc_addr import hash160
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CHAIN = os.path.join(HERE, "..", "materials", "chain")
@@ -78,7 +80,7 @@ def script_info(spk):
     if len(spk) == 34 and spk[0] == 0x51 and spk[1] == 32:
         return "p2tr", segwit_addr(1, spk[2:]), None
     if len(spk) in (35, 67) and spk[-1:] == b"\xac":
-        return "p2pk", b58check(b"\x00" + hashlib.new("ripemd160", hashlib.sha256(spk[1:-1]).digest()).digest()), None
+        return "p2pk", b58check(b"\x00" + hash160(spk[1:-1])), None
     return "nonstandard", None, None
 
 # ---------- raw tx parsing (offline seeds) ----------
@@ -257,9 +259,9 @@ def run(args):
         for v in t["vin"]:
             if v.get("witness") and len(v["witness"]) == 2:
                 pub = bytes.fromhex(v["witness"][1])
-                h = hashlib.new("ripemd160", hashlib.sha256(pub).digest()).digest()
+                h = hash160(pub)
                 redeem = b"\x00\x14" + h
-                addr = b58check(b"\x05" + hashlib.new("ripemd160", hashlib.sha256(redeem).digest()).digest())
+                addr = b58check(b"\x05" + hash160(redeem))
                 prevouts.setdefault((v["txid"], v["vout"]), {"address": addr, "sat": None})
             elif v["scriptSig"]:
                 ss = bytes.fromhex(v["scriptSig"]); pub = ss[ss[0] + 2:]
