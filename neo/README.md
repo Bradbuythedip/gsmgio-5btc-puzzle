@@ -22,6 +22,7 @@ LEDGER.md         append-only session log: findings, campaigns, exclusions
 | `harness/btc_addr.py` | dependency-free secp256k1 to P2PKH, with known-answer self-tests |
 | `harness/campaign_*.py` | individual candidate campaigns, each self-contained and re-runnable |
 | `harness/verify_xor_theory.py` | end-to-end test of the circulating XOR theory |
+| `harness/gate.py` | **the only live entry point.** Frozen one-shot gate for new primary material (see below) |
 
 Only dependency is `pycryptodome` (`pip install pycryptodome`). The EC code is pure Python
 so address results need no native library.
@@ -49,7 +50,23 @@ A candidate is only accepted on strict PKCS#7 padding **and** corroboration: pad
 This matters. A looser early rule produced three spurious "hits" in 75k trials. Any claimed
 solution in this puzzle that rests on a 1-byte pad is almost certainly noise.
 
-## Adding a campaign
+## Current regime: corpus parked
+
+No more campaigns run against the published corpus (see the 2026-09-26 entry in LEDGER.md).
+A new candidate enters only through `gate.py`, as one intake JSON with primary provenance:
+
+```bash
+python3 gate.py --selftest            # must print: gate self-test passed: True
+python3 gate.py intake.json           # exit 0 null, 2 refused, 10 HIT
+```
+
+```json
+{"kind": "jrk_sentence", "id": "…", "date": "…", "author": "Jrk", "text": "full verbatim text"}
+{"kind": "gsmg_page", "url": "https://gsmg.io/…", "fetched_at": "…", "body_file": "saved.html"}
+{"kind": "uttered_password", "speaker": "…", "date": "…", "where": "…", "candidate": "…"}
+```
+
+## Adding a campaign (historical; closed)
 
 Copy the shape of an existing one:
 

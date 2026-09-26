@@ -1323,3 +1323,47 @@ missing input is not in the creator-authenticated corpus. This matches #66573/#6
 "my close friends have the best chance … NOTE: that is a hint"): the last step is designed not to
 be derivable from published material. That is a real terminal state, not a failure. The freeze and
 address oracles remain as tooling for any password a fact-from-outside might supply.
+### Regime change (2026-09-26) — corpus parked; one frozen gate for new primaries only
+
+The lock-battery regime is over. Campaigns through 33, the 240 BIP32 derivations, VIC reuse and
+the FAED/last-words grids are all null, and more forms of the same objects only produce PKCS#7
+noise at the rates already measured. No more campaigns are run against the published corpus.
+
+**What is established, and what is not.** No password for mini, P32T or Cosmic can be derived
+from the published corpus through any tested channel. Flat decrypt-equals-key finds nothing on
+that set. Two-stage HD cannot be tested until a seed exists, and none of the seeds in hand is it.
+`#66573` ("my close friends have the best chance … NOTE: that is a hint") does **not** prove the
+last step lies outside the corpus. This corrects tick 35's "designed not to be derivable". The solved text already contains readings of that line: "half
+and better half", the couple who "need funds to live", the Matrix intimates. Those were tried as
+seeds and passwords. So "close friends" means either those spent objects, or a social fact that
+cannot be rebuilt from the page. Hashing more variants cannot tell which. VIC stays local.
+`{1,4}` is named by "one for one, four for one", not by `matrixsumlist`. `31/73→42` depends on
+the map. None of these is key material. The 2021 "another door" / "2nd way wasn't founded" line
+is read as the same instruction: a path that is not a remix of SalPhaseIon.
+
+**The gate** (`harness/gate.py`, frozen):
+candidate → {raw, sha256hex} → EVP-{MD5, SHA256} aes-256-cbc → {miniA, miniAB, P32T, Cosmic}
+→ strict PKCS#7 + printable/magic gate. In parallel, sha256(candidate) (and the candidate
+itself, if it is 64 hex) → uncompressed P2PKH compared with `1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe`.
+Each intake gets 16 decrypts. No sliding windows, no substrings picked by the gate, no 2ⁿ
+subset XOR.
+
+Admissible input, one candidate per intake file, refused otherwise:
+- `jrk_sentence`: a new Jrk/@SoWut message with id, date, author and the full verbatim text;
+- `gsmg_page`: a new gsmg.io page with url, fetch time and the saved body (the 9-byte
+  `Hello :-)` 404 is refused);
+- `uttered_password`: a password a person in that circle actually said, with speaker, date and
+  where it was said. Inferred passwords are refused.
+
+Refused as spent before any decrypt: an exact string (raw or sha256hex) already in
+`attempts/*.jsonl`; any string whose normalized a-z0-9 form occurs in LEDGER.md, `materials/`,
+`materials/primary/`, `prior-sessions/`, `unverified/`, or among the literal candidates in
+`harness/campaign_*.py` and `attempts/*.txt` (so campaigns 32/33, which wrote no JSONL, count); and anything already run through the gate
+(`attempts/gate_intake.jsonl`). `gate.py --selftest` checks the three solved blobs, the address
+known-answer vectors, the spent-refusal cases (half/better half, causality, the 3.2 password,
+matrixsumlist), the provenance refusals, the 404 refusal, and confirms that the frozen decrypt
+path reproduces phase 3.2.
+
+**Standing state.** Slot A stays unfilled and slot C stays blank until one of the three primaries
+arrives. Sandwich-B and `a=0` are not promoted to operators. If no primary appears, stop: the
+tooling waits, and the only proof that counts is a spend from the prize address.
