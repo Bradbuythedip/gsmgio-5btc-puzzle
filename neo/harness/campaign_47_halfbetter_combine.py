@@ -80,16 +80,29 @@ def main():
     check(rec, "sha256(better||half)", int.from_bytes(hashlib.sha256(BETTER + HALF).digest(), "big") % N)
     check(rec, "sha256(hex(half)||hex(better))",
           int.from_bytes(hashlib.sha256((HALF.hex() + BETTER.hex()).encode()).digest(), "big") % N)
-    lc = 0
+    # linear grid a*half + b*better vs the prize POINT (fast: precompute multiples of H=half*G
+    # and B=better*G, one point-add per pair). 17ucy1's pubkey is not public, so the grid can
+    # only compare against the prize point; the arithmetic checks above cover both addresses.
+    QX = 0xf4d1bbd91e65e2a019566a17574e97dae908b784b388891848007e4f55d5a464
+    QY = 0x9c73d25fc5ed8fd7227cab0be4e576c0c6404db5aa546286563e4be12bf33559
+    assert btc_addr.p2pkh(b"\x04" + QX.to_bytes(32, "big") + QY.to_bytes(32, "big")) == TARGETS["prize"]
+    Q = (QX, QY)
+    Hpt, Bpt = btc_addr.mul(kh), btc_addr.mul(kb)
+    def negp(pt): return None if pt is None else (pt[0], (btc_addr.P - pt[1]) % btc_addr.P)
+    Hm, Bm = [None] * 65, [None] * 65
+    for a in range(1, 65):
+        Hm[a] = btc_addr._add(Hm[a - 1], Hpt); Bm[a] = btc_addr._add(Bm[a - 1], Bpt)
+    lc = 0; grid_hits = []
     for a in range(-64, 65):
+        aH = Hm[a] if a >= 0 else negp(Hm[-a])
         for b in range(-64, 65):
-            check_k = (a * kh + b * kb) % N
-            c, u = btc_addr.addrs(check_k) if 0 < check_k < N else (None, None)
-            if c in TARGETS.values() or u in TARGETS.values():
-                rec.append({"label": f"a*half+b*better a={a} b={b}", "addr_comp": c, "addr_unc": u, "HIT": ["prize/better"]})
-                print(f"  *** HIT a={a} b={b}")
+            bB = Bm[b] if b >= 0 else negp(Bm[-b])
+            if btc_addr._add(aH, bB) == Q:
+                grid_hits.append((a, b))
+                rec.append({"label": f"a*half+b*better a={a} b={b} = prize point", "addr_comp": TARGETS["prize"], "addr_unc": None, "HIT": ["prize"]})
+                print(f"  *** HIT a={a} b={b} -> prize point")
             lc += 1
-    print(f"  a*half+b*better grid: {lc} pairs [-64,64]^2, no hit")
+    print(f"  a*half+b*better grid: {lc} pairs [-64,64]^2 vs prize point, {grid_hits or 'no hit'}")
 
     # Bitcoin-specific class
     for label, data in [("HMAC-SHA512(better,half)", hmac.new(BETTER, HALF, hashlib.sha512).digest()),

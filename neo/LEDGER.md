@@ -2828,3 +2828,31 @@ addresses on both sides of every decoded tx.
   unblocked host, or paste the funding tx hex and decode it here with `--decode-hex`.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 78 (2026-09-26): Bitcoin-specific combinations of the Issue #79 keys — null
+
+`harness/campaign_47_halfbetter_combine.py`, address-predicate only, no AES. The two Issue #79
+scalars are re-derived in-code from the false-positive file (tick 75), not hardcoded; the self-check
+confirms they reproduce `1JG648…`/`145ZQ9…` and their uncompressed forms. No private-key material is
+written to source or log (prefixes only: half `0423d911…`, better `48cc46e6…`, trailer `fc0c1b02`).
+
+The user's relayed table (XOR, ±, ×, ÷, mean, sha256 concats, and the a·half + b·better grid) is
+reproduced from primary, upgrading it from USER grade, and extended with the Bitcoin-specific class
+the ledger had not recorded:
+- **41 named constructions**, each vs the prize and `17ucy1…`, compressed and uncompressed:
+  the arithmetic set; HMAC-SHA512 both directions; SHA512 concatenations; byte interleaves; BIP32
+  (each key as seed, child at paths from the other key's and the trailer's bytes, non-hardened and
+  hardened, plus each master key); and the point sum (H+B).x raw, hashed, and trailer-offset.
+- **16,641 linear pairs** a·half + b·better for a,b ∈ [−64,64], compared as points against the prize
+  public key `04f4d1bb…` (17ucy1's key is not public; the arithmetic checks cover it by address).
+- **0 hits.** Runs in ~5 s (precomputed point multiples + one add per pair; the naive address-per-pair
+  version was ~250× slower and was replaced).
+
+This closes the "combine the two #79 keys with a Bitcoin construction, not just arithmetic" question.
+As tick 75 established, the operands are slices of a one-byte-pad false-positive decrypt, so no
+combination of them can produce the prize scalar; this records it on primary. The real Half/Better-Half,
+if the puzzle has them, live behind the two OpenSSL locks, which still wait on a creator-named string.
+The one open on-chain item is unchanged: the 2026-02-05 funding source of the two addresses
+(`harness/trace_address.py`, tick 77), pending network or pasted hex.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
