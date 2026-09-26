@@ -66,6 +66,12 @@ python3 gate.py intake.json           # exit 0 null, 2 refused, 10 HIT
 {"kind": "uttered_password", "speaker": "…", "date": "…", "where": "…", "candidate": "…"}
 ```
 
+Each batch of intakes lives in `intake/<date>-<source>/`, with a `PREREG.md` committed before the
+run. The folder is outside the gate's corpus, so pre-registering a string does not spend it.
+Paths inside an intake are relative to `harness/`. `materials/wayback/` indexes the 545 gsmg.io
+captures; note that the domain was parked for sale from 2026-07-07, so later pages have
+unverified authorship.
+
 ## Adding a campaign (historical; closed)
 
 Copy the shape of an existing one:

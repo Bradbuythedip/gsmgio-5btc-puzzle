@@ -1368,3 +1368,62 @@ path reproduces phase 3.2.
 **Standing state.** Slot A stays unfilled and slot C stays blank until one of the three primaries
 arrives. Sandwich-B and `a=0` are not promoted to operators. If no primary appears, stop: the
 tooling waits, and the only proof that counts is a spend from the prize address.
+
+### Intake 1 (2026-09-26): uploaded Wayback, primary and drive material digested; nine web units gated, all null
+
+**What arrived.** Three user archives:
+- **Wayback:** 545 gsmg.io captures, 450 unique bodies after gzip/brotli/zstd decoding.
+  Indexed in `materials/wayback/`.
+- **Primary archive:** 65 files. Every one is already in the repo or byte-identical to a Wayback
+  capture; the only extra is the raw binary of the 2023-02-23 hint, whose decoded form is here.
+- **Drive export:** 9 files, filed under `unverified/drive-2026-05/`.
+
+**What was new, and what it was worth.**
+- **Tick 11 was wrong about the finale page, and right about its keys.** `root_2026-08-19` is a
+  GSMG shutdown page: "2017 — 2026", "The lights are off.", "Nine years of chaos ended. One
+  mystery remains.", with "Follow the white rabbit" linking to `/puzzle`. It types two Matrix
+  terminal lines, then renders a hard-coded 14×14 grid under "SYSTEM FAILURE". That grid is
+  **exactly the phase-1 grid**, with blue set to 1 and yellow to 0, and its spiral read is
+  `gsmg.io/theseedisplanted`. So there is text, but no new operand.
+- **The domain lapsed.** "The sites are down" drew "The puzzle is still valid!" (#63957,
+  2026-05-28). From 2026-07-07 to at least 2026-08-10 gsmg.io was a parked domain listed for
+  sale (abovedomains `forsale.min.js`, FingerprintJS `tr_uuid` redirects). The finale appeared
+  on 2026-08-19. **Anything served on gsmg.io after 2026-07-07 has unverified authorship.** Any
+  future `gsmg_page` intake from after that date carries the caveat.
+- **A comment was added to the phase-2 page** between 2022-12-23 and 2026-04-05:
+  `<!-- You made it to the next step! Good luck little bunny hunter ;) -->`. It is the only
+  HTML comment on either live puzzle page. SalPhaseIon changed only in whitespace (2024-11)
+  and a Cloudflare beacon (2025-10).
+- **The SPA carries one puzzle string.** Across all 11 app.js versions, the `/puzzle` route shows
+  `GSMG MEGANIGMA || 5 BTC` above the white-rabbit image. `/yummy` is the Cookies Policy. The
+  legal PDFs are boilerplate for Epipremnum Aureum LLC (Saint Kitts–Nevis).
+- **Every other path is the SPA shell**, including the guessed ones (`/merovingian`,
+  `/final_stage`, hope-line spellings), 10 of the 12 hex paths, and a hex-encoded `Salted__`
+  blob with a salt that appears in no known material. Shell diffs are infrastructure only.
+  Of the other two hex paths, `/89727c…` is the SalPhaseIon page. `/4f7a1e4e…`, requested
+  on 2026-07-08 while the domain was parked, is `sha256(cosmic_1327b_decrypted.bin)` from the
+  drive export. Someone tried the sha256 → URL convention on a noise decryption
+  while the domain was parked.
+- **Drive export verdicts.** Four files are copies of known blobs. The two 1327-byte "Cosmic
+  decryptions" are 1-byte-pad noise (entropy 7.8+, no structure). `ca158_hidden_blob` starts
+  `Salted__`, but its 1153-byte body is not a multiple of 16, so it cannot be an openssl
+  AES-CBC envelope; its source file is not in the export. `chain2`/`chain4` are pad-1
+  decryptions of its first 1152 bytes.
+- **The 2026-01-01 new-year hint is already in the transcript** (#53342): 'Happy new year! Make
+  the best of everything. Oh, and here's a "tiny hint" <3.' The quoted "tiny hint" echoes #881,
+  the 2019 promise of a "tiny hint" at the start of 2020. The five preceding messages of one to
+  five dots are logged as NOISE. As Morse they read E, I, S, H, 5, the dots-only ladder. That
+  is recorded as a reading, not promoted to an operand.
+
+**The gate run.** `intake/2026-09-26-web/PREREG.md` was committed and pushed before anything
+ran. It covers every solver-facing text unit of the three new sources, whole and verbatim,
+nine intakes: the phase-2 comment, `GSMG MEGANIGMA || 5 BTC`, "The lights are off.", "Nine
+years of chaos ended. One mystery remains.", "2017 — 2026", "WARNING: carrier anomaly",
+"Trace program: running", "SYSTEM FAILURE", and the rain-glyph string. All nine were admitted.
+**144 decrypts, 0 with valid PKCS#7 padding at all (about 0.6 expected by chance), 0 prize
+address.** Each is logged in `attempts/gate_intake.jsonl` and is now spent.
+
+**Stop rule applied.** The 2026 web material is closed: no variants, no concatenations, and the
+timing constants (1441, 2442 ms …) are not promoted. Nothing in the three archives is a new Jrk
+sentence or an uttered password. Standing state is unchanged: A unfilled, C blank, tooling
+waiting.
