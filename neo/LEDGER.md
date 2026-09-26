@@ -3461,3 +3461,128 @@ user grade):
 
 **State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent. An independent adversarial review of the
 new tooling is in progress; its fixes follow in the next commit.
+
+### Tick 93 (2026-09-26): the pre-registered live receipt pass — H1 (12 → 12) PASS; 37mh… closes as wallet infrastructure; the 2021 refill came from a single-use wallet; review fixes applied
+
+**Procedure.** The pre-registration `intake/2026-09-26-fanout/PREREG.md` (sha256 `dc748d60…`) was committed in `51bc123`
+before any live run. The user then made the single live acquisition on their machine with the wrapper
+(`gsmg_esplora_offline.py sync`: mempool.space, depth 12, max-fetch 200, max-pages 20), running `receipt_lookups.py`
+sha256 `23ae11a1…` (commit `e8730dd`). The sync made 479 requests, with `cache_complete` true, 0 transient failures and
+0 unavailable items. An `offline` replay of the frozen cache then made 0 network requests with 0 cache misses. The
+results below are user-grade: heights and dates are explorer-reported, and the raws sit in the user's frozen cache, not
+yet in the repo.
+
+The wrapper selftest had printed `False` on the user's machine. The cause was fixture isolation. In fixture mode,
+`tx_hex()` fell through to the on-disk raw cache, which on that machine held the real raws, so the "unavailable"
+negative control read real data. The defect lived only in the selftest's fixture mode; live and offline paths never use
+it. Fixture mode is now hermetic: it reads neither the raw cache nor the JSON cache. A new control plants a valid raw
+and a JSON response in a temporary cache and shows that fixture mode ignores them while a live-mode client reads them.
+
+**H1 — PASS** (read off the report's UTXO tree against the PREREG criteria):
+- **Root.** `1f8eb99e…:0`, 15,000 sat (height 622711, 2020-03-24, signed by `37mh…`).
+- **Split `8ee72f46…`** into 1,189 / 1,189 / 1,180 / 1,180 / 10,000:
+  - `117e2796…` "Right, this is causality" → `1Jqq37…`
+  - `62dbb701…` "You are here because 227 chars were correct" → `1M5ypv…` (990 sat)
+  - `2f64b875…` "phase3.2 pass OK" → `1K23RS…`
+  - `bd1b5d81…` "are you sure?" → `1AD2wf…`
+- **The 10,000 → split `0ba2a2e2…`** into 7,400 / 1,200 / 1,200:
+  - `496ab2c7…` "part of the cipher" → `18Cchr…`
+  - `3891dd14…` "do you beleive me you need it?" → `1GyT5W…`
+- **The 7,400 → split `547246e9…`** into 1,106 + 5 × 1,200:
+  - outputs 0, 1, 2 → `a798905f…` "Halving" (height 630001, 2020-05-11) → the prize, 700 sat
+  - output 3 → `d6ff3da1…` → `1NULY7…`, 1,050 sat (2020-04-07, no memo)
+  - output 4 → `722fbf35…` "Good job, Neo!" → `13HGhj…`
+  - output 5 → `364de511…` "Good job, Neo!" → `148XH2…`
+
+That is exactly 12 fuel outputs consumed by exactly the 10 emissions. No fuel output is unspent, nothing is spent
+elsewhere, there is no other recipient, and every signature in the tree verified offline against its parent's amount.
+**The treasury model is promoted: the creator funded 3GSMG24T once and pre-cut the message fuel.** The tool now computes
+this verdict itself (`h1_check`, below); the user's offline replay of the frozen cache will print it. A synthetic history
+of exactly this shape gives PASS. Two perturbations give FAIL with the difference: a missing emission leaves fuel unspent,
+and an emission paying a nonstandard output adds another recipient.
+
+**1NULY7… is now authenticated.** `d6ff3da1…`, signed by the 3GSMG24T key, is a signature-verified creator emission. That
+closes the `1NULY7…` part of NEXT_PASS item 5.
+
+**H2 — the 2021 refill came from a single-use wallet.** `e5db0968…` (height 691562, 2021-07-18) was paid by
+`bc1q5rs27knqndl6ewkats0jv78222dzuw2g6h8mx5`. That wallet has 2 transactions in all: `4f4ae848…` (height 691550) brought
+in 3,000,000 sat, and `e5db0968…` sent all of it, 21,048 sat of it to 3GSMG24T. One block later `a82052a2…` (height 691563,
+signature verified) spent that 21,048 as 4 × 5,000 sat to Q−G, Q/2, 2Q and Q+G ("neighbors, half and double"). The
+creator's last action on 3GSMG24T is therefore 2021-07-18.
+
+**Promotion** (rule fixed before the run; topology only, and nothing becomes an AES candidate):
+- **`37mh7EYetVKAesxqzv968sTYqSLF8dE6oD`: CLOSE, operational wallet infrastructure.**
+  - (i) Its ancestry walk ran to its bound (12 transactions, a linear chain of its own self-spends) with no creator-trail
+    signer.
+  - (ii) No key reuse.
+  - (iii) 4,332 transactions, 2020-03-20 → 2020-08-01, about 365.9 BTC through; one payee plus change per transaction,
+    like a service's withdrawal wallet. One transaction touches GSMG, so the history is not narrow.
+  - (iv) It signs one spent funding of 3GSMG24T. The 2021 refill came from `bc1q5rs27…`, so (iv) fails.
+- **`bc1q5rs27…`: PROMOTE by (iii)** (2 transactions, 1 touching GSMG). Taken alone, (iii) is weak for a 2-transaction
+  wallet: any single-use wallet that pays 3GSMG24T once meets it. The substantive fact is the timing: funded at 691550,
+  paid 3GSMG24T at 691562, and 3GSMG24T's creator-signed emission followed at 691563. That is one operator's pipeline,
+  so the wallet counts as creator operational infrastructure for the 2021 memo. Under the corrected tool its (i) reads
+  NOT DETERMINED, because the 200-fetch cap stopped the walk. That does not change the verdict. The one open topology
+  lookup it leaves is where the other ≈2.98M sat of `e5db0968…` went.
+
+**3GSMG24T in full.** 30 transactions: 16 inbound, 3 splits, 11 emissions.
+- Books: 57,176 sat inbound = 29,740 emitted + 21,128 unspent + 6,308 fees; the books balance.
+- Census: 0 unknown recipients, and every expected receipt was seen.
+- Every inbound payment after 2021 (14 deposits, 2024-12 → 2026-04) is signed by a third party or a public-knowledge puzzle key, never by 3GSMG24T, and sits unspent. Their
+  memos: "BULLSHIT", "From Neo", "Neo wallet bc1qyw9q…", "Yes" ×2, "Its in good hands with Gavin and everyon.", "Happy late
+  mothers day!", "I thought choice was an illusion?".
+- The 2024 split parents are unchanged from tick 92: no creator signer and no memo.
+
+**Tool review and fixes** (`txscript.py`, `receipt_lookups.py`, `chain_flows.script_info`). The adversarial review of the
+tick-92 tooling (3 reviewers, then 39 independent verifiers) confirmed 38 findings and refuted 1 (a 520-byte P2SH push
+limit that cannot arise on these data). None was triggered by the live data: the live report had 0 unavailable items,
+2 funders, no co-signed transactions and no runestones in 3GSMG24T's history. All 38 are fixed.
+- **Signatures now follow consensus.**
+  - Segwit signatures must be strict DER (BIP66). A legacy signature that is not strict DER reports "valid only before
+    BIP66".
+  - Public keys must lie on the curve; before this, a crafted off-curve key could "verify" a keyless signature.
+  - Hybrid keys are accepted.
+  - Witness multisig must be exactly an empty dummy, then m signatures, then the script (NULLDUMMY and CLEANSTACK).
+  - P2SH-wrapped witness programs must be pushed canonically.
+  - A P2PK output spent with a (sig, pubkey) scriptSig is rejected.
+  - Native segwit inputs are routed by the spent program. A taproot annex is handled, an empty signature no longer
+    crashes, and uncompressed P2WPKH keys are recognised.
+- **The run cannot crash on odd data.**
+  - A Runestone (an OP_RETURN starting with a non-push opcode) used to kill the whole run.
+  - One unreadable transaction no longer aborts a section.
+  - Nonstandard outputs no longer crash the census.
+  - Truncated HTTP bodies are retried.
+- **The report no longer overclaims.**
+  - An output spent by an unread transaction is no longer called UNSPENT; the fan-out uses the explorer's inputs.
+  - Incomplete runs say so and never claim balanced books.
+  - A co-signer's change is not a receipt, and co-signers' inputs enter the books.
+  - Spends funded from outside the history have their own outputs followed.
+  - The ancestry walk says which depths it read, and says NOT DETERMINED when the fetch cap or an unreadable transaction
+    cut it.
+  - A signature marked unchecked states the real reason.
+  - Rule (ii) is printed as what it does: it searches `neo/materials`, excluding `materials/chain`.
+- **Funders.**
+  - Every funder is evaluated; a silent cap of 5 is gone.
+  - Taproot and P2PK signers are identified from the spent output.
+  - The promotion rule carries the pre-registered (iv), plus a NOT DETERMINED state: close only when all four conditions
+    were evaluated.
+  - A funder that is itself a creator-trail signer counts for (i).
+- **H1 is computed by the tool,** exactly per the PREREG (`h1_check`: PASS / FAIL with the difference / UNDETERMINED only
+  while data is missing).
+
+**Replay safety.** Under the live run's conditions, the corrected code requests nothing the old code did not, so the
+user's frozen cache replays offline without a second live pass. This was checked on a mock Esplora world shaped like the
+live run: a paginated 37mh-like funder, a refill wallet whose ancestry hits the fetch cap, the 12 → 12 tree, and the 2021
+emission.
+- The old code synced it: 136 requests, 2 funders evaluated.
+- The new code replayed that cache offline: 0 misses, 0 network requests, and H1 PASS end-to-end through the wrapper.
+- The only report differences are the intended ones.
+An independent adversarial verification of these fixes is running. Its confirmed findings, if any, follow in the next
+commit, before master is advanced.
+
+**Next (user):** `git pull`; `selftest`; then `offline` with the same bounds on the existing frozen cache (no new sync).
+Then push the frozen cache (`materials/chain/fetched/` including `json/` and `esplora_http/`, plus `RECEIPT_LOOKUPS.md`,
+`receipt_lookups.json` and the run manifest) to a branch. The result can then be replayed and every signature re-verified
+here. The one open topology lookup is `e5db0968…`'s other output.
+
+**State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.

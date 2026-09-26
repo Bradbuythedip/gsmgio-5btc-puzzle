@@ -67,8 +67,11 @@ def script_info(spk):
         i, data = 1, b""
         while i < len(spk):
             op = spk[i]; i += 1
-            n = op if op < 0x4c else int.from_bytes(spk[i:i + {0x4c: 1, 0x4d: 2, 0x4e: 4}[op]], "little")
-            if op >= 0x4c: i += {0x4c: 1, 0x4d: 2, 0x4e: 4}[op]
+            if op > 0x4e:                       # non-push opcode (OP_13 of a runestone, OP_1..OP_16, …): no data
+                continue
+            w = {0x4c: 1, 0x4d: 2, 0x4e: 4}.get(op, 0)
+            n = op if not w else int.from_bytes(spk[i:i + w], "little")
+            i += w
             data += spk[i:i + n]; i += n
         return "op_return", None, data
     if len(spk) == 25 and spk[:3] == b"\x76\xa9\x14" and spk[-2:] == b"\x88\xac":

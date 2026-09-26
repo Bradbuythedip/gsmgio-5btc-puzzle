@@ -40,8 +40,11 @@ Disconnect networking if desired, then use the SAME API base and bounds:
 If any required endpoint was not cached, offline mode exits 4, lists the missing
 endpoints and leaves the existing reports untouched. It never fetches. A sync hit by a
 transient failure exits 5 (invariant cache_complete=false); rerun sync to fill the gap.
-HTTP 404/400 answers are pinned and replayed verbatim, so offline reproduces sync byte
-for byte. Every report carries an "invariant" block: mode, cache_complete,
+HTTP 404/400 answers are pinned and replayed verbatim, so offline replays every response
+sync saw. The report text can differ only in its timestamp and in a signature tag where
+offline, holding the whole cache from the start, finds a parent that sync fetched in a later
+section ("unchecked: parent not fetched" becomes "verified"); verdicts do not depend on it.
+Every report carries an "invariant" block: mode, cache_complete,
 network_requests, cache_misses, transient_failures, unavailable_items, prereg_sha256,
 receipt_lookups_sha256.
 
@@ -75,6 +78,8 @@ GET-only chain evidence acquisition and offline verification. No signing,
 broadcasting, AES candidate generation, BSGS, key-range search, or private-key
 recovery.
 
-Because the repo receipt code was still under review when this wrapper was made,
-the wrapper deliberately does not copy/fork that logic. Pull the reviewed commit,
-run selftest, then sync/offline.
+The wrapper deliberately does not copy or fork the receipt logic. The reviewed version
+(tick 93: 38 review findings fixed, the pre-registered H1 verdict and promotion condition
+(iv) added) issues no request that the tick-92 version did not under the live run's
+conditions, so a cache synced with the earlier code replays offline with the reviewed code:
+pull, run selftest, then offline. No second sync is needed.

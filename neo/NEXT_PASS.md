@@ -37,6 +37,7 @@ it skipped key material on decrypts with invalid padding.
 | **Natural last-words phrases decrypted bare** (were gate-refused, never decrypted) | **null**, 224 decrypts | 84 / `campaign_52` |
 | Soup→string operators (DBBI⊖VIC=YOUWON is terminal; FAED carries no planted string; both a/b blocks consumed) | exhausted | 8–11, 15, 20, 34–35, 84 |
 | On-chain trail — locktimes 629998 (signed) & 840003, "neighbors half and double" = points, Good-job-Neo brainwallets, Half/Better = solver dust (NONE creator-funded); **receipt topology**: the halves transact (2020/2024 splits, the 2020 one signed over the `3GSMG24T` "Halving" memo), never co-sign; `17ucy1` receive-only | **null** | 37–38, 52–53, 59, 63, 77, 79, 88 |
+| **3GSMG24T fan-out and funders** (pre-registered, `intake/2026-09-26-fanout`): funded once by the 2-of-2 `37mh7EYet…` (a 4,332-tx wallet → closed as wallet infrastructure), whose 15,000 sat was pre-cut into 12 outputs consumed by exactly the 10 known 2020 emissions (**H1 PASS**); the 2021 refill from the single-use `bc1q5rs27…`; `1NULY7…` a signed creator emission; no unknown creator receipt. Topology only: never AES candidates | **closed** (topology) | 92–93 |
 | Community "solutions" — jackdevs66 XOR-of-seven = 7.87-bit noise / 1-byte pad; Issue #79 keys from that noise; Murray not Genesis; Issue #108 "two typos" a non-issue | falsified | 7, 75, 78, 82, 85 |
 | **Ricardian reading** (Grigg: the hash of the whole document is the identifier) — 6 whole, byte-exact documents (three solved-stage plaintexts, the phase-3.2 prose before P32T, the pinned soup) | **null**, 96 decrypts + 48 addresses | 89 / `campaign_54` |
 | **OP_RETURN = nonce coordinate** — no saved creator tx carries a 32-byte OP_RETURN (the memos are 7–53 B of ASCII); parked for the existing corpus, kept as a future-event detector (`opreturn`/`txscan` + `materials/chain/nonce_points_prize.json`) | **no object** | 91 |
@@ -96,9 +97,10 @@ cannot be MITM'd (must enumerate). What we now know:
 3. **BSGS-from-seed-center** (§3) — the one EC test I can run here; say the word.
 4. **Extract + diff the 2023-11-27 SalPhaseIon capture** (wayback ts `20231127181947`) to formally
    retire the last 1% of the transcription item. Low effort, low value (2024/2025 captures already match).
-5. **Verify `1NULY7…` history** on a block explorer (USER-grade oracle target; egress-blocked here). Same
-   trip, topology only (tick 88), now one command: `python3 neo/harness/receipt_lookups.py` (tick 89): parents of the 2024 split's inputs `81d35929…:0`/`f28b0b68…:0` (a 2024
-   "Halving" memo?), the inputs of `3GSMG24T`'s funder `547246e9…` (→ `1EtbTv…`?), raw hex of `a82052a2…`.
+5. **Receipt lookups: done (tick 93).** `1NULY7…` is a signed creator emission; the 2024 split parents carry no creator
+   signer; `3GSMG24T` was funded by `37mh…` (closed) and refilled by `bc1q5rs27…`. Open: the user publishes the frozen
+   Esplora cache so the run replays here (`gsmg_esplora_offline.py offline`), and one topology lookup, the other output of
+   `e5db0968…` (where the rest of `bc1q5rs27…`'s 3,000,000 sat went).
 
 ## 5. The crux (why nothing derivable has worked)
 
