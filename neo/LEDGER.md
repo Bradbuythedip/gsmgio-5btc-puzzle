@@ -2463,3 +2463,40 @@ No source names a graph operation, so the K₁₄ family is not opened. The DOUB
 of the same message is tick 65.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 68 (2026-09-26): K₁₄ edge-space reading, pre-registered and run once — null on structure, text and crypto
+
+User-directed six-step "multiplicity" proposal (place the 91-streams on the edges of K₁₄, apply the
+VIC 33/58 mask, treat the coloured cells as edges, compute graph invariants, check them against the
+macro labels). Pre-registered at `intake/2026-09-26-k14/PREREG.md` (commit 72805e2, pushed before
+the run); `harness/campaign_44_k14.py`, which needs numpy and networkx. The self-test passes 12/12:
+τ(K₁₄) = 14¹², K₅/K₈/C₇/Petersen Hamiltonian and tree counts, DP == brute force, batched == exact.
+
+Fixed before any invariant was computed: **the 24 coloured cells contain no mirrored pair.** As
+undirected edges they are 24 distinct edges. The proposal's "12 mirrored edges" option does not exist.
+
+- **A. Structure.** VIC 33-edge mask under four placements (row-major RM, column-major CM, spiral
+  above the diagonal SPU, spiral below SPL) against 20,000 uniform 33-edge subsets. 28 tests, **min p =
+  0.31** (threshold 3.6×10⁻⁴). Every mask graph is connected, λ = 2–3, diameter 3, τ ≈ 1.8×10⁷,
+  6,754–18,268 Hamiltonian paths, all at the null median. Weighted K₁₄ (seven layers a=0, VIC A=1,
+  residual A=0) against 50,000 shuffles each: 144 tests, **min p = 0.0073** (threshold 6.9×10⁻⁵).
+  **0 flagged**, so the English control was not triggered.
+- **B. Text.** 49 integer sequences (degree, directed in/out, strength) × 4 mod-26 renderings: no
+  `YOUWON`, `HALF` or `YINYANG`. Null rate per strength sequence is 4×10⁻⁵ to 2.6×10⁻⁴. Degree
+  sequences cannot render Y at all (max degree 13).
+- **C. Crypto.** 138 deduplicated strings through gate.py's frozen path: 2,208 decrypts, 5 PKCS#7
+  events (pad 1–2, printable ≤ 0.48; ~8.7 expected by chance), **0 hits, 0 freeze keys, 0 address
+  matches**. 53 integer invariants used directly as scalars against the prize and `17ucy1…`: 0.
+- **Correction found after the run.** SPL is SPU under the vertex relabelling i → 13 − i (checked
+  edge for edge), so the four placements are three up to isomorphism. The Bonferroni divisor was
+  conservative; no result changes.
+- **The colour graph is shaped by parity, not by choice (descriptive).** Consecutive spiral cells are
+  neighbours, so spiral index ≡ row + col (mod 2). The coloured cells sit at indices ≡ 7 (mod 8), so
+  every one has row + col odd. Two consequences follow: none can lie on the diagonal (row = col makes
+  the sum even), and every coloured edge joins an even vertex to an odd one, so COL24 is bipartite.
+  That happens 0 times in 20,000 for random 24-edge sets, and here it is forced. Each 12-edge half is
+  a two-tree spanning forest (12% for random 12-edge sets; three of the eight stride-8 offsets do the same).
+
+**Closed per the stop rule:** no new placements, masks, invariants, serializations or maps. The
+house map a=1 is not run here; the user reported it null (USER grade). The K₁₄ reading has now had
+its one pre-registered pass.

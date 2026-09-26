@@ -1,0 +1,59 @@
+PASS tau(K5) = 125
+PASS tau(K14) = 14^12
+PASS K5: 60 Hamiltonian paths, 12 cycles
+PASS K8: 20160 paths, 2520 cycles
+PASS C7: tau 7, 7 paths, 1 cycle
+PASS Petersen: tau 2000, 0 Hamiltonian cycles
+PASS weighted K3 (2,3,5): tau_w = 2*3+3*5+5*2 = 31
+PASS DP == brute force on 40 random 7-vertex graphs
+PASS batched DP == exact DP on 6 random 33-edge K14 subgraphs
+PASS batched log tau == exact
+PASS objects load; mask 33/58; YOUWON at 21
+PASS 24 coloured cells: 12 above, 12 below, none mirrored
+campaign 44 self-test passed: True
+OK   phase2-assets/phase2_aes.txt ('s2', 'sha256hex', 8, 1.0, b'The ironic 2name of the keymakers trying to protect the curr')
+OK   phase2-assets/phase3_aes.txt ('s2', 'sha256hex', 6, 1.0, b'What if the merovingian is wrong. What instead of causality ')
+OK   phase3-assets/phase3.2-aes.txt ('s2', 'sha256hex', 10, 0.598, b"I've been waiting for you. You have many questions, and alth")
+OK   1 1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH 1EHNa6Q4Jz2uvNExL497mE43ikXhwF6kZm
+OK   2 1cMh228HTCiwS8ZsaakH8A8wze1JR5ZsP 1LagHJk2FyCV2VzrNHVqg3gYG4TSYwDV4m
+self-test freeze True on right K: True  rejects wrong K: True
+
+== A. structure
+unweighted family: 28 tests, threshold 3.57e-04, min p 3.12e-01
+   VIC33_CM   triangles   obs=                    20 null_med=16 p=0.312
+   VIC33_CM   edge_conn   obs=                     3 null_med=2 p=0.499
+   VIC33_SPU  ham_paths   obs=                 18268 null_med=9826 p=0.556
+   VIC33_SPL  ham_paths   obs=                 18268 null_med=9826 p=0.556
+   VIC33_CM   ham_paths   obs=                 18112 null_med=9826 p=0.563
+   VIC33_SPU  deg_var     obs=    1.9183673469387759 null_med=2.49 p=0.575
+   VIC33_SPL  deg_var     obs=    1.9183673469387759 null_med=2.49 p=0.575
+   VIC33_RM   triangles   obs=                    14 null_med=16 p=0.577
+weighted family:   144 tests, threshold 6.94e-05, min p 7.28e-03
+   RES_CM     lambda_max    obs=     214.2912489017401 null_med=231.8 p=0.00728
+   L4_CM      lambda2       obs=     37.69959251291444 null_med=44.57 p=0.0542
+   L6_RM      log_tau_w     obs=     51.86520120763934 null_med=51.96 p=0.0614
+   RES_RM     log_tau_w     obs=     63.31600783852229 null_med=63.2 p=0.0754
+   L6_RM      strength_var  obs=    111.28571428571429 null_med=63.14 p=0.0845
+   L5_SPU     log_tau_w     obs=     51.08086589600364 null_med=51.2 p=0.0881
+   L5_SPL     log_tau_w     obs=     51.08086589600364 null_med=51.2 p=0.0881
+   RES_RM     strength_var  obs=    337.42857142857144 null_med=703.6 p=0.0901
+flagged: 0
+
+== observed graphs
+   VIC33_RM   m=33 comp=1 lam=2 kap=2 tri= 14 tau=18554688 ham_p=6754 ham_c=60 diam=3 bip=False deg=[6, 5, 2, 3, 6, 4, 6, 3, 8, 5, 4, 6, 3, 5]
+   VIC58_RM   m=58 comp=1 lam=5 kap=5 tri= 94 tau=93405966089 ham_p=71666994 ham_c=2926552 diam=2 bip=False deg=[7, 8, 11, 10, 7, 9, 7, 10, 5, 8, 9, 7, 10, 8]
+   VIC33_CM   m=33 comp=1 lam=3 kap=3 tri= 20 tau=18330293 ham_p=18112 ham_c=335 diam=3 bip=False deg=[3, 5, 7, 3, 5, 6, 7, 3, 3, 5, 6, 5, 3, 5]
+   VIC58_CM   m=58 comp=1 lam=6 kap=6 tri= 85 tau=101057959528 ham_p=79563140 ham_c=3312323 diam=2 bip=False deg=[10, 8, 6, 10, 8, 7, 6, 10, 10, 8, 7, 8, 10, 8]
+   VIC33_SPU  m=33 comp=1 lam=2 kap=2 tri= 14 tau=18865150 ham_p=18268 ham_c=343 diam=3 bip=False deg=[6, 2, 5, 4, 7, 6, 4, 5, 4, 5, 5, 5, 2, 6]
+   VIC58_SPU  m=58 comp=1 lam=6 kap=6 tri= 90 tau=101831030352 ham_p=85421322 ham_c=3645875 diam=2 bip=False deg=[7, 11, 8, 9, 6, 7, 9, 8, 9, 8, 8, 8, 11, 7]
+   VIC33_SPL  m=33 comp=1 lam=2 kap=2 tri= 14 tau=18865150 ham_p=18268 ham_c=343 diam=3 bip=False deg=[6, 2, 5, 5, 5, 4, 5, 4, 6, 7, 4, 5, 2, 6]
+   VIC58_SPL  m=58 comp=1 lam=6 kap=6 tri= 90 tau=101831030352 ham_p=85421322 ham_c=3645875 diam=2 bip=False deg=[7, 11, 8, 8, 8, 9, 8, 9, 7, 6, 9, 8, 11, 7]
+   COL12U     m=12 comp=2 lam=0 kap=0 tri=  0 tau=0 ham_p=0 ham_c=0 diam=None bip=True deg=[2, 2, 2, 1, 2, 3, 2, 2, 1, 1, 2, 1, 1, 2]
+   COL12L     m=12 comp=2 lam=0 kap=0 tri=  0 tau=0 ham_p=0 ham_c=0 diam=None bip=True deg=[1, 2, 2, 1, 1, 1, 2, 2, 2, 3, 2, 1, 2, 2]
+   COL24      m=24 comp=1 lam=2 kap=2 tri=  0 tau=232544 ham_p=1050 ham_c=35 diam=4 bip=True deg=[3, 4, 4, 2, 3, 4, 4, 4, 3, 4, 4, 2, 3, 4]
+
+== B. text: 49 sequences x 4 renderings; found: none
+   null rate (33-edge degree seqs): (0.0, 0)
+   null rate (strength seqs): {'L1': 6e-05, 'L2': 4e-05, 'L3': 0.00012, 'L4': 0.00026, 'L5': 0.00016, 'L6': 0.00012, 'L7': 8e-05, 'VIC': 0.00022, 'RES': 0.00016}
+
+== C. crypto: 138 strings, 2208 decrypts, pkcs7_any=5, string hits=0; 53 scalars, scalar hits=0
