@@ -1154,3 +1154,54 @@ further AES campaign is run: the measured false-positive regime would manufactur
 answers. The impasse breaks only with a new authenticated artifact naming the operation, or
 the lost S0 seed — neither available. The freeze oracle and the address oracle remain as
 tooling for any future candidate key.
+
+### Loop tick 32 (2026-09-26) — the f73d92 factorization "revelation": verified, built, null-tested, closed
+
+Claim: `f73d92 = 2·11·149·4943` is not coincidence but the encoded instruction —
+`11` = side of an 11×11 matrix, `121 = 11² = π(661)` prime positions of `DBBI‖FAED`
+(`661 = 91+570`), `149` = VIC numeric-ciphertext length, `4943 = prime(661)`. Pipeline:
+121 prime-position chars → 11×11 → row/col sums (matrixsumlist) → sums as indices into a
+held text (lastwordsbeforearchichoice) → the extracted letters/words are the password.
+
+**Every arithmetic claim is exactly true** (verified): `f73d92 = 16203154 = 2·11·149·4943`;
+121 = 11²; the 121st prime is 661; the 661st prime is 4943; π(661) = 121; 661 = 91+570; and
+the VIC numeric ciphertext **is** 149 digits. This is a genuinely tight-looking chain, tighter
+than most, because it makes two independently checkable matches (149 = VIC length; 4943 =
+prime(len DBBI+FAED)).
+
+**But the operation it names is empty.** campaign_30 built the pipeline faithfully and
+exhaustively over its natural parameter space:
+- 121 prime-position chars of `DBBI‖FAED`, `a=1…i=9` (and `a=0…i=8`), 11×11 row-major and
+  column-major, sums = row / col / row‖col / col‖row.
+- **Letter-level** indexing (160 candidates) into held texts {Architect rewrite, VIC
+  plaintext, URL, `DBBI‖FAED`, VIC ciphertext}, 1- and 0-based, reject/mod out-of-range.
+- **Word-level** indexing (32 candidates) into the 332-word Architect speech, the VIC
+  sentence, the checkerboard sentence, both digit maps.
+Terminal gate: the 128-bit freeze oracle (both salts) + full-harness accept + address oracle.
+**Result: 0 freeze hits, 0 harness hits, 0 address matches, and no readable output.** The
+letter extracts are gibberish; the word extracts are salad ("otherwise it not has precision
+not not and unexpected thus it…", with repeated "it it it" from duplicate sums).
+
+**Null test on the factorization chain — it is a 1-in-11 coincidence.** Over 40,000 random
+even 24-bit integers, against the puzzle's own quantity set
+`{7,9,11,13,14,15,16,23,24,91,121,140,149,196,570,661}`:
+
+| property | rate |
+|---|---|
+| a prime factor is a puzzle quantity | 0.31 |
+| a prime factor's prime-index is a puzzle quantity | 0.23 |
+| **both (the exact f73d92 chain)** | **0.094 (~1 in 11)** |
+
+Small primes are common factors and the quantity set holds several small numbers, so a chain
+this "tight" is an ordinary event — the same category as the π-digit chain closed at tick 21
+(a 10% coincidence). The `149`-as-VIC-length and `4943 = prime(661)` matches are exactly what
+a 1-in-11 process produces.
+
+**Verdict.** The factorization is arithmetically real and unusually pretty, but it carries
+~3.4 bits of evidence (chance level for this search) and the operation it supposedly encodes
+produces nothing under a 2⁻¹²⁸ gate. Recorded as coincidence, not promoted to "the operation"
+— consistent with the ledger's standing rule that a reproducible number is not a compelled one.
+The matrixsumlist pipeline in its most-motivated instantiation (11×11 from `DBBI‖FAED` prime
+positions) is closed; broader matrixsumlist readings on the 14×14 grid were already closed
+(campaigns 12–19). The live gap is unchanged: an authenticated statement naming the operation,
+or the lost S0 seed. Neither is in hand.
