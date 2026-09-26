@@ -2363,3 +2363,30 @@ sha256(public answer) brainwallets, so the 2025 "Yes" replies authenticate nobod
 personal data.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 63 (2026-09-26): "Good job, Neo!" decoded — it congratulates the Phase-0 raw-key doors; tick 39's lead dissolves
+
+User-pasted raw txs (`unverified/tx_good_job_neo_2020.hex`), decoded offline:
+- `f9a1aee2…` (computed txid): in `547246e9…:5`, spent by P2SH-P2WPKH **`3GSMG24T…`** (pubkey
+  `0205eaf7…`) → OP_RETURN `Good job, Neo!` + 1000 sat → **`148XH2YBmLr4oAJXQcG84FpNYoBmqnVPHQ`**.
+- `9edc34f0…` (computed txid): in `547246e9…:4`, same key → OP_RETURN `Good job, Neo!` + 1000 sat →
+  **`13HGhjkmKUkP8sk9k63BLmhkxRjy7uK4Rp`**.
+  (The earlier user-given prefixes `364de511…`/`722fbf35…` do not match the computed txids.)
+
+Both recipients are keys taken directly from the Phase-0 answer: `b"gsmg.io/theseedisplanted"`
+zero-padded as a scalar (→ `148XH2…`) and the same 192 bits reversed (→ `13HGhj…`). Re-verified
+offline. **So "Good job, Neo!" congratulates finding the seed used as a raw private key (two
+encodings). It is not an unpublished stage past 3.2.** Tick 39's "a Neo team found something extra"
+lead is withdrawn. The "Neo wallet" tx (tick 56) is someone spending that public-knowledge key.
+Creator stamp convention now 8/8: six sha256(answer) keys plus two raw-seed keys.
+
+Bounded follow-up (sourced by this convention): 28 seed-derived keys (the seed, the full URL,
+`theseedisplanted`; rjust/ljust/bitrev/byterev/mod-N/sha256; compressed + uncompressed) vs `1NULY7…`,
+prize, `17ucy1…`. **Only the two controls hit (`148XH2…`, `13HGhj…`); `1NULY7…` and the prize: 0.**
+
+Third tx (locktime 903634, ~2025-07): `16DUcZT3…` (not a creator address) → OP_RETURN "Its in good
+hands with Gavin and everyone..." (a Satoshi quote) + 546/547 sat to all eight stamp addresses and
+`1JZBwa…` (the uncompressed `causality` key), change to `1KCcVh…`. A solver who knows the convention;
+unauthenticated.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
