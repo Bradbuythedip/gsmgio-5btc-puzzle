@@ -1750,3 +1750,20 @@ digits (a=1…i=9). Reinsert the prime basics 2,3,5,7 (cycling) at every prime p
 (digits → int → hex → ASCII). 12 variants (24, 104 and 120/121 reinsertions): **31–44%
 printable, no alphabetic run of 5 or more, no 64-hex shape. Null.** No AES. The ordering reading
 is closed for these tapes; the object "the source codes" remains unnamed.
+
+### Loop tick 45 (2026-09-26): the phase-2 FEN verified as a finished gadget; tick 42's board was an invented overlay
+
+**Verified with python-chess 1.10.** In the riddle position
+`B5KR/1r5B/6R1/2b1p1p1/2P1k1P1/1p2P2p/1P2P2P/3N1N2 w - - 0 1` (legal), White has **14 legal
+moves; 13 are mate; the only non-mate is Rc6+**. After it, Black's **only legal reply is
+Rxh7**. The board after Rc6+ is exactly the password FEN
+`B5KR/1r5B/2R5/2b1p1p1/2P1k1P1/1p2P2p/1P2P2P/3N1N2 b - - 0 1`. The engine writes the move
+counters as `1 1`; the password keeps the author's `0 1`. That answers "the buddhist is forced
+to move / what will be the next situation": play the one non-mating move, the rook check. The
+string is already inside the phase-2.2/3 key and did its job there.
+
+**Correction to tick 42.** "On a sad board but as wide as the first one seen" belongs to the
+phase-3.2 checkerboard line (the 14-wide genesis grid, tick 1b). The 8-wide chessboard is a
+different board. Laying the VIC alphabet under the FEN pieces (`FRALGMX` / `FRAEKV`) combined
+the two, which makes it an invented operator. Its null stands, but it should not have been run
+as sourced. The FEN is closed: no knight tours, no reuse of the FEN as a password, no overlays.
