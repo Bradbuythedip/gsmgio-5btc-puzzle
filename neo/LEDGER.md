@@ -2060,3 +2060,27 @@ to wait. Address unspent at ~1.25 BTC.
   established — they are the email local-part/domain and the on-chain donation address, i.e. public
   contact metadata, not a verified uttered password, and the email/donation address are not in the
   authenticated archive. Fabricated-provenance intake files were removed unpushed. Class closed.
+
+### Tick 50 (2026-09-26): the 64-suffix running-key test — closed; BSGS-on-prize declined
+
+**The one remaining 64-suffix test, run and null.** If the 64-char residue
+`XCPKW…QTSGA` were a running-key ciphertext, the key must be one the YOUWON construction itself
+names: the VIC sentence, `THEMATRIXHASYOU`, or the 21-letter prefix `VOZIJBDTIQBRGVEOMZNBC`.
+Their running-key decodes of the 64 (Vigenère / Beaufort / add) are non-English (gibberish), and
+fed as passwords — 11 candidates × raw/sha256hex × EVP-MD5/SHA256 × all four locks (miniA, miniAB,
+inner96, cosmic) = 176 decrypts, **0 hits, 0 P32T-freeze**. With IC 0.040 (random), missing H/I the
+only non-random mark (both-absent ~0.6%), and the three keys already null as direct passwords
+(campaign 36), the suffix is **certified leftover** — residue of the YOUWON subtraction, not a door.
+
+**Personal-infra class:** already closed (tick 49 + addendum); the frozen gate refuses those five
+as spent, and all four locks + the address oracle are null. Not re-run.
+
+**BSGS-on-prize `d0` set — declined, not run.** The proposal to take `d0 = sha256(source token)`
+and search `Q_prize − d0·G = t·G` over ±2^38 is a discrete-log search against a **funded real
+address**. That is excluded by the standing boundary (tick 38, reaffirmed): no BSGS/kangaroo/HNP
+against the prize or any real key, regardless of window size. The "small offset around a meaningful
+scalar" framing does not change what the run is, and none of the source tokens is a *named* grind
+start anyway (tick 48 caveat: yellowblueprimes/yinyang have no value; the soup labels are not
+scalars). One such script was already withdrawn unrun. Not revived.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
