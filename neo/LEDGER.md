@@ -958,3 +958,62 @@ checkerboard numbering miss under this frozen protocol, park the chess-board/P32
 **the chess-board/P32T branch is parked.** The 2×14 observation (VIC sentence is 91 chars = the
 dbbi length; the 28-symbol alphabet is 2×14) remains structurally elegant but yields no
 justified next reading rule. Not blended, not widened, not re-run with new vocabulary.
+
+### Loop tick 28 (2026-09-25/26) — Cosmic closure of the tick-1b set; the constraint sheet; the genesis image re-read
+
+**1. The tick-1b token set against Cosmic — closed.** The requested "57-token" list is not in
+this repository (the ledger records tick 1b as 182 trials per board, and the campaign_24 logs
+are empty because only pad-valid results are logged), so the set was regenerated from
+`campaign_24_board.py`: **50 distinct raw candidate strings** (the two boards share every
+coordinate, so their union is one set; written to `neo/attempts/campaign_25_tokens.txt`).
+Protocol exactly as requested: each token raw and as sha256hex × EVP-MD5 and EVP-SHA256 ×
+Cosmic only (salt `2d3f6fe06dc950e6`, ct 1328 B), strict gate.
+**campaign_25: 200 trials, 0 hits, 0 pad-valid results.** If the user's 57 contained tokens
+outside tick 1b, those seven were never in this repo and must be supplied; everything that
+was here is now closed against Cosmic as well as P32T.
+
+**2. Constraint sheet written and fact-checked** — `unverified/endgame_constraint_sheet.md`.
+Operands, operators and representations per official hint, each graded (AUTH / PRIMARY /
+DECODED / DERIVED / READING / LORE-BANTER-META / APRIL / USER / NEGATIVE / POLICY), with
+frozen tables B0–B3 and C0–C3. Five independent refuters attacked the sections against the
+primary files; the substantive corrections (all folded in):
+- the sheet had labelled artefacts and interpretations AUTH; a PRIMARY grade and a READING
+  grade now separate "the creator said" from "the archive contains" and "we read it as";
+- `yinyang`: the three creator lines make it a *phase reached after the wall* (#9599, #39224,
+  #39237); "output of a decryption / not an input" is our reading of them. The combine row
+  now reads `A‖B‖C` — the earlier draft fed D back in, the exact pattern correction 1 retracted;
+- "First or zero" (#4105) has no preserved question; three readings stay live (1/0; phase
+  zero; index base), so the 9/15 counts are unlicensed rather than excluded;
+- primes: the AUTH content is only "required"; the selector model is a reading, and the tie to
+  `matrixsumlist` rests on the META reply context of #6509;
+- `{1},{4},{21}` is archive-tagged HINT and downgraded to APRIL by the sheet (#7529, #6913
+  "1812 bit" = RAB-bit); #70307 "Pfff. Coincidence." reacts to an unarchived solver post and
+  neither confirms nor denies anything;
+- the close-friends hint is #66573/#66574 (HINT, tag KEY, 2026-07-13): friends' knowledge
+  *plus* skill, not "biographical rather than technical".
+Every numeric value in the operand table reproduces (spiral, colour indices, 0xF73D92, sums,
+91/570/24, the dbbi−VIC string, the 24 primes).
+
+**3. The genesis image, whole.** `puzzle.png` is byte-identical to the archive's
+`02_pages_raw` capture (sha256 `38125bbd…`), and it is 1048×1556, not a bare grid:
+- the QR code decodes to `https://www.blockchain.com/btc/address/1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe`
+  — the prize link, nothing hidden;
+- the **rabbit** is pixel art on a 15-px lattice, 14 × 13 lattice cells, 37 black pixels,
+  drawn over cells (6,6),(6,7),(7,6),(7,7),(7,8),(7,9),(8,6). The spiral's four unused end
+  cells are exactly (6,6),(7,6),(7,7),(6,7): the poem's "rabbits nest" is the spiral's centre.
+  Read as bits under every attested encoding (row/column order, both polarities, bit- and
+  byte-reversed) it yields no printable output (best 0.32). It is a drawing. Saved as
+  `neo/materials/rabbit_bitmap.txt`;
+- the colours have literal numbers: yellow `#FFF200` (2⁹·181²), blue `#3F48CC`
+  (2²·3·37·9341), the red rule `#ED1C24`, the off-white `#FEFEFE` (2·3·7·13·127·241). A
+  fourth reading of "Yellow has a number and so does Blue", never tested here before.
+
+**4. Bounded offline address oracle** — `neo/harness/addr_check.py`: six fixed encodings
+(sha256, sha256d, hex64, zero-padded raw, bit-reversed sha256, byte-reversed sha256) ×
+compressed/uncompressed, against the prize address, the README second address and the
+user-supplied `1NULY7DhzuNvSDtPkFzNo6oRTZQWBqXNE9` (USER grade: absent from the archive;
+block explorers are egress-blocked, so its history is unverified). Capped at 2000 objects
+per run so it stays an oracle for named objects, not a grinder.
+- campaign_26: every object named in the sheet (49) → 458 addresses, **0 matches**;
+- campaign_27: the colour codes in hex/decimal/packed, singly and yellow‖blue / blue‖yellow
+  (34) → 340 addresses, **0 matches**.
