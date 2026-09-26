@@ -2241,3 +2241,22 @@ Bare OP_RETURN phrases and substrings ("half and double", "neighbors") stay excl
 stop rule.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 58 (2026-09-26): salt-as-fingerprint census, null (with solved-stage controls)
+
+Hypothesis (user-relayed): an unsolved envelope's salt = a 64-bit truncation of a hash of some
+visible object. Tick 30's salt probe tested ASCII/XOR/reversal, not hash truncation.
+1. User's script over the 56 ARCHIVE-README SHA256 records: the only duplicate is two identical
+   robots.txt snapshots (2020-09-14, 2022-03-17). No salt, colour or URL anchor occurs in any
+   digest, and no pair shares a ≥4-byte prefix or suffix.
+2. `harness/campaign_41_salt_census.py`: 82 fixed objects (primary files, stage assets, the three
+   solved passwords, VIC/DBBI/soup, the named slot words, both addresses, the prize pubkey, plus
+   sha256hex forms) × 7 hashes (sha256, sha256d, md5, sha1, sha512, hash160, identity). Each of 6
+   salts is searched anywhere in every digest, both the 3 unsolved salts and the 3 solved-stage
+   salts as controls. **64-bit hits 0 (expected 1.6e-12); 32-bit half hits 0 (expected 0.01).**
+   Positive control: the cosmic salt is found at offset 8 of its raw envelope.
+
+The solved stages' salts are not fingerprints of their own known passwords, so the creator's
+salts behave as ordinary random OpenSSL salts. The salt-fingerprint route is closed.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
