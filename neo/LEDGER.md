@@ -2142,3 +2142,20 @@ Its only direction is "operate on the public point", i.e. ECDLP against the fund
 stays out of scope (tick 50). Kept as creator lore. Not a password; not sent to the gate.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 53 (2026-09-26): the four derived addresses have never spent; branch closed on-chain
+
+User-run explorer check (this environment's egress to blockstream/mempool is denied):
+`1G1kRAFR68…` (Q−G), `16eEXbSuKN8…` (Q/2), `1KHMK2C8uB…` (2Q), `1PhXF3xVQ8…` (Q+G) each have
+exactly one transaction, the 2021-07-18 funding tx `a82052a2…`. None has spent, so they expose no
+public key and no signature, and there is no nonce surface. The branch is closed. Tick 52 stands:
+this is creator lore, not an operand.
+
+**Re-requested gate classes, not re-run.** Class A is lowercased/spaceless forms and substrings of
+the 2026 finale lines. The verbatim lines are spent (web intake, 144 decrypts, null), and PREREG's
+stop rule excludes case/spacing variants and substrings. Class B (contact infrastructure) is spent
+(tick 49 + addendum; the gate refuses it). The proposed intake block labels them
+`uttered_password / speaker Jrk`. That provenance is false and was already rejected at the tick-49
+addendum, so no intake files were written.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
