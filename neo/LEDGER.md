@@ -1017,3 +1017,41 @@ per run so it stays an oracle for named objects, not a grinder.
 - campaign_26: every object named in the sheet (49) → 458 addresses, **0 matches**;
 - campaign_27: the colour codes in hex/decimal/packed, singly and yellow‖blue / blue‖yellow
   (34) → 340 addresses, **0 matches**.
+
+### Loop tick 29 (2026-09-26) — the Base58 frame, verified and closed
+
+User frame: soup letters `a…i` are Base58 glyphs 33–41, not digits, when the object is a
+Bitcoin value; the puzzle's numbers should be written in Base58; slot A is the colour
+integer `f73d92`, not a spelling of `yellowblueprimes`; "zeroed out" = delete the
+Base58-illegal set `{0,O,I,l}`; Base58Check is the only encoding the prize wears in public.
+
+**Arithmetic verified** (validated against the canonical Bitcoin alphabet):
+- row sums `610876654997879` → `5mfhF9tp6`; col sums `8108108736759668` → `26KBGX9uKH`;
+  rows‖cols → `7RUyS4gBTMenM76Fcf`; `f73d92` = 16203154 → `2S3dj`; prime-subset `445` → `8g`.
+  All match.
+- **One correction**: the complement (Y=1,B=0) `574061` encodes to **`3wec`**, not the
+  stated `3Q9h`. Used `3wec`.
+- `yeowbueprimes` (label minus `l`) is legal Base58 and decodes to
+  `82101348098033013316316` = 10 bytes `1162b9166f936e795adc`; reproduces the user's value.
+- **Whole-block Base58Check fails** for `dbbi` (91→67 B) and `faed` (570→418 B): both are
+  legal Base58 strings but neither is a valid version+payload+checksum. So neither block is a
+  hidden address/WIF. Confirmed; do not slice them for a `1…`/`5…`/`K…` prefix.
+
+**campaign_28_base58 — the bounded test, run through the self-testing harness.**
+Slot A = the colour integer in every representation (`f73d92`, `F73D92`, `16203154`,
+`0xf73d92`, `2S3dj`, the complement `08c26d`/`574061`/`3wec`, the prime-subset `445`/`8g`/
+`110111101`, the zeroed label `yeowbueprimes`/its decimal), plus a "delete `{0,O,I,l}`"
+variant of every slot value. B and C = the frozen sheet sets and their Base58 forms.
+Combine A‖B‖C (the §6 join), each raw and sha256hex, EVP-MD5 and EVP-SHA256, against
+**cosmic, inner96 (P32T) and miniAB (salph_inner)**: **1672 combine candidates + 19 A-alone,
+20,292 trials, 0 hits, 0 pad-valid near-misses.** Address oracle on the A family and each
+`A‖matrixsumlist‖lastwordsbeforearchichoice`: 342 addresses, **0 matches** to prize / second
+/ `1NULY7`.
+
+So the colour integer as slot A, in every Base58/hex/decimal/zeroed representation and
+combined with the frozen B and C, opens no lock and derives no target address. The Base58
+*representation* frame is closed. Base58 stands only where it is actually attested: as the
+last-mile dress of the answer (WIF `5`/`K`/`L`, or `1GSMG1…`/`17ucy1…` from a hash160), i.e.
+an oracle for a real hit, not a way to brute the blob. What is still missing is unchanged: a
+*further named operation* on `f73d92` (the SAL-scoped primes/zeroing) that yields a
+recognisable object before AES — not another spelling of the label.
