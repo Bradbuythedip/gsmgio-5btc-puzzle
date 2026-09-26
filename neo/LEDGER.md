@@ -2344,3 +2344,22 @@ the prize key signs again just after block 1,050,000, moving 0.625 BTC to `17ucy
 prove the creator still holds the key. Nothing here yields a password or a key.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 62 (2026-09-26): the five checkpoint preimages, verbatim, null; public-ask draft rejected
+
+Pre-registered (`intake/2026-09-26-checkpoints/PREREG.md`, pushed before the run).
+`harness/campaign_42_checkpoints.py` used the frozen gate functions, the freeze oracle and scalar
+checks. Candidates: `causality`, the prize-address string, the 149-digit VIC string (no earlier literal
+trace in harness/logs), `jacquefresco…principle`, `theflowerblossoms…surface`. **80 decrypts, 1 weak
+padding event (sha256hex/EVP-MD5 on miniAB, printable 0.44, rejected; ~0.3 expected by chance), 0 hits,
+0 freeze keys, 0 address matches.** Together with the 227-char string (tick 57), the checkpoint family
+is closed as password material.
+
+**Proposed public ask, not endorsed.** Its premises contradict tick 59. The "recipients" are
+sha256(public answer) brainwallets, so the 2025 "Yes" replies authenticate nobody, and there is no
+"original submitter" behind an address to contact. Only 6 checkpoints are verified, not 8 (the two
+"Good job, Neo!" recipients are unconfirmed). A fair ask would go to the group or thread: who received
+"Good job, Neo!" on 2020-04-03, and what did it confirm? That asks about their own public find, with no
+personal data.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
