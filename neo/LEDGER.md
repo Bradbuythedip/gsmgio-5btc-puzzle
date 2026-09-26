@@ -1563,3 +1563,13 @@ sent 2.5 BTC to `17ucy1…` and returned 2.49815966 BTC in change. A second tran
 against the prize key: 163,354-scalar pool, 8.0×10¹⁰ add/sub/mul pairs, 17 s, no match.**
 The two-part-sum reading is closed. This line ends here: no further elliptic-curve searching
 against the prize key.
+
+**Chain flows (2026-09-26).** `harness/chain_flows.py` walks the transaction graph through any
+Bitcoin node RPC, reading the URL from `BTC_RPC_URL`, never from disk. It goes backward through
+funding inputs, checks the spent/unspent status of tracked outputs, and optionally scans chosen
+block ranges forward (halving windows). It writes `materials/chain/FLOWS.md` and `flows.json`.
+The Alchemy endpoint is blocked by this environment's network policy, so only the offline pass
+has run. That pass already shows **the 700-sat "Halving" output (`a798905f…f383:1`) is the third
+input of the 2.5 BTC halving spend (`2aa9a4a9…1b13`)**. The creator sent dust plus OP_RETURN
+`Halving` from `3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK` into the prize address, then spent it
+alongside the prize coins, so one party controls both the prize key and the `3GSMG24` wallet.

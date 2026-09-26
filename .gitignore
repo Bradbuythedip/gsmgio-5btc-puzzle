@@ -1,2 +1,3 @@
 __pycache__/
 *.pyc
+neo/materials/chain/cache/
