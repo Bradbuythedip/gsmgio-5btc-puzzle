@@ -1094,3 +1094,13 @@ P32T's operand first. The missing piece is the operation, and it is now shown no
 public-address derivation either. No AES campaign on P32T or Cosmic is warranted until a
 primary statement names an operand that is not a VIC string — which the archive does not
 currently supply. The freeze oracle stays as reusable tooling for any future K.
+
+**Salt-structure probe (same tick).** The salt is the one field the creator chooses freely
+at encryption time, so it is a natural place to plant a pointer. Examined all six real salts
+(the three unsolved locks + the three solved stages) for ASCII, byte-reversal, pairwise XOR,
+digit/base structure, and repeats: **nothing.** No salt is printable, no reversal or XOR
+yields text, byte distributions are chance (the one repeated byte in the salph_inner salt is
+within the ~11% birthday chance for 8 bytes). The salts are ordinary random OpenSSL salts;
+they carry no operand. (Re-confirmed the TG-doctored salt differs from cosmic only in bytes
+0–1, tail `6fe06dc950e6` shared — a splice, as tick 3 found.) So "the salt names the next
+step" is closed.
