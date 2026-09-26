@@ -130,15 +130,24 @@ class RPC:
         if cache and os.path.exists(path):
             return json.load(open(path))
         body = json.dumps({"jsonrpc": "2.0", "id": 1, "method": method, "params": list(params)}).encode()
-        for attempt in range(5):
+        for attempt in range(8):
             try:
                 req = urllib.request.Request(self.url, body, {"content-type": "application/json"})
                 with urllib.request.urlopen(req, timeout=60) as r:
                     out = json.load(r)
                 break
+            except urllib.error.HTTPError as e:
+                detail = e.read()[:300].decode("utf-8", "replace")
+                if e.code in (429, 500, 502, 503, 504) and attempt < 7:
+                    wait = int(e.headers.get("Retry-After") or 0) or min(2 ** (attempt + 1), 64)
+                    print(f"  HTTP {e.code} on {method}; waiting {wait}s ({detail.strip()[:120]})", file=sys.stderr)
+                    time.sleep(wait); continue
+                sys.exit(f"RPC failed: HTTP {e.code} on {method}: {detail}\n"
+                         "429 on the first call usually means the key's quota is used up: "
+                         "check usage in the Alchemy dashboard or use a new key.")
             except (urllib.error.URLError, TimeoutError) as e:
-                if attempt == 4: raise
-                time.sleep(2 ** attempt)
+                if attempt == 7: sys.exit(f"RPC unreachable: {e}")
+                time.sleep(min(2 ** (attempt + 1), 64))
         self.calls += 1; time.sleep(self.delay)
         if out.get("error"):
             raise RuntimeError(f"{method}: {out['error']}")
@@ -189,7 +198,7 @@ def run(args):
     if not args.offline and (not url.startswith("https://") or re.search(r"[<>\s]", url)):
         sys.exit("BTC_RPC_URL must be your full endpoint with the real key, e.g. "
                  "https://bitcoin-mainnet.g.alchemy.com/v2/AbC123... (no <placeholder>, no spaces)")
-    rpc = None if args.offline else RPC(url)
+    rpc = None if args.offline else RPC(url, delay=args.delay)
 
     def fetch(txid):
         if txid in txs and "blockhash" in txs[txid]:
@@ -283,5 +292,6 @@ if __name__ == "__main__":
     ap.add_argument("--depth", type=int, default=3, help="backward hops (default 3)")
     ap.add_argument("--follow-all", action="store_true", help="follow every input, not only GSMG/known addresses")
     ap.add_argument("--scan", action="append", default=[], metavar="A-B", help="block height range to scan forward")
+    ap.add_argument("--delay", type=float, default=0.5, help="seconds between RPC calls (default 0.5)")
     ap.add_argument("--txid", action="append", default=[], help="extra seed txid")
     run(ap.parse_args())
