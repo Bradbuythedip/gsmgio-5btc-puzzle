@@ -2969,3 +2969,43 @@ cosmic_A, cc/1327-byte decrypt").** Re-confirmed this tick:
 **Do not treat `4f7a1e4e…` as plaintext or KDF output.** Standing work unchanged: a creator-named
 candidate through `gate.py` on the correct envelope (`3ab5…` short, `b45a…` trailing, Cosmic
 separately). Prize unspent; corpus exhausted; two locks gated on a new primary.
+
+### Tick 83 (2026-09-26): grave-detail "what did we miss" audit (4 agents) — three escape-hatches found and closed
+
+A four-agent parallel audit (MITM/EC, AES-lock acceptance, soup operators, primary provenance)
+hunted for missed avenues. Net: real gaps were found and **closed**; the endgame is now more firmly
+gated, not less.
+
+- **MITM pool gap → closed (curated re-run null).** Tick 37 ran the correct point-collision MITM
+  (a+b, a−b, a·b vs the prize point Q) but over a pool that lowercases and 4-word-caps everything,
+  so it was MISSING the S1–S4 seed scalars (and their C1–C6 constructions), most canonical answers,
+  `YOUWON`/`yinyang`, the layer-sum concatenations, and the three salts. `campaign_50_mitm_curated.py`
+  adds all of these (163,515 base + 59 new) and re-runs: **no hit** on add/sub/mul vs Q (24 s). So
+  "prize = half ± better / half·better" is closed for the corrected pool, not just the old one.
+  (Also newly closed by the audit: 17ucy1 is **not** a point-function of Q — Q/2, 2Q, Q±G, ±Q all
+  ≠ 17ucy1 — so the "half = prize/2 as a key" reading is false; the 2.5-BTC split is an amount, and
+  17ucy1 is an independent key with no public pubkey, hence no MITM surface.)
+- **Accept-rule false-negative gap → closed for strong candidates.** `check_pt` hard-rejects a decrypt
+  on invalid PKCS#7 **before** any printability/address test, and the address oracle sits behind that
+  gate — so a right password whose plaintext is a raw 32-byte key (miniA, −nopad), or whose final CBC
+  block were corrupted, would be silently dropped. `campaign_51_padding_independent.py` bypasses the
+  pad gate: per strong candidate × {raw, sha256hex} × EVP-{md5,sha256} × 4 locks it scans the FULL
+  plaintext for a 64-hex→prize/17ucy1 address, tests `pt[:32]`/`pt[32:64]` as raw keys, and checks
+  tail-robust prefix printability. **464 decrypts, 0 address hits, 0 printable prefixes.** So the pad
+  gate was not hiding a known-candidate solution.
+- **Ciphertext transcription risk (tick 81) → closed in-repo, verified.** Two independent
+  web.archive.org captures (`materials/wayback/pages/salphaseion_2024-11-23.html`,
+  `…2025-10-31.html`) carry the SalPhaseIon soup byte-identical to `salphaseion_soup_space_separated.txt`
+  (sha256 `d39d10b1…`; the soup contains both mini-lock base64 runs) and the Cosmic block decoding
+  byte-identical to `cosmic_duality_envelope_1344B.bin` (sha256 `b1895055…`). Three independent sources
+  agree, so the mini-lock and Cosmic ciphertexts are correct; every EVP/PBKDF2 null is now robust to
+  the transcription question as well as the KDF question. (Agent 2's tail-corruption concern was real
+  in principle but is moot given verified bytes; the padding-independent oracle above remains as the
+  structural fix for the −nopad/raw-key reading.)
+
+Residual accept-rule notes (low prior, recorded not run): the live gate omits aes-128/192 and EVP-sha1
+and the miniB_* variants for new intakes; a miniAB last-block freeze oracle (analogue of p32t_freeze,
+two-raw-keys P5) is not built. None applies to the solved blobs (all EVP-sha256/aes-256). Provenance
+audit (tick 84 pending) surfaced the Telegram JSON export and a lead-solver ask as the real levers.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
