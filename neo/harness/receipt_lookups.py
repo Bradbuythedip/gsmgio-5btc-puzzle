@@ -110,7 +110,10 @@ class Esplora:
             raise Unavailable(f"offline: {path}")
         cached = os.path.join(JSONDIR, cache_name) if cache_name else None
         if cached and os.path.exists(cached):
-            return json.load(open(cached))
+            try:
+                return json.load(open(cached))
+            except ValueError:
+                pass                                        # a truncated file from an interrupted write: refetch
         data = self._json(path)
         if cached and self.save:
             atomic_write(cached, json.dumps(data))
@@ -383,11 +386,12 @@ def lookup_funder(api, out, depth, max_fetch, start=None):
     return verdict
 
 # ---------- 3. the 2021 memo ----------
-def lookup_2021(api, out):
+def lookup_2021(api, out, max_pages=20):
     creator_pub = RT.signer(saved("a798905f")["vin"][0])[2].hex()   # 3GSMG24T's witness pubkey
     out.append(f"## 3. The 2021 \"neighbors, half and double\" transaction (via `{QMG}`)\n")
     try:
-        txids = api.address_txids(QMG)
+        hist, complete = api.address_history(QMG, max_pages)     # first request as before; later pages if any
+        txids = [h["txid"] for h in hist]
     except Unavailable as e:
         out.append(f"- unavailable ({e})\n\n**Signed by 3GSMG24T's key: unavailable**\n")
         return "unavailable"
@@ -404,8 +408,8 @@ def lookup_2021(api, out):
                    + ", ".join(f"{sat} → {label(a)}" for _, sat, kind, a, _ in outs if kind != "op_return"))
     if txids and missing == len(txids):
         verdict = "unavailable"
-    elif missing and verdict == "NO":
-        verdict = "NO (partial)"
+    elif (missing or not complete) and verdict == "NO":
+        verdict = "NO (partial" + ("" if complete else ": Q−G history incomplete, raise --max-pages") + ")"
     out.append(f"\n**Signed by 3GSMG24T's key `{creator_pub[:16]}…`: {verdict}** ({len(txids)} tx at Q−G)\n")
     return verdict
 
@@ -522,6 +526,14 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
         diffs = [f"in the read part of the tree: {d}" for d in diffs]
     return {"verdict": verdict, "diffs": gaps + diffs, "fuel": len(fuel), "emissions": emissions, "root": root,
             "splits": splits, "gap_txids": list(dict.fromkeys(gap_txids))}
+
+def input_keys(sc):
+    """Public keys (hex) an input exposes: its script's keys, or for taproot the output key from the spent script,
+    written as a compressed key so that rule (ii)'s x-coordinate comparison applies."""
+    keys = [p.hex() for p in sc["pubkeys"]]
+    if sc["kind"].startswith("p2tr") and sc.get("spk") and len(sc["spk"]) == 34:
+        keys.append("02" + sc["spk"][2:].hex())
+    return keys
 
 def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
     out.append(f"## 4. The complete {label(addr)} fan-out (from its full address history)\n")
@@ -763,14 +775,14 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
     inbound_inputs = {}
     for t in inbound:
         if t in txs:
-            inbound_inputs[t] = [(v["txid"], sc["address"], [p.hex() for p in sc["pubkeys"]])
+            inbound_inputs[t] = [(v["txid"], sc["address"], input_keys(sc))
                                  for v, sc in zip(txs[t][0]["vin"], txs[t][4])]
         else:
             inbound_inputs[t] = [(ptx, a, []) for ptx, _, a in vin_of(t)]
     cosigned_inputs = {}
     for t in cosigners:
         if t in txs:
-            cosigned_inputs[t] = [(v["txid"], sc["address"], [p.hex() for p in sc["pubkeys"]])
+            cosigned_inputs[t] = [(v["txid"], sc["address"], input_keys(sc))
                                   for v, sc in zip(txs[t][0]["vin"], txs[t][4]) if sc["address"] != addr]
         else:
             cosigned_inputs[t] = [(ptx, a, []) for ptx, _, a in vin_of(t) if a != addr]
@@ -812,7 +824,7 @@ def repo_mentions(hexes):
     for root in roots:
         paths = [root] if os.path.isfile(root) else [os.path.join(dp, f) for dp, _, fs in os.walk(root) for f in fs]
         for p in paths:
-            if os.sep + "chain" + os.sep in p:                  # our own chain notes and fetched raws
+            if os.path.relpath(p, root).split(os.sep)[0] == "chain":   # our own chain notes and fetched raws
                 continue
             try:
                 s = open(p, errors="ignore").read().lower()
@@ -858,7 +870,7 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
         rows.sort(key=lambda x: (x[0] or 10**9))
         hs = [x[0] for x in rows if x[0]]
         r.update(n_tx=n_tx, complete=complete, touch=touch, first=(hs[0] if hs else None), last=(hs[-1] if hs else None),
-                 txids={h["txid"] for h in hist},
+                 txids={h["txid"] for h in hist}, stubs=bool(hist) and all("vin" not in h and "vout" not in h for h in hist),
                  funded=cs.get("funded_txo_sum"), spent=cs.get("spent_txo_sum"))
         out.append(f"### {f}\n")
         out.append(f"- {n_tx} transactions ({'complete' if complete else 'INCOMPLETE: raise --max-pages'}); "
@@ -916,6 +928,8 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
                                 "(e.g. a P2PK key, which explorers index by script)")
         elif n_tx > RULE_III[0]:
             s3 = False
+        elif r.get("stubs"):
+            s3, s3_why = None, "the history entries carry no counterparty data (offline fixture)"
         elif not r.get("complete"):
             s3, s3_why = None, "history incomplete"
         else:
@@ -1151,7 +1165,7 @@ def save_audit(stem, lines, results, h1=None, meta=None):
 def run(api, depth, max_fetch, max_pages=20, full=True):
     out = [f"# Receipt lookups (ticks 88–93), {time.strftime('%Y-%m-%d %H:%M:%SZ', time.gmtime())}\n",
            f"Source: `{api.base}`" + (" (offline fixture)" if api.fixture is not None else "") + "\n"]
-    v = [lookup_2024(api, out), lookup_funder(api, out, depth, max_fetch), lookup_2021(api, out)]
+    v = [lookup_2024(api, out), lookup_funder(api, out, depth, max_fetch), lookup_2021(api, out, max_pages)]
     extra = {}
     if full:
         fan = lookup_fanout(api, out, max_pages)
