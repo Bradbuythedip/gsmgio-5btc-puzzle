@@ -1786,3 +1786,24 @@ reuse, invented grid operations, the XOR-triangle citation, prime-basics reinser
 
 **Standing state:** until a page names the next rewrite of the 20 sums or the two missing
 ingredient values (yellowblueprimes, yinyang), there is no AES pass to run.
+
+### Standing state (2026-09-26, filed): the sourced queue is empty; wait
+
+No AES. No new operator on DBBI, the 20 sums, the 24 primes, the FEN or the Architect stream.
+`yellowblueprimes` and `yinyang` remain labels without values. Both 80-byte locks (P32T and
+SalPhaseIon short) need the same independently named X.
+
+**Primary material still open. None of it is a typeable operand:**
+- #66573 (2026-07-13): "My close friends have the best chance of solving it… NOTE: that is a
+  hint." A person-context hint, not a string. No name lists are to be built from it.
+- #53342 (2026-01-01, exact bytes in the archive and README): "Happy new year! Make the best of
+  everything. Oh, and here's a "tiny hint" <3." Read as text. Nothing is derived from its date
+  or bits.
+- The two missing soup words, which count only when another authenticated field names how
+  they are computed.
+
+**Not to be done:** inventing the rewrite tick 46 left; reopening 479 = 479 as a password
+(`yellow479`, `479479`, `zero5`); a close-friends name list.
+
+**Answer to any request for work:** there is no next tick until a page names the next rewrite
+(of the 20 sums, or of the two ingredient values). New primaries enter only through `gate.py`.
