@@ -76,20 +76,11 @@ def load_saved():
     return txs
 
 def signer(vin):
-    """(kind, address, pubkey) of whoever authorised this input."""
-    ss = bytes.fromhex(vin["scriptSig"]); wit = [bytes.fromhex(w) for w in vin["witness"]]
-    if ss and not wit:
-        p = V.pushes(ss)
-        if len(p) == 2 and len(p[1]) in (33, 65):
-            return "p2pkh", btc_addr.p2pkh(p[1]), p[1]
-    if len(wit) == 2 and len(wit[1]) == 33:
-        pub = wit[1]
-        if ss:
-            redeem = V.pushes(ss)[0]
-            assert redeem == b"\x00\x14" + h160(pub), "P2SH-P2WPKH redeem script does not match its pubkey"
-            return "p2sh-p2wpkh", b58check(b"\x05" + h160(redeem)), pub
-        return "p2wpkh", segwit_addr(0, h160(pub)), pub
-    return "unknown", None, None
+    """(kind, address, pubkey) of whoever authorised this input; pubkey is None for multisig and
+    unknown types. Full detail (all pubkeys, m-of-n, commitments) is txscript.input_script(vin)."""
+    import txscript
+    d = txscript.input_script(vin)
+    return d["kind"], d["address"], (d["pubkeys"][0] if len(d["pubkeys"]) == 1 else None)
 
 def uncompressed(pub):
     if len(pub) == 65:

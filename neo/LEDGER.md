@@ -3413,3 +3413,51 @@ carries the same fallback, becomes 2026-09-26.3, and `doctor` now reports which 
 Verified in both modes, with `hashlib` refusing ripemd160 simulated: doctor, selftest, the
 `receipt_lookups` self-test (with its positive controls) and the halving-signature check all pass.
 `receipt_topology.py` output is byte-identical between the modes. No results change.
+
+### Tick 92 (2026-09-26): the user's live receipt run; 3GSMG24T is funded by a 2-of-2 multisig; creator signatures verified offline; tooling extended (review pending)
+
+**User-run results** (mempool.space, the tick-89 tool, on the user's machine; raws are not yet in the repo, so these are
+user grade):
+- **2024 split parents: NO repeat of the 2020 pattern.** `81d35929…:0` (535,500 sat) was paid by
+  `bc1qey9rjg6zkpr47q6krhx58hecdn2jqkqnnwnavx`; `f28b0b68…:0` (666 sat) by `1GmTEC3Ygz3qZGHnfft9JBZdDNQkH2tGqo`. Neither is
+  creator-signed and neither carries a memo. The user notes that `f28b0b68…` also paid `17ucy1…` 700 sat: a transaction that
+  touches both halves is not provenance, since anyone can pay a public address. The signer is what matters.
+- **The 2021 memo is creator speech.** `a82052a2…` ("GSMG.io neighbors, half and double", 4 × 5,000 sat to Q−G, Q/2, 2Q,
+  Q+G) is signed by 3GSMG24T's key `0205eaf7…`.
+- **3GSMG24T's ancestry:** `547246e9…` ← `0ba2a2e2…` ← `8ee72f46…` (all self-spends by 3GSMG24T) ← `1f8eb99e…`. The tool
+  printed that last signer as "None (unknown)"; the old signer() did not recognise its script. The user decoded it: a
+  **P2SH-P2WSH 2-of-2 multisig**, witness script `OP_2 028f2689…e5e1 03e4bf9b…2a22 OP_2 OP_CHECKMULTISIG`, address
+  `37mh7EYetVKAesxqzv968sTYqSLF8dE6oD`. It spends `483451c5…:1` and pays 15,000 sat → 3GSMG24T plus 2,233,734 sat change
+  back to itself. The user reports the fan-out as: 8ee7 splits 15,000 into 1,189 + 1,189 + 1,180 + 1,180 + 10,000; 0ba2
+  splits 10,000 into 7,400 + 1,200 + 1,200; 5472 splits 7,400 into 1,106 + 1,200 × 5.
+
+**Verified here, offline:**
+- The two keys, in that order, as a 2-of-2 P2SH-P2WSH give exactly `37mh7EYetVKAesxqzv968sTYqSLF8dE6oD`; the reversed order
+  gives a different address. Neither key, nor any of these txids, occurs anywhere in the repo.
+- **The creator's P2SH-P2WPKH signatures now verify offline** (tick 70 had them as uncheckable without amounts). With the
+  user's amounts for `547246e9…` (out 0 = 1,106 sat; outs 1, 2, 4, 5 = 1,200 sat), every 3GSMG24T signature on "Halving"
+  (`a798905f…`, spending outs 2, 1, 0) and on both "Good job, Neo!" (`364de511…` out 5, `722fbf35…` out 4) verifies, and no
+  other amount from 1,000 to 1,300 does. That confirms the user's figures for those five outputs and authenticates the three
+  memos by signature.
+- A consistency count, to be confirmed by the live fan-out: the three splits leave 12 spendable outputs of about 1.1–1.2k
+  sat, and the ledger's known 2020 emissions consume exactly 12 (six checkpoints, one bare payment to `1NULY7…`, two "Good
+  job, Neo!", and three for "Halving"). The 2021 memo's 20,000 sat needs a second inbound funding event.
+
+**Tooling** (`harness/txscript.py`, new; `receipt_lookups.py`, extended; `receipt_topology.signer()` now delegates):
+- **Script recognition:** p2pkh, p2pk, legacy p2sh m-of-n, p2wpkh, p2sh-p2wpkh, p2wsh / p2sh-p2wsh m-of-n (with pubkeys),
+  and taproot flagged. Nested commitments are checked.
+- **Offline ECDSA verification:** legacy SIGHASH_ALL, and BIP143 for all six sighash types with OP_CHECKMULTISIG ordering.
+  It passes the official BIP143 vectors (fixture committed), including the 6-of-6 P2SH-P2WSH with six sighash types, and
+  rejects amount + 1.
+- **Lookups:** the ancestry walk now defaults to depth 12 and 200 fetches and prints multisig keys, block heights and
+  signature status. New: the full 3GSMG24T fan-out from its address history (UTXO tree, recipient census against the
+  ledger's receipts with UNKNOWN recipients flagged, fuel accounting with a books-balance check); full histories of the
+  wallets that funded it; and the promotion rule, fixed in the tool before any run:
+  - PROMOTE only if (i) the ancestry reaches a creator-trail signer, or (ii) a key matches authenticated GSMG material, or
+    (iii) the history is narrowly GSMG-specific (≤ 10 transactions, ≥ 50% touching GSMG-labelled addresses);
+  - otherwise it is operational funding infrastructure, and the branch closes.
+  - Condition (ii) searches only `neo/materials` outside `materials/chain`, so our own notes cannot self-match. Nothing here
+    becomes an AES candidate.
+
+**State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent. An independent adversarial review of the
+new tooling is in progress; its fixes follow in the next commit.
