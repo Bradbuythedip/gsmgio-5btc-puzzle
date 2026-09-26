@@ -2591,3 +2591,34 @@ environment allows:
   (connect_rejected), as at tick 37.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 71 (2026-09-26): affine-nonce trapdoor test on the prize key's own signatures — null, with a powered self-test
+
+User-relayed "R = aQ + bG" trapdoor idea: if the prize signer chose a nonce k = a·d + b from the
+"neighbors, half and double" vocabulary, d falls out by algebra (d = (z − s·b)/(s·a − r) mod n),
+no discrete log. Tested against the creator's own three 2020 halving signatures (Q = `04f4d1bb…`,
+verified tick 70). `harness/campaign_45_affine_nonce.py`, pre-registered at
+`intake/2026-09-26-affine-nonce/PREREG.md`. Read-only on chain data; the accept predicate is the
+hard one, d·G must hash to the prize address, so nothing can be tuned to a false positive.
+
+- **Self-test proves power (5/5):** it plants k = d+1 and recovers d with d·G = Q, plants k = d
+  (nonce = key) and recovers it, rejects the wrong (a,b), round-trips a lifted nonce point, and
+  confirms a normal random signature matches no (a,b).
+- **Real run, null.** Three signatures, three distinct nonces (so no repeated-nonce recovery).
+  Twelve single-signature families {d, d±1, 2d, d/2, −d, …}, the pairwise-nonce affine relations,
+  and exact point identity R = ±(Q), ±(Q±G), ±2Q, ±(Q/2) with both lifts and both parities:
+  **no branch yields a scalar whose point is Q.** The prize signer used ordinary independent
+  nonces. There is no planted affine-nonce weakness to exploit.
+- **"Robert Doty → R.y" not run: no operand.** The authenticated OP_RETURN payloads are ASCII
+  text ("Halving", "GSMG.io neighbors, half and double", "script VM"), not 32-byte binary fields,
+  so there is nothing to compare a nonce y-coordinate against.
+- **"Apple Pie" / Murray out of scope.** The two scalars in the relayed screenshot were checked:
+  `0337dc18…` → `1E5fUmFo…`/`1BKNtBk8…`, `18E14A7B…` (the standard address tutorial key) →
+  `16UwLL9R…`/`1PMycacn…`; neither is the Genesis address `1A1zP1e…`. GSMG's prize is `1GSMG1…`,
+  not Genesis, and Genesis-block constants were already tested as passwords (tick 26, null).
+  zenodo.org is blocked by this environment, so Murray's documents cannot be fetched; the claim is
+  not GSMG-relevant regardless.
+
+This complements tick 37 (meet-in-the-middle a+b/a−b/a·b against the prize key, null) and tick 50
+(BSGS declined): the prize key is not recoverable by any small algebraic relation to G or to its
+own nonces. **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
