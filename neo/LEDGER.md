@@ -2228,3 +2228,16 @@ raw-key door, not an unpublished stage past 3.2, and tick 39's lead dissolves. T
 encoding of puzzle strings vs `1NULY7…` is already covered by `addr_check` (ticks ~1011/1816/2016).
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 57 (2026-09-26): the 227-char phase-2.2 string is not forgotten; scalar check added, null
+
+The string is in the harness verbatim (`aes_try.py`, `campaign_01.PHASE22`). It is 227 chars and
+its sha256 is `1a57c572…d2ec30d5`, matching the walkthrough, so no reconstruction is needed. It was
+already run as a candidate in campaign_01 across all targets, and campaign_05 ran ~1,100 logged
+derivatives of it against miniA, miniAB, inner96/P32T and cosmic. The gate self-test uses it for
+the phase-3 decrypt. New here: sha256(S), sha256(sha256hex(S)) and bytes(S) mod N as scalars →
+compressed/uncompressed P2PKH vs `1GSMG1…`, `17ucy1…`, `1NULY7…`: 6 addresses, 0 matches.
+Bare OP_RETURN phrases and substrings ("half and double", "neighbors") stay excluded by the tick-54
+stop rule.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
