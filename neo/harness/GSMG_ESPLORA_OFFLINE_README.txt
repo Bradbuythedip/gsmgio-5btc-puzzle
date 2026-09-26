@@ -1,0 +1,75 @@
+GSMG ESPLORA OFFLINE SOLVER
+===========================
+
+This wrapper separates PUBLIC CHAIN ACQUISITION from OFFLINE ANALYSIS.
+
+It imports the current repository implementation of:
+
+  neo/harness/receipt_lookups.py
+
+So reviewer fixes are picked up automatically after `git pull`.
+
+1. SELFTEST — NO NETWORK
+
+  python3 /path/to/gsmg_esplora_offline.py selftest --repo .
+
+2. ACQUIRE ONCE WITH ESPLORA
+
+  python3 /path/to/gsmg_esplora_offline.py sync \
+    --repo . \
+    --base https://mempool.space/api \
+    --depth 12 \
+    --max-fetch 200 \
+    --max-pages 20
+
+Alternative:
+
+  --base https://blockstream.info/api
+
+3. TRUE OFFLINE RERUN
+
+Disconnect networking if desired, then use the SAME API base and bounds:
+
+  python3 /path/to/gsmg_esplora_offline.py offline \
+    --repo . \
+    --base https://mempool.space/api \
+    --depth 12 \
+    --max-fetch 200 \
+    --max-pages 20
+
+If any required endpoint was not cached, offline mode exits 4, lists the missing
+endpoints and leaves the existing reports untouched (version .2). It never fetches.
+
+4. CACHE STATUS
+
+  python3 /path/to/gsmg_esplora_offline.py status --repo .
+
+CACHE LOCATIONS
+
+Repo's existing receipt tool:
+  neo/materials/chain/fetched/*.hex
+  neo/materials/chain/fetched/json/*
+
+This wrapper also stores every exact Esplora GET response:
+  neo/materials/chain/fetched/esplora_http/<sha256(path)>.bin
+  neo/materials/chain/fetched/esplora_http/index.json
+  neo/materials/chain/fetched/esplora_run_manifest.json
+
+The HTTP cache is frozen at first acquisition: a later sync serves cached endpoints
+without refetching them (delete esplora_http/ to re-acquire). The index pins each
+response's sha256, and `status` reports any file that no longer matches.
+
+OUTPUTS
+
+  neo/materials/chain/RECEIPT_LOOKUPS.md
+  neo/materials/chain/receipt_lookups.json
+
+SCOPE
+
+GET-only chain evidence acquisition and offline verification. No signing,
+broadcasting, AES candidate generation, BSGS, key-range search, or private-key
+recovery.
+
+Because the repo receipt code was still under review when this wrapper was made,
+the wrapper deliberately does not copy/fork that logic. Pull the reviewed commit,
+run selftest, then sync/offline.
