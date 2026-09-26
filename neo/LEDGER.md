@@ -2316,3 +2316,31 @@ Two residues, neither creator-confirmed:
   wanted from the export.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 61 (2026-09-26): genesis vs prize — the relation is the subsidy schedule, not a key
+
+Genesis coinbase (user-pasted raw tx, txid `4a5e1e4b…a33b` verified) enters the puzzle once: its
+headline, byte-reversed as hex, is part 2 of the 227-char phase-2.2 answer (verified verbatim). Every
+other block-0 constant was tested at campaign 23 (13,020 trials, 0 hits). Genesis pubkey `04678afd…`
+is not the prize point, and the output is unspendable.
+
+**The real relation is monetary.** The prize is a 1/10-scale mirror of the block subsidy, halved at
+each halving by the creator's own announced rule (#5069 "halving the price money at every bitcoin
+halving event", #5365, #4603):
+
+| event | subsidy | prize `1GSMG1…` | `17ucy1…` ("better half", #3902) |
+|---|---|---|---|
+| 2019-04-13 funding (block 571497) | 12.5 | 5.0 | 0 |
+| halving 3, tx at block 630001 (OP_RETURN "Halving") | 6.25 | 2.5 | 2.5 |
+| halving 4, tx locktime 840003 | 3.125 | 1.25 | 3.75 |
+| halving 5, block 1,050,000 (~2028), predicted | 1.5625 | 0.625 | 4.375 |
+
+So "half and better half" is visible on-chain as the halving split. The unsolved prize decays toward
+the better half, which only ever receives. #3923 (2020-05-11): "who knows what you'll find after
+opening the 2nd door. The price is in half, but what does it mean 🤔". #66593: "The '5' btc was never
+the actual prize." Consistent with tick 47: `17ucy1…` is the halving sink and the "funds to live",
+most likely not a second payout to solvers. **Prediction (checkable, no compute):** absent a solve,
+the prize key signs again just after block 1,050,000, moving 0.625 BTC to `17ucy1…`. That would also
+prove the creator still holds the key. Nothing here yields a password or a key.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
