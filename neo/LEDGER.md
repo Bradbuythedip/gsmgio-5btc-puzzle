@@ -1606,3 +1606,22 @@ prize key, the coins would have moved. They have not.
 other real address. The one meet-in-the-middle run (tick 37) is the last. The gate's rule
 stands: only new primary material. A preimage for `1NULY7…` counts only if it is published or
 named by the creator's circle, not if it is searched for.
+
+### Loop tick 39 (2026-09-26): the 2020 OP_RETURNs are a solved-stage ladder; "Good job, Neo!" marks an unpublished stage
+
+**Verified:** the phase-2.2 password (the `causalitySafenetLunaHSM…b - - 0 1` concatenation) is
+exactly **227 characters**. So "GSMG.io: You are here because 227 chars were correct" is the creator
+confirming a phase-2.2 solve on-chain. Read with the others, the 2020-03-24 messages confirm
+solved stages: "Right, this is causality" (phase 2), "227 chars" (phase 2.2), "phase3.2 pass OK"
+(phase 3.2).
+
+**The rung past 3.2:** "Good job, Neo!" went to two addresses on 2020-04-03, and a bare 1050 sat
+went to `1NULY7…` on 2020-04-07. On 2020-04-08 the creator wrote (#3338): "one team managed to
+find something... something others haven't yet found (unless they didn't tell us)." The two
+"Good job, Neo!" recipients wrote "From Neo" and "Neo wallet bc1qyw9…" on-chain in May 2025.
+The congratulated team therefore exists and still identifies itself as "Neo".
+
+**Consequence:** the best remaining input is a human one, the gate's `uttered_password`
+channel. It means asking that team, through public channels (the GSMG Telegram, or an
+on-chain reply to the address they published), what "Good job, Neo!" confirmed. No wallet
+tracing, no attribution of people, no key search.
