@@ -2856,3 +2856,40 @@ The one open on-chain item is unchanged: the 2026-02-05 funding source of the tw
 (`harness/trace_address.py`, tick 77), pending network or pasted hex.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 79 (2026-09-26): the Half-address funding trace resolves tick 75 — NONE creator-trail; it is the dust-spray source
+
+User ran `harness/trace_address.py --addr 1JG648…` (Half) on mempool.space: **105 transactions,
+creator-trail funders among inputs: NONE.** Decoded flows (user-pasted, offline-decodable):
+- **`1JG648…` pays the puzzle addresses**, it does not receive from them: tx `d1f774f1…` sends 70,000
+  sat to the prize `1GSMG1…`; `54da8139…` sends 5,000 sat to `17ucy1…`; `b6867f5a…` spends `1JG648…`
+  and `145ZQ9…` together. This is the 2026 dust spray of tick 38, now confirmed by decode.
+- **Its own funding is ordinary segwit change** (`bc1qekdql74…`, `bc1qm8qw4y0…`, `bc1qrft2p4…`,
+  `bc1q39hn5…`), none on the creator trail (`1EtbTv…`, `3GSMG24T…`, prize, `17ucy1…`).
+So the one open on-chain item from tick 75 is closed: the Issue #79 addresses were **not** funded by
+the creator. They are solver-controlled addresses spraying dust at the prize. Issue #79 is confirmed
+solver traffic, not a creator acknowledgement; its keys remain false-positive artifacts (tick 75/78).
+The Half/Better-Half branch is closed on-chain. (Trace files land under
+`materials/chain/traces/1JG648…/` when run; not committed from the sandbox, which the network blocks.)
+
+### Tick 80 (2026-09-26): the "Looking Forward" / Jacque Fresco direction — provenance corrected, adjacent strings null
+
+User-relayed claim that Jrk's "Bingo" confirmed *Looking Forward* (Jacque Fresco) as the reading of
+"it's in front of your eyes but you're not seeing it". **Overstated, per tick 60 (primary-checked):**
+#60312 "Bingo" confirms the Cartman chatroulette quote D1rty Byrd had just posted; Jrk never answered
+Denis Golovkin's Looking-Forward question (his only response was #60306 "Maybe, Cartman's quote fits
+too", plus the 👀). "Jacque was quite an inspiring lad" (#60303) is praise, not an instruction. And
+`jacquefresco` is already the phase-3.2 preimage, so Fresco points **backward** to a solved stage.
+- **Core strings already spent** (tick 60 / corpus): `lookingforward`, `Looking Forward`,
+  `looking forward`, `jacquefresco`, `Jacque Fresco`, `thevenusproject`, `venusproject`,
+  `itsinfrontofyoureyesbutyourenotseeingit`, and case/spacing variants — 13 forms, all refused by the gate.
+- **12 genuinely-new adjacent strings, run once** (`intake/2026-09-26-fresco`,
+  `harness/campaign_48_fresco.py`): the Fresco titles and Venus-Project concepts
+  (`thebestthatmoneycantbuy`, `sociocyberneering`, `resourcebasedeconomy`, `futurebydesign`,
+  `cybernetics`, `nothinghastobechangedonlyrediscovered`, …). **192 decrypts (all four locks, MD5+SHA256,
+  raw+sha256hex), 2 chance pad-1 events, 0 hits, 0 address matches.** Direction closed.
+- **Not done: the public ask.** Opening an issue on `puzzlehunt/gsmgio-5btc-puzzle` to ask the 2020
+  checkpoint recipients what they submitted is outward-facing and was drafted-and-rejected at tick 62.
+  It stays a user decision; not posted.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
