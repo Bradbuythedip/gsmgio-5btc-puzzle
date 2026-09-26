@@ -18,7 +18,7 @@ byte-verified across ≥3 independent sources (see §3), and byte-pinned by enve
 
 ---
 
-## 1. Do-not-repeat inventory (ticks 1–87)
+## 1. Do-not-repeat inventory (ticks 1–88)
 
 | class | status | where |
 |---|---|---|
@@ -31,7 +31,7 @@ byte-verified across ≥3 independent sources (see §3), and byte-pinned by enve
 | **Accept-rule false-negative** (padding-independent full-plaintext address/key oracle, bypasses PKCS#7 gate) | **null**, 464 decrypts | 83 / `campaign_51` |
 | **Natural last-words phrases decrypted bare** (were gate-refused, never decrypted) | **null**, 224 decrypts | 84 / `campaign_52` |
 | Soup→string operators (DBBI⊖VIC=YOUWON is terminal; FAED carries no planted string; both a/b blocks consumed) | exhausted | 8–11, 15, 20, 34–35, 84 |
-| On-chain trail — locktimes 629998 (signed) & 840003, "neighbors half and double" = points, Good-job-Neo brainwallets, Half/Better = solver dust (NONE creator-funded) | **null** | 37–38, 52–53, 59, 63, 77, 79 |
+| On-chain trail — locktimes 629998 (signed) & 840003, "neighbors half and double" = points, Good-job-Neo brainwallets, Half/Better = solver dust (NONE creator-funded); **receipt topology**: the halves transact (2020/2024 splits, the 2020 one signed over the `3GSMG24T` "Halving" memo), never co-sign; `17ucy1` receive-only | **null** | 37–38, 52–53, 59, 63, 77, 79, 88 |
 | Community "solutions" — jackdevs66 XOR-of-seven = 7.87-bit noise / 1-byte pad; Issue #79 keys from that noise; Murray not Genesis; Issue #108 "two typos" a non-issue | falsified | 7, 75, 78, 82, 85 |
 | **Dates** — Satoshi's P2P birth date / EO 6102 / gold (no creator anchor → unlicensed); **Neo's passport expiry 11 Sep 2001** (the creator's only named date, #8048/#8516), 51 pre-registered forms | **null**, 816 decrypts | 87 / `campaign_53` |
 
@@ -89,7 +89,9 @@ cannot be MITM'd (must enumerate). What we now know:
 3. **BSGS-from-seed-center** (§3) — the one EC test I can run here; say the word.
 4. **Extract + diff the 2023-11-27 SalPhaseIon capture** (wayback ts `20231127181947`) to formally
    retire the last 1% of the transcription item. Low effort, low value (2024/2025 captures already match).
-5. **Verify `1NULY7…` history** on a block explorer (USER-grade oracle target; egress-blocked here).
+5. **Verify `1NULY7…` history** on a block explorer (USER-grade oracle target; egress-blocked here). Same
+   trip, topology only (tick 88): parents of the 2024 split's inputs `81d35929…:0`/`f28b0b68…:0` (a 2024
+   "Halving" memo?), the inputs of `3GSMG24T`'s funder `547246e9…` (→ `1EtbTv…`?), raw hex of `a82052a2…`.
 
 ## 5. The crux (why nothing derivable has worked)
 

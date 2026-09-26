@@ -3146,3 +3146,76 @@ date, now **closed** under the stop rule (no other passport fields, film dates, 
 format variants).
 
 **State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
+
+### Tick 88 (2026-09-26): receipt-topology audit — the halves transact, never co-sign; the "third entry" is the 2020 memo→split link, and it carries no key
+
+User-relayed hypothesis (from outside this session: Jeffries 2017 on triple-entry accounting;
+Ijiri's momentum accounting; Grigg 2005, "the receipt is the transaction"): HALF and BETTER HALF do
+not combine algebraically, they *transact*, and the chain is their shared signed receipt. "They also
+need funds to live" is literal: a key becomes an actor only once funded. Asked: audit the
+authenticated transaction *topology* (no values as passwords, no txids into AES) as a receipt
+system: authorisation + counterparty + signed receipt.
+
+**Provenance of the concept: none in the puzzle.** 0 matches in the repo or in the creator's own
+words for Jeffries / Ijiri / Grigg / triple-entry / "one pill" / Ricardian / bookkeeping, and no
+receipt/ledger/accounting vocabulary in his messages. His only "cicada" (#7152, 2021-04-06: "Some
+parts of cicada puzzles are still unsolved. Must be bad design.") means Cicada 3301, a homonym of
+Jeffries' project. Rabbit, pill and architect co-occur in any Matrix-themed crypto text, so the
+thematic overlap is weak evidence. The article itself was not fetched here.
+
+**Audit** (`harness/receipt_topology.py`, offline, no network, reads only saved raw hex). It decoded
+7 saved transactions (5 creator-signed) and re-verified every legacy P2PKH signature, including
+compressed keys. The six checkpoint addresses re-derive from their answers (tick 59 prefixes, all
+match) and the four 2021 points re-derive from Q (tick 52, all match).
+
+| # | when | authorised by | memo | counterparty (its key) | what the chain certifies |
+|---|---|---|---|---|---|
+| 1 | 2020-03-24 ×6 *(recorded)* | `3GSMG24T…` | checkpoint lines | compressed P2PKH(sha256(answer)) | answer X is correct, checkable by anyone holding X |
+| 2 | 2020-04-03 ×2 *(saved)* | `3GSMG24T…` | "Good job, Neo!" | `148XH2…`, `13HGhj…` (the Phase-0 seed as a raw key) | the seed-as-raw-key doors |
+| 3 | 2020-04-07 *(recorded)* | `3GSMG24T…` | none | `1NULY7…` (unidentified) | an answer key not yet identified |
+| 4 | 2020-05-11 *(saved)* `a798905f…` | `3GSMG24T…` | "Halving" | 700 sat → **HALF** (prize key) | the instruction, delivered to half |
+| 5 | lt 629998 *(saved)* `2aa9a4a9…` | **HALF**, 3 sigs verified; in2 spends #4's outpoint | none in-tx | 2.5 BTC → **BETTER HALF** + change → HALF | half pays better half, signing over #4 |
+| 6 | 2021-07-18 *(recorded)* `a82052a2…` | `3GSMG24T…` | "neighbors, half and double" | Q−G, Q/2, 2Q, Q+G | nothing secret: all four derive from the public Q |
+| 7 | lt 840003 *(saved)* `88cdb3cd…` | **HALF**, 3 sigs verified; in0 spends #5's change | none | 1.25 BTC → **BETTER HALF** + change → HALF | the second halving split |
+
+**Pre-stated questions:**
+- **Q1, do both halves co-sign one tx? NO.**
+- **Q2, both halves plus an OP_RETURN in one tx? NO.**
+- **Q3, does a half→better-half payment spend a memo-carrying tx? YES, exactly once.** The 2020 split
+  spends `a798905f…:1`. The prize key's verified SIGHASH_ALL signature covers that outpoint, so it
+  commits by hash to the `3GSMG24T…`-signed "Halving" memo.
+- **Q4, has `17ucy1…` ever signed? NO.** It is receive-only: no pubkey, no signature.
+
+**Verdict.** The topology is real, and it is Grigg-shaped at #4→#5: one key signs an instruction,
+a second key executes it with a signature that embeds the instruction, and the counterparty is
+credited. So yes, the halves *transact*. The "third entry" was already in the ledger (ticks 37,
+61, 70, 72): the halving splits, one-directional. It certifies three things: the holder of the
+prize key ran the halving rule at 629998 and 840003; that holder acknowledged `3GSMG24T…`'s memo;
+better half only receives. It certifies **nothing about better half's key**, which has never acted.
+
+In every checkpoint the counterparty's key is a public answer. If that convention extends to
+`17ucy1…`, its key is f(an answer not yet found), so better half is the receipt for the final
+answer. That is the existing two-keys/two-locks model (ticks 37, 47), and every candidate is
+already checked against `17ucy1…` (addr_check). Nothing new to search. The MITM null is what this
+topology predicts: the halves are related by a payment, not by arithmetic.
+
+**Corrections.**
+- Tick 63: the "Gavin" tx paid **seven** of the eight stamp addresses (no `1M5ypv…`, the 227-char
+  key), plus `1JZBwa…` and change. Its signature, and the Neo-wallet tx's two (`148XH2…`), verify.
+  Both are signed by public-knowledge keys and stay unauthenticated.
+- #60314 (2026-03-04, "I only need to look at the address. If any of you reaches the next phase,
+  the price is taken in no-time") is about watching the *prize* address for a solve, not about
+  checkpoints.
+- The creator's stated progress channel was off-chain: #896, solvers "send me proof of them passing
+  the stages" on Telegram.
+
+**Ijiri's Δ reading.** First differences of DBBI, VIC and R at every lag and both signs were already
+searched at tick 55 (marker test, chance level). Δ² has no anchor and is not run.
+
+**Topology-only lookups left for an unblocked machine** (three lookups; egress here is refused):
+- the parents of `81d35929…:0` and `f28b0b68…:0`, the 2024 split's other inputs: did 2024 repeat the
+  2020 memo→split pattern?
+- the inputs of `547246e9…`, `3GSMG24T…`'s fan-out funder: does it trace to the 2019 funder `1EtbTv…`?
+- the raw hex of `a82052a2…`: is its signer `3GSMG24T…`'s key `0205eaf7…`?
+
+**State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
