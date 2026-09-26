@@ -18,7 +18,7 @@ byte-verified across ≥3 independent sources (see §3), and byte-pinned by enve
 
 ---
 
-## 1. Do-not-repeat inventory (ticks 1–83)
+## 1. Do-not-repeat inventory (ticks 1–87)
 
 | class | status | where |
 |---|---|---|
@@ -32,7 +32,8 @@ byte-verified across ≥3 independent sources (see §3), and byte-pinned by enve
 | **Natural last-words phrases decrypted bare** (were gate-refused, never decrypted) | **null**, 224 decrypts | 84 / `campaign_52` |
 | Soup→string operators (DBBI⊖VIC=YOUWON is terminal; FAED carries no planted string; both a/b blocks consumed) | exhausted | 8–11, 15, 20, 34–35, 84 |
 | On-chain trail — locktimes 629998 (signed) & 840003, "neighbors half and double" = points, Good-job-Neo brainwallets, Half/Better = solver dust (NONE creator-funded) | **null** | 37–38, 52–53, 59, 63, 77, 79 |
-| Community "solutions" — jackdevs66 XOR-of-seven = 7.87-bit noise / 1-byte pad; Issue #79 keys from that noise; Murray not Genesis | falsified | 7, 75, 78, 82 |
+| Community "solutions" — jackdevs66 XOR-of-seven = 7.87-bit noise / 1-byte pad; Issue #79 keys from that noise; Murray not Genesis; Issue #108 "two typos" a non-issue | falsified | 7, 75, 78, 82, 85 |
+| **Dates** — Satoshi's P2P birth date / EO 6102 / gold (no creator anchor → unlicensed); **Neo's passport expiry 11 Sep 2001** (the creator's only named date, #8048/#8516), 51 pre-registered forms | **null**, 816 decrypts | 87 / `campaign_53` |
 
 ## 2. What the audit found and CLOSED (three escape-hatches)
 

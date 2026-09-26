@@ -3091,3 +3091,58 @@ local and gitignored.
 
 **State unchanged:** two locks + Cosmic byte-pinned and closed; corpus exhausted; prize unspent; the
 next computational event requires new primary creator material through the gate.
+
+### Tick 87 (2026-09-26): Satoshi's P2P birth date / EO 6102 / gold has no creator anchor; the creator's one named date (Neo's passport expiry) pre-registered and run, null
+
+User-relayed framing: 5 Apr 1975 is Satoshi's *self-reported* P2P Foundation birth date (unverified,
+widely read as symbolic: EO 6102 of 5 Apr 1933; private gold ownership legal again in 1975). The user
+searched the authenticated Jrk corpus for April 5 / 5 April / 1975 / 6102 / gold / Satoshi /
+Nakamoto / birthday / born and found nothing. Their classification: the Satoshi date is a real public
+Bitcoin referent; the biblical-calendar mapping (24 Nisan ↔ 24 coloured cells, 9th Omer ↔ 9 yellow,
+Shmini ↔ every 8th bit) is a secondary coincidence; neither is a licensed lock input. Bounded
+question: does any authenticated puzzle object point to that date, or to 6102/gold?
+
+**Repo-wide census: no.**
+1. **Creator's own words** (510 parsed rows of the 445-message log, reply context stripped): 0 hits
+   for the user's list, and no creator message is dated on any 5 April. This reproduces the user's check.
+2. **Puzzle pages and solved stages** (phases 0–3.2, SalPhaseIon, Cosmic, Decentraland, wayback
+   pages): no `1975`, `6102`, `1933`, `gold`, `Satoshi`, `Nakamoto` or `birthday`. The nearest
+   neighbours are both already consumed in the hash-confirmed phase-3 password (`1a57c572…`):
+   phase 2.2 part 5 is an executive-order riddle about money ("never execute an order that revokes
+   the highest power or you might suddenly get killed" → JFK's EO **11110**, Treasury/silver
+   certificates, chosen because it reads as binary); part 6 ("random magic pieces of metal", a
+   "green" idea that "came back") resolves to Satoshi's genesis coinbase (v0.1 `main.cpp:1616`).
+   Monetary executive orders, metal lore and Satoshi's own artefacts are therefore creator-native
+   vocabulary, but the pointers land on 11110 and the genesis block, not on 6102, gold or 1975.
+   Tick 26 already swept Bitcoin v0.1 constants and satoshi/nakamoto vocabulary (13,020 + 792, 0 hits).
+3. **On-chain:** the creator's calendar is the halving (locktimes 629998/840003, OP_RETURN "Halving",
+   "Happy halving!" in 2020 and 2024). These are block heights, not birthdays.
+4. **False friends:** `wayback/pages/choiceisanillusion_2026-04-05.html` is an archive.org crawl
+   date; the "gold logo" of the 2026-08-19 finale is the brand colour; `6102` occurs only inside
+   random sha256 hex in attempt logs.
+
+**The creator's own rule on dates.** #8048 (2021-12-31), in reply to "…i also want to ask questions
+like, how old are you": *"The only date I give away is the expiry date of neo's passport."* He
+repeats it in #8516 (2023-05-02): *"Still remarkable that scene. Especially the expiration date of
+his passport 😁."* Asked a birth-date-type question, the creator names exactly one date and rules
+out the rest. That cuts against any birthday reading, Satoshi's included. The referent is *The
+Matrix* (1999): Thomas A. Anderson's passport expires 11 Sep 2001, printed "11 Sep/Sep 01".
+
+**campaign_53** (pre-registered in `intake/2026-09-26-passport/PREREG.md`, committed before the
+run). 51 fixed forms of 11 Sep 2001: as printed, DMY/MDY/YMD in text and numeric, MRZ
+`010911`/`0109110`, unix `1000166400`, `9/11`, `911`, … Each ran through the frozen gate path
+(16 decrypts), the P32T freeze, the padding-independent scan, and addr_check (510 addresses).
+**Result: 816 decrypts, 3 PKCS#7-valid (3.2 expected by chance), 0 hits, 0 freeze passes, 0
+address matches.** 43 of the 51 were new to the gate's spent check. Of the other 8, only
+`911`/`nineeleven` had been decrypted before (campaign_22_911, tick 24's unrelated π-"9:11" claim). The PREREG's "no form of this date occurs" line overstated this for those two short forms.
+The `11 Sep 2001` forms occurred only as the log's annotation text. #8048 is LORE (a deflection),
+so the prior was low. It ran because it is the only date the creator names, it was untested, and
+the test was bounded.
+
+**Classification.** Satoshi's birth date: a public Bitcoin referent with no creator anchor, so it
+stays unlicensed. 6102/gold: adjacent to phase 2.2's executive-order riddle, but that riddle is
+spent on 11110. Biblical mapping: coincidence, unlicensed. Neo's passport date: the one creator-named
+date, now **closed** under the stop rule (no other passport fields, film dates, translations or
+format variants).
+
+**State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
