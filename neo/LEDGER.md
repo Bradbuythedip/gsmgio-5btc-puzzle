@@ -1553,3 +1553,13 @@ pairs are recovered, and a random point at full scale gives 0 false matches.
 scriptSig of the 2020-05-11 spend, but this environment's network policy denies every chain
 API tried (blockstream, mempool.space, blockcypher, blockchain.info). The harness refuses any
 key that does not hash to one of the two addresses.
+
+**Tick 37 result (2026-09-26).** The user supplied the two 2020 halving transactions, saved in
+`materials/chain/`. The halving spend (locktime 629998) reveals the prize public key: it is
+uncompressed, `04f4d1bb…3559`, and hashes to `1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe`. The spend
+sent 2.5 BTC to `17ucy1…` and returned 2.49815966 BTC in change. A second transaction sent
+700 sat plus OP_RETURN `Halving` to the prize from a different vanity address,
+`3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK` (P2SH-P2WPKH, key `0205eaf7…`). **Meet-in-the-middle run
+against the prize key: 163,354-scalar pool, 8.0×10¹⁰ add/sub/mul pairs, 17 s, no match.**
+The two-part-sum reading is closed. This line ends here: no further elliptic-curve searching
+against the prize key.
