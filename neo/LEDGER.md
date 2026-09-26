@@ -1705,3 +1705,16 @@ both.
 first 24 primes); DBBI 91 / FAED 570; P32T 80 B / SalPhaseIon 80 B; HALF / BETTER HALF (VIC
 sentence). None of these pairs has a named operation that turns both sides into words. The
 table in tick 42 supplies no string, so the gate stays empty.
+
+### Loop tick 43 (2026-09-26): "XOR triangle" citation rejected as unverified
+
+An LLM output (a "personal_context tool" screenshot) cited a "March 2026 issue" saying "The only
+way out will be an XOR triangle". It attached `f7 | 3d | 92`, a 4-byte trailer `fc0c1b02` and
+"two 32-byte halves plus a 4-byte trailer". **Not found anywhere:** not in the creator log
+(March 2026 is #60285–60327, all 2026-03-04, with no such line), the hint images, the site
+pages, the 545 Wayback captures, the chain data or the ledger. The only "triangle" strings in
+gsmg.io code are a chart library's `triangle-down` marker and an emoji keyword. **Internally
+inconsistent:** 32+32+4 = 68 bytes is not a valid AES-CBC plaintext length for P32T (80 B
+ciphertext = 64 B content + a 16-byte pad block). Treated as a hallucinated citation. The
+stop rule is unchanged, nothing was run, and XOR constructions on f7/3d/92 or the sums stay
+excluded.
