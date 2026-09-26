@@ -2292,3 +2292,27 @@ Consequences:
   unauthenticated. Identifying real people behind name-vanities is out of scope.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 60 (2026-09-26): #60312 "Bingo" recovered — it confirms a South Park quote, not a puzzle step
+
+Context recovered from a user screenshot plus pasted chat (`unverified/recovered_reply_context_2026-09-26.txt`;
+USER-grade until checked against the JSON export). The creator lines match the transcript IDs exactly
+(#60302, #60306, #60307, #60309, #60312, #60314), so the window is aligned.
+
+Sequence: Jrk #60302 "pvp zone … nice and toxic units" → #60306 "Maybe, Cartman's quote about
+chatroulette fits too" → D1rty Byrd quotes it ("if you wanna find new friends you gotta weave through
+all the dicks first") → Jrk #60312 **"Bingo"**. "Bingo" confirms that the quote was identified. It is
+banter about the group's toxicity, not a puzzle statement. **#60312 is closed as a lead.**
+
+Two residues, neither creator-confirmed:
+- #60309 "Looks at gnomad. 👀" answers X's "we can't proceed … hint us about the direction". gnomad then
+  points to Denis Golovkin's question: was "it's in front of your eyes but you're not seeing it" a
+  recommendation to read *Looking Forward* (Jacque Fresco & Ken Keyes, 1969)? Jrk never answers it. The
+  three nearest Jrk signals are "No hints, only free will", "Jacque was quite an inspiring lad" and the
+  👀. That is a member's reading plus a creator glance, not a creator statement. **Not a gate
+  candidate.** It stays user-grade unless Jrk confirms.
+- #60307 🤐 replies to X's "@SoWut Are we really…" (truncated; the transcript has "…looking for just the
+  btc…?"). Pair it with #66593 "The '5' btc was never the actual prize". The full question text is
+  wanted from the export.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
