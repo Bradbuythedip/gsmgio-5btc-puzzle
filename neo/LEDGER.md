@@ -3009,3 +3009,34 @@ two-raw-keys P5) is not built. None applies to the solved blobs (all EVP-sha256/
 audit (tick 84 pending) surfaced the Telegram JSON export and a lead-solver ask as the real levers.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 84 (2026-09-26): audit part 2 — soup operators exhausted; natural last-words decrypted bare (null); provenance levers; NEXT_PASS.md
+
+Soup-operator and provenance agents completed the tick-83 audit.
+- **Soup→string operators exhausted.** No missed deterministic operator emits a new confirming word.
+  `DBBI⊖VIC→YOUWON` is terminal (no second planted word in the prefix/tail/reversals); `BIN1`→
+  `matrixsumlist` and `BIN2`→`enter` are fully consumed (104=13×8, 40=5×8; only byte-reversed twins,
+  no residue); FAED carries no planted string under layer⊖DBBI, pairwise layer differences, self-halves,
+  or ⊖ any authenticated 570-char text. The 4-token master-hint assembly is a **missing-operand** state,
+  not a missed operation (`yellowblueprimes`/`yinyang` have no computed value).
+- **Gate-hygiene gap found and closed.** The natural last-words phrases the soup grammar designates as
+  the password ("the last words before the architect's choice" → `…goodluckneverthelessireallyhope`
+  `youretheoneciaobellao`, from `phase3.2.ipynb`) were only ever **refused by gate.py as corpus-present**,
+  never decrypted (verified: 0 in `attempts/*.jsonl`). `campaign_52_lastwords_bare.py` decrypts them and
+  the soup instructions (`yourlastcommand`, `firsthintisyourlastcommand`, `shabefanstoo`) bare: **224
+  decrypts, 1 chance pad, 0 hits, 0 freeze keys.** campaign_32 had tested only arbitrary 48/96-char cuts.
+- **Provenance levers (recorded).** No creator line names an operation on any 80-byte blob (confirms
+  tick 31). The real external levers: (1) the **Telegram JSON export** (resolves the #60312 Bingo
+  threading, the truncated #66568/#66592/#32579 tails, #8569's questions); (2) a human ask to the
+  **lead solvers** the creator said got past "the hardest part" (#8795/#8796, #4694, VrsN), for an
+  uttered post-3.2 intermediate — gate-admissible, unlike the tick-62 checkpoint ask. New reading:
+  #66573 "close friends… solving *it*" may attach to the **secret/payload** (#66592/#66593 "the 5 btc
+  was never the actual prize"), not the key — in which case the key stays corpus-derivable and only its
+  meaning is social; the export distinguishes these.
+- **`neo/NEXT_PASS.md`** written: the do-not-repeat inventory, the three closed escape-hatches, the
+  meet-in-the-middle verdict (pool closed; 17ucy1 has no MITM surface; BSGS-from-seed-center is the one
+  un-run EC test), and the ranked lever list.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent. The audit
+closed the KDF, accept-rule, transcription, MITM-pool and soup-operator escape-hatches; the frontier is
+now firmly external (export / lead-solver ask) plus the single bounded BSGS-from-seed-center check.
