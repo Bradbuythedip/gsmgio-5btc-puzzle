@@ -2432,3 +2432,17 @@ User-relayed analysis ("operator wall, not private-fact wall"). Checked:
   is a sourced rule for that operation.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 66 (2026-09-26): item E residue null; #8569 confirmed not public
+
+User-relayed "Ken Thompson cut" (trust only re-derived bytes; community labels count as injected).
+Item E: of the proposed passwords, VIC lowercase, `halfandbetterhalf` and the last-words block trace
+to campaigns 01/06/10/16/32. The four with no clean trace were pre-registered and run
+(`intake/2026-09-26-itemE`, `harness/campaign_43_itemE.py`): empty string, `b45a5e3d827593ca`, the
+uppercase VIC sentence, `HALFANDBETTERHALF`. **64 decrypts (all four locks incl. Cosmic, MD5 +
+SHA256), 0 padding, 0 freeze keys, 0 address matches.** Item E closed.
+#8569: the user found no public copy (GitHub, Wayback, walkthroughs). The only recovery is the
+in-group search and screenshot. Correction to item B: Cosmic is a contaminated false positive
+(ledger), not an established "claim object".
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
