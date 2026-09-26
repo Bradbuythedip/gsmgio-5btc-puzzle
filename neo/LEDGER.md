@@ -3040,3 +3040,30 @@ Soup-operator and provenance agents completed the tick-83 audit.
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent. The audit
 closed the KDF, accept-rule, transcription, MITM-pool and soup-operator escape-hatches; the frontier is
 now firmly external (export / lead-solver ask) plus the single bounded BSGS-from-seed-center check.
+
+### Tick 85 (2026-09-26): Issue #108 "two typos" verified a non-issue; the three envelopes byte-pinned
+
+User-relayed provenance closure on the short-lock "first-diff" question. Verified in-repo:
+- **The three committed envelopes byte-pin to the relayed baselines exactly:** SalPhaseIon short
+  (miniA‖miniB, 96 B) sha256 `9e2831e1b34b5f34796df47ccaf6530d48d371c61a6bff84d60db1064fa7a258`,
+  salt `3ab585348552415d`, last block `ef756397ea74234a97a95f01ae37f8c9`; P32T/inner96 (96 B)
+  `291dfd6f3e759ec2e272b35a00c24907da70c3e7a9291b4c13605c7b0b4f3de9`, salt `b45a5e3d827593ca`, last
+  block `5334de08884878aaed7c99d0b4340bf8`; Cosmic (1344 B) `b18950551a4dd0cb…`, salt
+  `2d3f6fe06dc950e6`, last block `5bbf983669ed922eb12dff1dcc3f6fc6`.
+- **Issue #108's alleged short-lock typos are a non-issue.** #108 claims base64 positions 18 and 51
+  should read J and s (vs a "corrupted" R and k). The committed base64 already has **J at position 18
+  and s at position 51 (0-based)** — verified; R/k occur only elsewhere (R at 47/85/98, k at
+  8/39/78/99). So #108's "fixed" blob is byte-identical to the standing committed object (both hash
+  `9e2831e1…`); there is no competing corrected artifact. #108's downstream CADEIA construction
+  depends on the already-rejected 1327-byte Cosmic decrypt (ticks 7/82), so nothing there reopens.
+- **Relayed but not independently checkable here** (network-blocked): that Naddiseo/gsmgio-5btc-puzzle
+  commit `dcb66952` (2023-08-31) already carries the J/s base64, predating #108's 2026 "typo" claim by
+  ~3 years. Recorded USER-grade; it corroborates the wayback captures (tick 83, verified) as a third
+  independent source. Absent a dated capture of any R/k text, the "corruption" assertion has no
+  evidentiary weight against the byte-pinned object.
+
+**Boxed state, tightened:** three ciphertext objects are byte-pinned (hashes above); EC/MITM over the
+public corpus is exhausted (curated pool, two- and three-way, null — tick 83); AES/KDF families are
+exhausted (incl. PBKDF2 — tick 81); the #55/#79/#108 Cosmic chain is non-authentic; no source-named
+rewrite remains. **The next computational event requires new primary creator material through
+`gate.py`.** Prize unspent.

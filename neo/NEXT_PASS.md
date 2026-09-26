@@ -8,7 +8,13 @@ dead, what the audit *closed*, and the few levers that remain. The accept predic
 The two live targets are the **SalPhaseIon short lock** (miniA‖miniB, salt `3ab585348552415d`, 80-byte ct)
 and the **Phase-3.2 trailing lock P32T** (inner96, salt `b45a5e3d827593ca`, 80-byte ct). **Cosmic**
 (salt `2d3f6fe06dc950e6`, 1328-byte ct) is a third, separate object. All three ciphertexts are now
-byte-verified across ≥3 independent sources (see §3).
+byte-verified across ≥3 independent sources (see §3), and byte-pinned by envelope sha256:
+
+| object | envelope | sha256 (96/1344 B) | last ct block |
+|---|---|---|---|
+| SalPhaseIon short (miniA‖miniB) | 96 B | `9e2831e1b34b5f34796df47ccaf6530d48d371c61a6bff84d60db1064fa7a258` | `ef756397ea74234a97a95f01ae37f8c9` |
+| P32T / inner96 | 96 B | `291dfd6f3e759ec2e272b35a00c24907da70c3e7a9291b4c13605c7b0b4f3de9` | `5334de08884878aaed7c99d0b4340bf8` |
+| Cosmic | 1344 B | `b18950551a4dd0cb8a9378f0906ba18c03a15f0ee83eb98c6bc90165c5f79805` | `5bbf983669ed922eb12dff1dcc3f6fc6` |
 
 ---
 
