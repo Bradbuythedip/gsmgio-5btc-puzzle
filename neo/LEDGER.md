@@ -2562,3 +2562,32 @@ alphabet; with a–i it is ~3.2×10⁻⁶.
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent. K₁₄ closed.
 The one untested nearby item is the VIC mask applied to DBBI as a zero mask. It is outside the K₁₄
 family but inside tick 68's "no new masks" rule, so it waits for an explicit user decision.
+
+### Tick 70 (2026-09-26): the "chain trapdoor" review — mechanics agreed; locktime 629998 is signature-bound to the prize key
+
+User-relayed review, from another assistant, of whether chain mechanics could release `1GSMG1…`:
+- OP_RETURN is a memo. It is provably unspendable, pruned from the UTXO set, and never executed.
+- nLockTime and CLTV only delay a spend.
+- For this P2PKH output, only a valid CHECKSIG under the prize key moves coins.
+**Agreed.** It matches the closed OP_RETURN-VM note (`unverified/op_return_script_vm.md`) and the
+terminal state: the only path to the key is the puzzle's own content.
+
+Its one caution was to check the GSMG specifics against a node. Checked as far as this
+environment allows:
+- **Locktime 629998 is verified offline and bound to the key.** `harness/verify_halving_sigs.py`
+  rebuilds legacy SIGHASH_ALL for the three P2PKH inputs of `2aa9a4a9…1b13`. It verifies each
+  ECDSA signature against the prize pubkey `04f4d1bb…` twice: with the repo's own curve code, and
+  independently with the `ecdsa` package. All three are valid, and all three fail when the
+  locktime is changed by 1. Sequence is 0xfffffffd, so the locktime is enforced. The inputs are
+  two earlier prize outputs (`73e48ff5…:1`, `a2d2481d…:1`) and the 700-sat `Halving` dust
+  (`a798905f…:1`). So the holder of the prize key signed a transaction locked to 629998 that pays
+  2.5 BTC to `17ucy1…` and spends the dust sent from `3GSMG24T…`. That it was mined, and at which
+  height, is not verified here.
+- **Not checkable offline:** the 840003 spend has no raw hex in the repo. The `Halving` OP_RETURN
+  transaction and the `Good job, Neo!` transactions spend P2SH-P2WPKH inputs. BIP143 signatures
+  commit to input amounts, so their contents decode (tick 69) but their signatures cannot be
+  checked without chain data.
+- **Network:** this environment's policy still refuses mempool.space and blockstream.info
+  (connect_rejected), as at tick 37.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
