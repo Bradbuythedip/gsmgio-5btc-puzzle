@@ -1,0 +1,111 @@
+{
+ "transactions": [
+  {
+   "txid": "2aa9a4a90be819d5122d70c993280785a0508f163521e7b38cebb4db0b071b13",
+   "locktime": 629998,
+   "version": 2,
+   "time": null,
+   "blockhash": null,
+   "inputs": [
+    {
+     "outpoint": "73e48ff571a7e9a4387574a50cf2fcb7b21b6ea5702c777a035664df57cbce02:1",
+     "sequence": 4294967293,
+     "address": "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+     "sat": null
+    },
+    {
+     "outpoint": "a2d2481d57e976dbaa84812a504097150ded09216957aeb7bf0177eaec6a7a8b:1",
+     "sequence": 4294967293,
+     "address": "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+     "sat": null
+    },
+    {
+     "outpoint": "a798905f53fdcadcbd2e2a1e61d23ba69a07e26130a78c76da4bf4d7a170f383:1",
+     "sequence": 4294967293,
+     "address": "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+     "sat": null
+    }
+   ],
+   "outputs": [
+    {
+     "n": 0,
+     "sat": 249815966,
+     "kind": "p2pkh",
+     "address": "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+     "op_return": null,
+     "label": "prize (half)"
+    },
+    {
+     "n": 1,
+     "sat": 250000000,
+     "kind": "p2pkh",
+     "address": "17ucy1K9ZUAaoY6JVtM932W9jUp5LXfyHa",
+     "op_return": null,
+     "label": "better half (#3902)"
+    }
+   ],
+   "hints": [
+    "vanity output 1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    "vanity input 1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    "vanity input 1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    "vanity input 1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    "locktime 629998"
+   ]
+  },
+  {
+   "txid": "a798905f53fdcadcbd2e2a1e61d23ba69a07e26130a78c76da4bf4d7a170f383",
+   "locktime": 0,
+   "version": 1,
+   "time": null,
+   "blockhash": null,
+   "inputs": [
+    {
+     "outpoint": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:2",
+     "sequence": 4294967294,
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "sat": null
+    },
+    {
+     "outpoint": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:1",
+     "sequence": 4294967294,
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "sat": null
+    },
+    {
+     "outpoint": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:0",
+     "sequence": 4294967294,
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "sat": null
+    }
+   ],
+   "outputs": [
+    {
+     "n": 0,
+     "sat": 0,
+     "kind": "op_return",
+     "address": null,
+     "op_return": "Halving",
+     "label": null
+    },
+    {
+     "n": 1,
+     "sat": 700,
+     "kind": "p2pkh",
+     "address": "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+     "op_return": null,
+     "label": "prize (half)"
+    }
+   ],
+   "hints": [
+    "OP_RETURN \"Halving\"",
+    "vanity output 1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    "dust 700 sat -> 1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+    "vanity input 3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+    "vanity input 3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+    "vanity input 3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK"
+   ]
+  }
+ ],
+ "output_status": {},
+ "rpc_calls": 0
+}
