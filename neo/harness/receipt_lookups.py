@@ -65,6 +65,20 @@ RULE_III = (10, 0.5)                                  # (max transactions, min G
 class Unavailable(Exception):
     pass
 
+def raw_matches(txid, hx):
+    """True if hx decodes completely (no truncation, no trailing bytes) to a transaction with this txid."""
+    try:
+        return parse_raw(hx)["txid"] == txid
+    except (ValueError, IndexError, KeyError):
+        return False
+
+def atomic_write(path, text):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    tmp = f"{path}.tmp{os.getpid()}"
+    with open(tmp, "w") as f:
+        f.write(text)
+    os.replace(tmp, path)
+
 class Esplora:
     """GET-only Esplora client with an on-disk cache. `fixture` (txid -> hex) replaces the network;
     `addr_fixture` (address -> [txid]) replaces address histories."""
@@ -99,8 +113,7 @@ class Esplora:
             return json.load(open(cached))
         data = self._json(path)
         if cached and self.save:
-            os.makedirs(JSONDIR, exist_ok=True)
-            json.dump(data, open(cached, "w"))
+            atomic_write(cached, json.dumps(data))
         return data
 
     def _json(self, path):
@@ -111,11 +124,13 @@ class Esplora:
             raise Unavailable(f"{self.base}{path}: response is not JSON ({e})")
 
     def cached_hex(self, txid):
-        """Hex only if already on hand (fixture or disk cache); never fetches."""
+        """Hex only if already on hand (fixture or disk cache) and it decodes to this txid; never fetches."""
         if self.fixture is not None:
-            return self.fixture.get(txid)
-        p = os.path.join(FETCHED, txid + ".hex")
-        return open(p).read().strip() if os.path.exists(p) else None
+            hx = self.fixture.get(txid)
+        else:
+            p = os.path.join(FETCHED, txid + ".hex")
+            hx = open(p).read().strip() if os.path.exists(p) else None
+        return hx if hx is not None and raw_matches(txid, hx) else None
 
     def tx_hex(self, txid):
         cached = os.path.join(FETCHED, txid + ".hex")
@@ -123,15 +138,18 @@ class Esplora:
             if txid not in self.fixture:
                 raise Unavailable(f"offline fixture has no tx {txid}")
             hx = self.fixture[txid]
-        elif os.path.exists(cached):
+            if not raw_matches(txid, hx):
+                raise Unavailable(f"{txid}: returned hex does not hash to the txid")
+            return hx
+        if os.path.exists(cached):
             hx = open(cached).read().strip()
-        else:
-            hx = self._get(f"/tx/{txid}/hex").decode().strip()
-        if parse_raw(hx)["txid"] != txid:
+            if raw_matches(txid, hx):
+                return hx                                   # a corrupt disk copy is ignored, not trusted
+        hx = self._get(f"/tx/{txid}/hex").decode("ascii", "replace").strip()
+        if not raw_matches(txid, hx):
             raise Unavailable(f"{txid}: returned hex does not hash to the txid")
-        if self.save and self.fixture is None and not os.path.exists(cached):
-            os.makedirs(FETCHED, exist_ok=True)
-            open(cached, "w").write(hx + "\n")
+        if self.save:
+            atomic_write(cached, hx + "\n")
         return hx
 
     def tx_status(self, txid):
@@ -174,9 +192,9 @@ class Esplora:
             complete = len(nxt) < 25
             if nxt:
                 last = nxt[-1]["txid"]
-        os.makedirs(JSONDIR, exist_ok=True)
-        json.dump({"address": addr, "complete": complete, "pages": pages, "txs": items},
-                  open(os.path.join(JSONDIR, f"history_{addr}.json"), "w"))
+        if self.save:
+            atomic_write(os.path.join(JSONDIR, f"history_{addr}.json"),
+                         json.dumps({"address": addr, "complete": complete, "pages": pages, "txs": items}))
         return items, complete
 
 # ---------- labels, keys, helpers ----------
@@ -211,27 +229,30 @@ def describe(hx, prevs=None):
     memos = [d.decode("latin1") for _, _, kind, _, d in outs if kind == "op_return"]
     return tx, signers, outs, memos, scripts
 
-def prev_spks(api, tx, meta=None):
-    """Spent scriptPubKey per input, from a parent raw already on hand (txid-verified) or else the
-    Esplora tx object's prevout (explorer-reported); None where neither is available. Never fetches."""
+def prev_spks(api, tx, meta=None, local=None):
+    """Spent scriptPubKey per input, from sources that do not depend on what happens to be on disk, so a
+    fresh sync and its offline replay attribute signers identically: raws read earlier in the same walk
+    (`local`, txid-verified), the Esplora tx object's prevout (`meta`, explorer-reported), or the offline
+    fixture. None where none applies. Never fetches."""
     vins = (meta or {}).get("vin") or []
     out = []
     for k, v in enumerate(tx["vin"]):
-        spk = None
-        phx = api.cached_hex(v["txid"]) if v["txid"] != COINBASE else None
-        if phx:
+        spk, phx = None, None
+        if v["txid"] != COINBASE:
+            phx = (local or {}).get(v["txid"]) or (api.fixture.get(v["txid"]) if api.fixture is not None else None)
+        if phx and raw_matches(v["txid"], phx) and v["vout"] < len(parse_raw(phx)["vout"]):
             spk = bytes.fromhex(parse_raw(phx)["vout"][v["vout"]]["spk"])
         elif k < len(vins) and (vins[k].get("prevout") or {}).get("scriptpubkey"):
             spk = bytes.fromhex(vins[k]["prevout"]["scriptpubkey"])
         out.append(spk)
     return out
 
-def read_tx(api, txid, meta=None):
-    """describe() of a fetched tx. A raw that cannot be decoded is reported like a missing one
-    (Unavailable), so one odd transaction never aborts the run."""
+def read_tx(api, txid, meta=None, local=None, prevs=True):
+    """describe() of a fetched tx. A raw that cannot be read or decoded is reported as Unavailable, so one
+    odd transaction never aborts the run. prevs=False describes the input scripts alone."""
     hx = api.tx_hex(txid)
     try:
-        return describe(hx, prev_spks(api, parse_raw(hx), meta))
+        return describe(hx, prev_spks(api, parse_raw(hx), meta, local) if prevs else None)
     except (ValueError, KeyError, IndexError, TypeError) as e:
         raise Unavailable(f"{txid}: raw does not decode ({type(e).__name__}: {e})")
 
@@ -305,22 +326,26 @@ def ancestry(api, starts, depth, max_fetch):
     """Backward BFS over every input, reading depths 0 .. depth-1. Returns (records, fetched, missing,
     cut); a record is (depth, txid, scripts, memos, height, time, tx); cut is None when the walk ran
     out at its depth bound, else (transactions left unread in the frontier, the shallowest depth)."""
-    frontier, seen, recs, fetched, missing = [(s, 0) for s in starts], set(), [], 0, []
+    frontier, seen, recs, fetched, missing, raws = [(s, 0) for s in starts], set(), [], 0, [], {}
     while frontier and fetched < max_fetch:
         txid, d = frontier.pop(0)
         if txid in seen or txid == COINBASE:
             continue
         seen.add(txid)
         try:
-            tx, signers, _, memos, scripts = read_tx(api, txid); fetched += 1
+            tx, signers, _, memos, scripts = read_tx(api, txid, prevs=False); fetched += 1
         except Unavailable as e:
             missing.append((d, txid, str(e))); continue
+        raws[txid] = tx["raw"]
         h, t = api.tx_status(txid)
         recs.append((d, txid, scripts, memos, h, t, tx))
         if any(sc["address"] in CREATOR_TRAIL for sc in scripts):
             continue                                        # reached the trail on this branch
         if d + 1 < depth:
             frontier += [(v["txid"], d + 1) for v in tx["vin"]]
+    # attribute signers once more with the spent scripts of parents this walk itself read (p2pk, p2tr, …)
+    recs = [(d, txid, describe(tx["raw"], prev_spks(api, tx, local=raws))[4], memos, h, t, tx)
+            for d, txid, scripts, memos, h, t, tx in recs]
     left = {}
     for txid, d in frontier:
         if txid not in seen and txid != COINBASE:
@@ -414,6 +439,7 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
         why = f"the root `{root_prefix}…` is not among the read history transactions"
         return {"verdict": "FAIL" if full else "UNDETERMINED", "diffs": [why], "fuel": 0, "emissions": []}
     root, seen, fuel, gaps, unspent, splits = roots[0], set(), {}, [], [], []   # fuel: outpoint -> non-split spender
+    gap_txids = []
     open_q = [(root, n) for n, s, k, a, _ in txs[root][2] if a == addr]
     while open_q:
         op = open_q.pop(0)
@@ -424,7 +450,8 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
         if sp is None:
             unspent.append(op); continue
         if sp in unread or sp not in txs:
-            gaps.append(f"`{op[0][:12]}…:{op[1]}` is spent by `{sp[:12]}…`, whose raw was not read"); continue
+            gaps.append(f"`{op[0][:12]}…:{op[1]}` is spent by `{sp[:12]}…`, whose raw was not read")
+            gap_txids.append(sp); continue
         if cls[sp] == "split":
             if sp not in splits:
                 splits.append(sp)
@@ -463,7 +490,7 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
         diffs.append(f"{len(emissions)} leaf spends, expected 10")
     verdict = "PASS" if not diffs and not gaps and full else ("UNDETERMINED" if gaps or not full else "FAIL")
     return {"verdict": verdict, "diffs": gaps + diffs, "fuel": len(fuel), "emissions": emissions, "root": root,
-            "splits": splits}
+            "splits": splits, "gap_txids": list(dict.fromkeys(gap_txids))}
 
 def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
     out.append(f"## 4. The complete {label(addr)} fan-out (from its full address history)\n")
@@ -510,6 +537,8 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
             cls[t] = "unread"
             if ins and not any(a == addr for *_, a in ins):
                 inbound.append(t)
+            elif ins and not all(a == addr for *_, a in ins):
+                cosigners[t] = {a for *_, a in ins if a != addr}    # explorer-reported co-signers
             continue
         tx, signers, outs, memos, scripts = txs[t]
         from_me = [sc["address"] == addr for sc in scripts]
@@ -524,6 +553,9 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
             cls[t] = "mixed"
             cosigners[t] = {sc["address"] for sc in scripts if sc["address"] != addr}
     order = sorted(cls, key=lambda t: (hstat(t)[0] or 10**9, t))
+    blind_in = {t for t in unread if not vin_of(t)}          # unread and no explorer inputs: spends unknown
+    def out_label(a, spk_hex):
+        return label(a) if a is not None else "nonstandard:" + spk_hex
     # tree
     printed = set()
     def node(outpoint, indent):
@@ -531,7 +563,9 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
         sp = spent_by.get(outpoint)
         head = f"{'  ' * indent}- `{outpoint[0][:12]}…:{outpoint[1]}` {sat} sat"
         if sp is None:
-            out.append(head + (" → **UNSPENT** (remaining fuel)" if full else " → not spent within the fetched history"))
+            out.append(head + (" → **UNSPENT** (remaining fuel)" if full else
+                               f" → spend status unknown ({len(blind_in)} unread transaction(s) with unknown inputs)"
+                               if blind_in else " → not spent within the fetched history"))
             return
         if sp in printed:
             out.append(head + f" → spent by `{sp[:12]}…` (shown above)")
@@ -541,10 +575,15 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
         if sp in unread:
             out.append(head + f" → spent by `{sp}` [raw not read] (height {h or '?'}, {when(t)}); outputs explorer-reported:")
             for n, o in enumerate((meta.get(sp) or {}).get("vout") or []):
+                spk_hex = o.get("scriptpubkey") or ""
                 if o.get("scriptpubkey_address") == addr:
                     node((sp, n), indent + 1)
+                elif spk_hex.startswith("6a"):
+                    memo = script_info(bytes.fromhex(spk_hex))[2]
+                    out.append(f"{'  ' * (indent + 1)}- out {n}: OP_RETURN {memo.decode('latin1')!r}")
                 else:
-                    out.append(f"{'  ' * (indent + 1)}- out {n}: {o.get('value')} sat → {label(o.get('scriptpubkey_address'))}")
+                    out.append(f"{'  ' * (indent + 1)}- out {n}: {o.get('value')} sat → "
+                               f"{out_label(o.get('scriptpubkey_address'), spk_hex)}")
             return
         tx, signers, outs, memos, scripts = txs[sp]
         out.append(head + f" → spent by `{sp}` [{cls[sp]}] (height {h or '?'}, {when(t)}; {sigtag(api, tx)})"
@@ -555,7 +594,7 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
             if a == addr:
                 node((sp, n), indent + 1)
             else:
-                out.append(f"{'  ' * (indent + 1)}- out {n}: {s2} sat → {label(a)}")
+                out.append(f"{'  ' * (indent + 1)}- out {n}: {s2} sat → {out_label(a, tx['vout'][n]['spk'])}")
     def paid_to_me(t):
         return sorted(n for (tt, n) in mine if tt == t)
     out.append("**Inbound funding** (transactions not signed by the address that pay it):\n")
@@ -575,7 +614,7 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
         for n in paid_to_me(txid):
             node((txid, n), 0)
     in_history = set(cls)
-    orphans = [t for t in order if t not in printed and cls[t] != "inbound" and t not in inbound
+    orphans = [t for t in order if t not in printed and cls[t] != "inbound" and t not in inbound and t not in blind_in
                and not any(ptx in in_history for ptx, *_ in vin_of(t))]
     if orphans:
         out.append("\nSpends whose funding lies outside the fetched history (their own outputs followed):")
@@ -589,10 +628,14 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
             else:
                 tx, signers, outs, memos, scripts = txs[t]
                 out.append(f"- `{t}` [{cls[t]}] (height {h or '?'}, {when(tt)}; {sigtag(api, tx)}) memo {memos or 'none'}; "
-                           + ", ".join(f"out {n}: {s} → {label(a)}" for n, s, k, a, _ in outs if k != "op_return"))
+                           + ", ".join(f"out {n}: {s} → {out_label(a, tx['vout'][n]['spk'])}"
+                                       for n, s, k, a, _ in outs if k != "op_return"))
             for n in paid_to_me(t):
                 node((t, n), 1)
-    rest = [t for t in order if t not in printed and cls[t] != "inbound" and t not in inbound]
+    if blind_in:
+        out.append("\nTransactions whose raw was not read and whose inputs are unknown: "
+                   + ", ".join(f"`{t}`" for t in sorted(blind_in)))
+    rest = [t for t in order if t not in printed and cls[t] != "inbound" and t not in inbound and t not in blind_in]
     if rest:
         out.append("\nOther spends not reached from any root: " + ", ".join(f"`{t}` [{cls[t]}]" for t in rest))
     # census: every non-self output of the address's own transactions; a co-signer's change is not a receipt
@@ -614,9 +657,12 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
         out.append(f"- {label(a)}: " + "; ".join(f"{s} sat in `{t[:12]}…` memo {m or 'none'}" for t, s, m in rows) + f" — {tag}")
     for t, s, a in returned:
         out.append(f"- {label(a)}: {s} sat in `{t[:12]}…` — change back to a co-signer of that transaction (not a receipt)")
-    if unread:
-        out.append(f"- the recipients of {len(unread)} transaction(s) whose raw was not read are not in this census")
-    missing_exp = [f"{a} [{l}]" for a, l in exp.items() if a not in seen]
+    spends_unread = [t for t in sorted(unread) if t not in inbound]
+    explorer_seen = {o.get("scriptpubkey_address") for t in spends_unread for o in (meta.get(t) or {}).get("vout") or []}
+    if spends_unread:
+        out.append(f"- the recipients of {len(spends_unread)} spend(s) whose raw was not read are not in this census")
+    missing_exp = [f"{a} [{l}]" + (" (seen only in explorer-reported outputs of an unread spend)" if a in explorer_seen else "")
+                   for a, l in exp.items() if a not in seen]
     out.append(f"\nExpected but not seen: {', '.join(missing_exp) or 'none'}")
     unknown = [a for a in seen if a not in exp and a not in lab]
     # accounting: an input's amount from its parent raw (txid-verified) or else the explorer's prevout
@@ -666,7 +712,8 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
                        "source": "raw" if t in txs else "explorer"})
     for t in sorted(cosigners):
         events.append({"txid": t, "kind": "co-signed", "signers": sorted(a for a in cosigners[t] if a),
-                       "unidentified_inputs": sum(1 for a in cosigners[t] if not a), "source": "raw"})
+                       "unidentified_inputs": sum(1 for a in cosigners[t] if not a),
+                       "source": "raw" if t in txs else "explorer"})
     funders = sorted({a for e in events for a in e["signers"]})
     blind = [e["txid"] for e in events if e["unidentified_inputs"] or e["unidentified_inputs"] is None]
     if blind:
@@ -675,7 +722,8 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
     idle = sorted({a for t in inbound if t not in used for *_, a in vin_of(t) if a} - set(funders))
     if idle:
         out.append(f"\nInbound deposits never spent by the address (not funding; not evaluated): "
-                   + ", ".join(label(a) for a in idle))
+                   + ", ".join(label(a) for a in idle)
+                   + (f" (provisional: {len(blind_in)} unread transaction(s) with unknown inputs may spend some)" if blind_in else ""))
     verdict = f"{len(cls)} transactions; {len(inbound)} inbound; {sum(1 for c in cls.values() if c == 'emit')} emissions; " \
               f"{len(unknown)} unknown recipients" + ("" if complete else "; history INCOMPLETE") \
               + (f"; {len(unread)} raw(s) not read: INCOMPLETE" if unread else "")
@@ -688,6 +736,13 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
                                  for v, sc in zip(txs[t][0]["vin"], txs[t][4])]
         else:
             inbound_inputs[t] = [(ptx, a, []) for ptx, _, a in vin_of(t)]
+    cosigned_inputs = {}
+    for t in cosigners:
+        if t in txs:
+            cosigned_inputs[t] = [(v["txid"], sc["address"], [p.hex() for p in sc["pubkeys"]])
+                                  for v, sc in zip(txs[t][0]["vin"], txs[t][4]) if sc["address"] != addr]
+        else:
+            cosigned_inputs[t] = [(ptx, a, []) for ptx, _, a in vin_of(t) if a != addr]
     # H1, as pre-registered
     h1 = h1_check(addr, txs, cls, spent_by, mine, unread, full, h1_root)
     out.append("### H1 (pre-registered): the 37mh… funding cut into 12 fuel outputs, consumed by the 10 known emissions\n")
@@ -700,7 +755,7 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
                + (f" from `{h1['root'][:12]}…`" if h1.get("root") else "") + ")\n")
     return {"verdict": verdict, "funders": funders, "funding_events": events, "unknown_recipients": unknown,
             "complete": full, "history_complete": complete, "unread": sorted(unread), "inbound": inbound,
-            "inbound_inputs": inbound_inputs, "classes": cls, "h1": h1}
+            "inbound_inputs": inbound_inputs, "cosigned_inputs": cosigned_inputs, "classes": cls, "h1": h1}
 
 # ---------- 5 and 6. funders: history and promotion ----------
 def known_keys():
@@ -772,6 +827,7 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
         rows.sort(key=lambda x: (x[0] or 10**9))
         hs = [x[0] for x in rows if x[0]]
         r.update(n_tx=n_tx, complete=complete, touch=touch, first=(hs[0] if hs else None), last=(hs[-1] if hs else None),
+                 txids={h["txid"] for h in hist},
                  funded=cs.get("funded_txo_sum"), spent=cs.get("spent_txo_sum"))
         out.append(f"### {f}\n")
         out.append(f"- {n_tx} transactions ({'complete' if complete else 'INCOMPLETE: raise --max-pages'}); "
@@ -800,15 +856,16 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
     for f, r in results.items():
         # the funder's keys and walk starts: every input it signed in an inbound tx, in fan-out order
         fkeys, starts, own = set(), [], []
-        for t in fan.get("inbound", []):
-            ins = (fan.get("inbound_inputs") or {}).get(t)
+        sources = [(t, (fan.get("inbound_inputs") or {}).get(t)) for t in fan.get("inbound", [])] + \
+                  sorted((fan.get("cosigned_inputs") or {}).items())   # inbound first: the tick-92 walk order
+        for t, ins in sources:
             if ins is None or not any(a == f for _, a, _ in ins):
                 continue
             for ptx, a, keys in ins:
                 if a == f:
                     fkeys.update(keys); starts.append(ptx)
-                if a in CREATOR_TRAIL:
-                    own.append((t, a))                      # the funding tx itself carries a creator-trail signer
+                    if a in CREATOR_TRAIL:
+                        own.append((t, a))                  # the funder itself is a creator-trail signer
         recs, fetched, missing, cut = ancestry(api, starts, depth, max_fetch) if starts else ([], 0, [], None)
         walk, s1 = walk_verdict(recs, fetched, missing, cut, depth, max_fetch) if starts else \
             ("no walk: the funder's inputs were not identified in a read funding transaction", None)
@@ -819,12 +876,17 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
         c2 += [(f"{p} mentions {h}…", "materials text") for p, h in repo_mentions([k for k in fkeys] + [k[2:66] for k in fkeys])]
         s2 = True if c2 else (False if fkeys else None)
         n_tx = r.get("n_tx")
+        own_funding = {e["txid"] for e in events if f in e["signers"]}
+        s3_why = ""
         if "unavailable" in r or n_tx is None:
-            s3 = None
+            s3, s3_why = None, "history unavailable"
+        elif n_tx == 0 or (r.get("complete") and not own_funding <= r.get("txids", set())):
+            s3, s3_why = None, ("the history fetched for this address does not contain its own funding transaction "
+                                "(e.g. a P2PK key, which explorers index by script)")
         elif n_tx > RULE_III[0]:
             s3 = False
         elif not r.get("complete"):
-            s3 = None
+            s3, s3_why = None, "history incomplete"
         else:
             s3 = r["touch"] >= RULE_III[1] * n_tx
         fund = sorted({e["txid"] for e in events if e["kind"] == "inbound" and f in e["signers"]})
@@ -844,7 +906,8 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
                                              ("none" if fkeys else "not evaluated: no public key identified")))
         out.append(f"  - (iii) history: {r.get('n_tx', '?')} txs, {r.get('touch', '?')} GSMG-touching, "
                    f"{'complete' if r.get('complete') else 'incomplete'} → "
-                   + {True: "narrowly GSMG-specific", False: "not narrowly GSMG-specific", None: "not evaluated"}[s3])
+                   + {True: "narrowly GSMG-specific", False: "not narrowly GSMG-specific",
+                      None: f"not evaluated ({s3_why})"}[s3])
         out.append(f"  - (iv) separate inbound fundings of 3GSMG24T it signed that 3GSMG24T then spent: {len(fund)}"
                    + (f" ({', '.join(f'`{t[:12]}…`' for t in fund)})" if fund else "")
                    + {True: " → two or more", False: " → fewer than two",
@@ -858,9 +921,20 @@ def lookup_funders(api, out, fan, depth, max_fetch, max_pages, only=None):
 SIGHASH = {1: "ALL", 2: "NONE", 3: "SINGLE", 0x81: "ALL|ANYONECANPAY", 0x82: "NONE|ANYONECANPAY", 0x83: "SINGLE|ANYONECANPAY"}
 
 class DiskOnly(Esplora):
-    """Reads raws already on disk (materials/chain/fetched/); never touches the network."""
+    """Reads raws and saved address histories already on disk (materials/chain/fetched/); never touches the
+    network and never writes."""
+    def __init__(self, base):
+        super().__init__(base, save=False)
+
     def _get(self, path):
-        raise Unavailable(f"not on hand (no network in audit mode): {path}")
+        raise Unavailable(f"not on hand (audit mode never fetches): {path}")
+
+    def address_history(self, addr, max_pages):
+        p = os.path.join(JSONDIR, f"history_{addr}.json")
+        if not os.path.exists(p):
+            raise Unavailable(f"no saved history for {addr} ({p})")
+        h = json.load(open(p))
+        return h["txs"], bool(h.get("complete"))
 
 _PRIMARIES = None
 def raw_on_hand(api, txid):
@@ -898,10 +972,11 @@ def audit_tx(api, txid, out):
     out.append(f"### `{txid}`\n")
     out.append(f"- raw hashes to its txid; wtxid `{wtxid}`; version {tx['version']}, locktime {tx['locktime']}; "
                f"{size} B, weight {weight}, {vsize} vB")
-    total_in, states, ins, outs_rec = 0, [], [], []
+    total_in, states, ins, outs_rec, coinbase = 0, [], [], [], False
     for i, v in enumerate(tx["vin"]):
         if v["txid"] == COINBASE:
-            out.append(f"- in {i}: coinbase"); total_in = None; states.append(None)
+            out.append(f"- in {i}: coinbase (spends no output: no amount, no signature to check)")
+            total_in = None; states.append(None); coinbase = True
             ins.append({"index": i, "coinbase": True, "ok": None}); continue
         try:
             o = parse_raw(raw_on_hand(api, v["txid"]))["vout"][v["vout"]]
@@ -920,8 +995,13 @@ def audit_tx(api, txid, out):
         for j, sd in enumerate(r["sigs"]):
             ht = sd["hashtype"]
             name = SIGHASH.get(ht, f"{ht:#04x}") if ht is not None else "none (empty)"
-            key = (f"verifies under key {sd['key'] + 1} of {len(r['pubkeys'])} `{r['pubkeys'][sd['key']]}`"
-                   if sd["key"] is not None else "does not verify")
+            st, nk = sd.get("status"), len(r["pubkeys"])
+            key = {"verified": lambda: f"verifies under key {sd['key'] + 1} of {nk} `{r['pubkeys'][sd['key']]}`",
+                   "out of CHECKMULTISIG order": lambda: f"verifies only under key {sd['key_any'] + 1} of {nk} "
+                                                         f"`{r['pubkeys'][sd['key_any']]}`, out of CHECKMULTISIG order",
+                   "does not verify": lambda: "does not verify under any key",
+                   "empty": lambda: "empty signature",
+                   "not strict DER": lambda: "not strict DER (BIP66)"}.get(st, lambda: "not checked")()
             out.append(f"  - signature {j + 1}: SIGHASH_{name}, {'strict DER' if sd['strict_der'] else 'NOT strict DER'}, "
                        f"{ {True: 'low S', False: 'high S (policy only)', None: 'unparseable r/s'}[sd['low_s']] }; {key}")
         out.append(f"  - input {'VALID' if r['ok'] else 'INVALID' if r['ok'] is False else 'not checked'}: {r['why']}")
@@ -929,7 +1009,8 @@ def audit_tx(api, txid, out):
         ins.append({"index": i, "spends": f"{v['txid']}:{v['vout']}", "parent_raw_on_hand": True, "amount_sat": o["sat"],
                     "spent_script": o["spk"], "kind": r["kind"], "address": r["address"], "pubkeys": r["pubkeys"],
                     "signatures": [{"sighash": SIGHASH.get(sd["hashtype"], sd["hashtype"]), "strict_der": sd["strict_der"],
-                                    "low_s": sd["low_s"],
+                                    "low_s": sd["low_s"], "status": sd.get("status"),
+                                    "key_any_index": None if sd.get("key_any") is None else sd["key_any"] + 1,
                                     "key_index": None if sd["key"] is None else sd["key"] + 1,
                                     "pubkey": None if sd["key"] is None else r["pubkeys"][sd["key"]]} for sd in r["sigs"]],
                     "ok": r["ok"], "why": r["why"]})
@@ -943,7 +1024,7 @@ def audit_tx(api, txid, out):
                                           if kind == "op_return" else f"{o['sat']} sat → {label(a)} ({kind})"))
     fee = None if total_in is None else total_in - total_out
     if fee is None:
-        out.append("- fee: not computable (an input amount is not on hand)")
+        out.append("- fee: not applicable (coinbase)" if coinbase else "- fee: not computable (an input amount is not on hand)")
     else:
         out.append(f"- inputs {total_in} sat = outputs {total_out} sat + fee {fee} sat ({fee / vsize:.2f} sat/vB)"
                    + ("" if fee >= 0 else " — NEGATIVE: outputs exceed inputs"))
@@ -964,27 +1045,58 @@ def audit_h1(api, out, max_pages, h1_root=H1_ROOT):
         out.append("- the root is not in the history on hand: " + "; ".join(h1["diffs"]))
         return {"ok": None, "results": [], "h1": h1["verdict"], "diffs": h1["diffs"], "fuel_outputs": h1.get("fuel"),
                 "fees_in_tree": None}
+    for d in h1["diffs"]:
+        out.append(f"- H1 difference: {d}")
     root_tx = parse_raw(raw_on_hand(api, h1["root"]))
     chain = list(dict.fromkeys([v["txid"] for v in root_tx["vin"]] + [h1["root"]] + h1["splits"]
-                               + [e["txid"] for e in h1["emissions"]]))
+                               + [e["txid"] for e in h1["emissions"]] + h1.get("gap_txids", [])))
     res = [audit_tx(api, t, out) for t in chain]
-    roles = {h1["root"]: "root", **{t: "split" for t in h1["splits"]}, **{e["txid"]: "emission" for e in h1["emissions"]}}
+    roles = {h1["root"]: "root", **{t: "split" for t in h1["splits"]}, **{e["txid"]: "emission" for e in h1["emissions"]},
+             **{t: "spend in the tree, raw not read" for t in h1.get("gap_txids", [])}}
     for r in res:
         r["role"] = roles.get(r["txid"], "parent of the root")
-    ok = False if any(r["ok"] is False for r in res) else (None if any(r["ok"] is None for r in res) else True)
-    tree = {h1["root"], *h1["splits"], *(e["txid"] for e in h1["emissions"])}
-    fees = [r["fee"] for r in res if r["txid"] in tree]
-    out.append(f"**Audited {len(res)} transactions ({len(res) - len(tree)} parent(s) of the root, the root, {len(h1['splits'])} splits, "
-               f"{len(h1['emissions'])} emissions): every input valid: {ok}; fees inside the tree "
-               + (f"{sum(fees)} sat" if None not in fees else "not all computable") + "**\n")
+    ok = audit_ok(res)
+    if ok is True and (h1.get("gap_txids") or h1["verdict"] == "UNDETERMINED"):
+        ok = None                                           # the tree itself was not fully read
+    tree_fees = [r["fee"] for r in res if r.get("role") in ("split", "emission")]
+    root_fee = next((r["fee"] for r in res if r.get("role") == "root"), None)
+    partial = bool(h1.get("gap_txids")) or None in tree_fees or h1["verdict"] == "UNDETERMINED"
+    out.append(f"**Audited {len(res)} transactions ({sum(1 for r in res if r.get('role') == 'parent of the root')} parent(s) "
+               f"of the root, the root, {len(h1['splits'])} splits, {len(h1['emissions'])} emissions"
+               + (f", {len(h1['gap_txids'])} tree spend(s) whose raw was not read" if h1.get("gap_txids") else "")
+               + f"): every input valid: {ok}; fees of the splits and emissions "
+               + (f"{sum(f for f in tree_fees if f is not None)} sat (PARTIAL)" if partial else f"{sum(tree_fees)} sat")
+               + f"; the root's own fee (paid by its funder) {root_fee} sat**\n")
     return {"ok": ok, "results": res, "h1": h1["verdict"], "diffs": h1["diffs"], "fuel_outputs": h1["fuel"],
-            "fees_in_tree": None if None in fees else sum(fees)}
+            "fees_in_tree": None if partial else sum(tree_fees), "root_fee": root_fee, "gap_txids": h1.get("gap_txids", [])}
 
 def audit_ok(results):
     """True only when something was audited and every input of every transaction is valid."""
     if any(r["ok"] is False for r in results):
         return False
     return None if not results or any(r["ok"] is None for r in results) else True
+
+def audit_exit(results, h1=None):
+    """Exit code of an audit run: 0 every input valid, 1 an input invalid, 6 something not checked."""
+    v = audit_ok(results)
+    if v is True and h1 is not None and h1.get("ok") is None:
+        v = None
+    return {False: 1, None: 6, True: 0}[v]
+
+def resolve_txid(t):
+    """A txid as given (any case, or a unique prefix of at least 8 hex digits) resolved against the raws on
+    disk (materials/chain/fetched/) and the committed primaries."""
+    t = t.strip().lower()
+    if not re.fullmatch(r"[0-9a-f]{8,64}", t):
+        raise ValueError(f"not a txid or txid prefix: {t!r}")
+    if len(t) == 64:
+        return t
+    known = {f[:-4] for f in (os.listdir(FETCHED) if os.path.isdir(FETCHED) else []) if f.endswith(".hex")}
+    known |= {x["txid"] for x in RT.load_saved()}
+    hits = sorted(k for k in known if k.startswith(t))
+    if len(hits) != 1:
+        raise ValueError(f"txid prefix {t} matches {len(hits)} raw(s) on hand; give the full txid")
+    return hits[0]
 
 def audit_stem(txids, h1):
     """Default output name: VERIFY_H1, VERIFY_<first 8 hex of each txid>, or both joined."""
@@ -1264,7 +1376,8 @@ def main():
         return 0 if selftest() else 1
     if a.verify or a.verify_h1:
         api, out = DiskOnly(a.base), []
-        res = [audit_tx(api, t, out) for t in a.verify or []]
+        a.verify = [resolve_txid(t) for t in a.verify or []]
+        res = [audit_tx(api, t, out) for t in a.verify]
         h1 = audit_h1(api, out, a.max_pages) if a.verify_h1 else None
         if h1:
             res += h1["results"]
@@ -1273,7 +1386,7 @@ def main():
                             h1 and {k: v for k, v in h1.items() if k != "results"},
                             {"mode": "disk-only", "network_requests": api.fetches}):
             print("written:", f)
-        return {False: 1, None: 6, True: 0}[audit_ok(res)]
+        return audit_exit(res, h1)
     api = Esplora(a.base)
     verdicts, text, extra = run(api, a.depth, a.max_fetch, a.max_pages)
     print(text)

@@ -90,11 +90,14 @@ def script_info(spk):
 def parse_raw(hx):
     b = bytes.fromhex(hx); i = 0
     def rd(n):
-        nonlocal i; r = b[i:i + n]; i += n; return r
+        nonlocal i
+        if i + n > len(b):
+            raise ValueError(f"raw transaction truncated at byte {i} (needs {n} more)")
+        r = b[i:i + n]; i += n; return r
     def vi():
         v = rd(1)[0]
         return v if v < 0xfd else int.from_bytes(rd({0xfd: 2, 0xfe: 4, 0xff: 8}[v]), "little")
-    ver = rd(4); seg = b[i] == 0 and b[i + 1] == 1
+    ver = rd(4); seg = len(b) > i + 1 and b[i] == 0 and b[i + 1] == 1
     if seg: rd(2)
     body_start = i
     vin = []
@@ -109,6 +112,8 @@ def parse_raw(hx):
     if seg:
         for v in vin: v["witness"] = [rd(vi()).hex() for _ in range(vi())]
     lock = rd(4)
+    if i != len(b):
+        raise ValueError(f"raw transaction has {len(b) - i} trailing byte(s)")
     stripped = ver + b[body_start:body_end] + lock
     txid = hashlib.sha256(hashlib.sha256(stripped).digest()).digest()[::-1].hex()
     return {"txid": txid, "version": int.from_bytes(ver, "little"), "segwit": seg,

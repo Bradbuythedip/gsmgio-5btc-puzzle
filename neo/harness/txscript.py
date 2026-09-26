@@ -120,11 +120,12 @@ def input_script(vin, prev_spk=None):
             # OP_CHECKMULTISIG pops exactly m signatures and one dummy, which must be empty (BIP147
             # NULLDUMMY); witness v0 must leave exactly one stack item (consensus CLEANSTACK)
             if len(wit) != m + 2:
-                bad(f"witness has {len(wit) - 2} items for a {m}-of-{len(keys)} (needs exactly dummy + {m} + script)")
+                bad(f"witness has {len(wit)} items for a {m}-of-{len(keys)} (needs exactly {m + 2}: dummy + {m} + script)")
             elif wit[0] != b"":
                 bad("non-empty multisig dummy (BIP147 NULLDUMMY)")
         else:
-            d.update(kind=f"{base}-script", note="non-multisig witness script")
+            d["kind"] = f"{base}-script"
+            d["note"] += ("; " if d["note"] else "") + "non-multisig witness script"
         d["script_code"] = ws
         if b"\xab" in ws and not ms:
             d["note"] += "; may contain OP_CODESEPARATOR (not verified)"
@@ -155,11 +156,13 @@ def input_script(vin, prev_spk=None):
     if not wit:
         if pushes is None:
             d["note"] = "scriptSig holds non-push opcodes"
-        elif p2pk_prev:                                     # <sig> | <pub> OP_CHECKSIG
-            d.update(kind="p2pk", sigs=pushes[:1], m=1, pubkeys=[prev_spk[1:-1]], address=spk_address(prev_spk),
+        elif p2pk_prev:                                     # [items…] <sig> | <pub> OP_CHECKSIG
+            d.update(kind="p2pk", sigs=pushes[-1:], m=1, pubkeys=[prev_spk[1:-1]], address=spk_address(prev_spk),
                      script_code=prev_spk, spk=prev_spk)
-            if len(pushes) != 1:
-                bad(f"a P2PK output is spent by exactly one signature push, not {len(pushes)}")
+            if not pushes:
+                bad("an empty scriptSig cannot spend a P2PK output")
+            elif pushes[-1] and _der(pushes[-1][:-1]) is None:
+                bad("the top scriptSig item, which CHECKSIG takes as the signature, is not a signature")
         elif len(pushes) == 2 and _is_pubkey(pushes[1]) and _looks_sig(pushes[0]):
             pub = pushes[1]
             d.update(kind="p2pkh", address=btc_addr.p2pkh(pub), pubkeys=[pub], m=1, sigs=[pushes[0]],
@@ -167,6 +170,10 @@ def input_script(vin, prev_spk=None):
             d["spk"] = d["script_code"]
         elif len(pushes) == 1 and _looks_sig(pushes[0]):
             d.update(kind="p2pk", sigs=[pushes[0]], m=1, note="p2pk: key and address need prev_spk")
+        elif prev_spk is not None and len(prev_spk) == 23 and prev_spk[:2] == b"\xa9\x14" and pushes \
+                and not parse_multisig(pushes[-1]) and btc_addr.hash160(pushes[-1]) == prev_spk[2:22]:
+            d.update(kind="p2sh-script", address=spk_address(prev_spk), script_code=pushes[-1], spk=prev_spk,
+                     note="non-multisig redeem script (commitment checked; signature not verified)")
         elif len(pushes) >= 2 and parse_multisig(pushes[-1]):
             m, keys = parse_multisig(pushes[-1])
             rs = pushes[-1]
@@ -207,7 +214,13 @@ def input_script(vin, prev_spk=None):
                 wsh(wit[-1], nested_redeem=redeem)
         else:
             d["note"] = "unrecognised scriptSig + witness"
-    if prev_spk is not None and d["spk"] is not None and prev_spk != d["spk"]:
+    if d["address"] is None and d["kind"] == "unknown" and prev_spk is not None and spk_address(prev_spk):
+        d["address"] = spk_address(prev_spk)                 # named by the output it spends, script unrecognised
+        d["note"] += ("; " if d["note"] else "") + "address from the spent output"
+    if prev_spk is not None and spk_address(prev_spk) is None:
+        d["unmodelled"] = True                               # non-standard spent script (or witness v2+): not modelled
+        d["note"] += ("; " if d["note"] else "") + "the spent script is not a standard template"
+    elif prev_spk is not None and d["spk"] is not None and prev_spk != d["spk"]:
         bad(f"spends {spk_address(prev_spk) or prev_spk.hex()}, input script implies {spk_address(d['spk'])} ({d['kind']})")
     return d
 
@@ -281,19 +294,64 @@ def strict_der(sig):
     return True
 
 def _der(sig):
-    """(r, s) of a DER-shaped signature (without hashtype), parsed laxly; None if it does not parse."""
-    try:
-        if len(sig) < 8 or sig[0] != 0x30 or sig[2] != 0x02:
-            return None
-        lr = sig[3]
-        if 4 + lr >= len(sig) or sig[4 + lr] != 0x02:
-            return None
-        ls = sig[5 + lr]
-        if lr == 0 or ls == 0 or 6 + lr + ls > len(sig):
-            return None
-        return int.from_bytes(sig[4:4 + lr], "big"), int.from_bytes(sig[6 + lr:6 + lr + ls], "big")
-    except IndexError:
+    """(r, s) of a signature (without hashtype) under Bitcoin Core's lax DER parser
+    (ecdsa_signature_parse_der_lax: long-form lengths, leading zeroes, trailing garbage tolerated); None if it
+    does not parse. An R or S longer than 32 bytes, or not below N, parses to (0, 0), which never verifies."""
+    n, pos = len(sig), 0
+    if pos == n or sig[pos] != 0x30:
         return None
+    pos += 1
+    if pos == n:
+        return None
+    lb = sig[pos]; pos += 1
+    if lb & 0x80:
+        lb -= 0x80
+        if lb > n - pos:
+            return None
+        pos += lb
+    def integer():
+        nonlocal pos
+        if pos == n or sig[pos] != 0x02:
+            return None
+        pos += 1
+        if pos == n:
+            return None
+        lb = sig[pos]; pos += 1
+        if lb & 0x80:
+            lb -= 0x80
+            if lb > n - pos:
+                return None
+            while lb > 0 and sig[pos] == 0:
+                pos += 1; lb -= 1
+            if lb >= 4:
+                return None
+            ln = 0
+            while lb > 0:
+                ln = (ln << 8) + sig[pos]; pos += 1; lb -= 1
+        else:
+            ln = lb
+        if ln > n - pos:
+            return None
+        start = pos
+        pos += ln
+        return start, ln
+    r_at = integer()
+    if r_at is None:
+        return None
+    s_tag = pos
+    if s_tag == n or sig[s_tag] != 0x02:
+        return None
+    s_at = integer()
+    if s_at is None:
+        return None
+    vals = []
+    for start, ln in (r_at, s_at):
+        while ln > 0 and sig[start] == 0:
+            start += 1; ln -= 1
+        vals.append(None if ln > 32 else int.from_bytes(sig[start:start + ln], "big"))
+    if None in vals or vals[0] >= N or vals[1] >= N:
+        return 0, 0
+    return vals[0], vals[1]
 
 def ecdsa_ok(pub, z, sig_der):
     Q, rs = _point(pub), _der(sig_der)
@@ -314,6 +372,8 @@ def verify_input(tx, i, prev_spk=None, prev_sat=None):
     d = input_script(tx["vin"][i], prev_spk)
     res = {"kind": d["kind"], "address": d["address"], "pubkeys": [p.hex() for p in d["pubkeys"]], "ok": None, "why": "",
            "sigs": []}
+    if d.get("unmodelled"):
+        res["why"] = "not checkable: the spent script is not a standard template"; return res
     if not d["ok"]:
         res.update(ok=False, why="invalid: " + d["note"]); return res
     if not d["sigs"] or d["script_code"] is None or not d["pubkeys"]:
@@ -329,25 +389,31 @@ def verify_input(tx, i, prev_spk=None, prev_sat=None):
 
     era = list(d["era"])
     sigs, keys, k = d["sigs"], d["pubkeys"], 0
-    for sig in sigs:                                        # OP_CHECKMULTISIG order; single-key is m=1
+    for sig in sigs:
         rs = _der(sig[:-1]) if sig else None
-        info = {"hashtype": sig[-1] if sig else None, "strict_der": bool(sig) and strict_der(sig),
-                "low_s": None if rs is None else rs[1] <= N // 2, "key": None}
-        res["sigs"].append(info)
+        res["sigs"].append({"hashtype": sig[-1] if sig else None, "strict_der": bool(sig) and strict_der(sig),
+                            "low_s": None if rs is None else rs[1] <= N // 2, "key": None, "status": "not reached"})
+    for sig, info in zip(sigs, res["sigs"]):                # OP_CHECKMULTISIG order; single-key is m=1
         if not sig:
+            info["status"] = "empty"
             res.update(ok=False, why="an empty signature cannot verify"); return res
         if not strict_der(sig):
             if d["segwit"]:
+                info["status"] = "not strict DER"
                 res.update(ok=False, why="signature is not strict DER (BIP66)"); return res
             era.append("non-strict DER signature (valid only before BIP66, height 363725)")
         z = z_of(sig)
         if z is None:
+            info["status"] = "not checked"
             res["why"] = f"sighash type {sig[-1]:#x} not implemented for legacy"; return res
         while k < len(keys) and not ecdsa_ok(keys[k], z, sig[:-1]):
             k += 1
         if k == len(keys):
-            res.update(ok=False, why="a signature does not verify"); return res
-        info["key"] = k
+            anywhere = next((x for x in range(len(keys)) if ecdsa_ok(keys[x], z, sig[:-1])), None)
+            info.update(status="out of CHECKMULTISIG order" if anywhere is not None else "does not verify", key_any=anywhere)
+            res.update(ok=False, why="a signature does not verify" if anywhere is None else
+                       f"a signature verifies only under key {anywhere + 1}, out of CHECKMULTISIG order"); return res
+        info.update(key=k, status="verified")
         k += 1
     if len(sigs) < (d["m"] or 1):
         res.update(ok=False, why=f"{len(sigs)} of {d['m']} signatures"); return res

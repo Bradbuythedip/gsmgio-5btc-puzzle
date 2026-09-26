@@ -162,12 +162,13 @@ class EndpointCache:
                 bad.append((rec.get("path"), f"sha256 {got} != {rec.get('sha256')}"))
         return total, nbytes, bad
 
-def make_esplora(RL, repo: Path, base: str, offline: bool, delay: float):
+def make_esplora(RL, repo: Path, base: str, offline: bool, delay: float, save: bool = True,
+                 miss_hint: str = "Run sync once with the same bounds."):
     cache = EndpointCache(endpoint_cache_root(repo))
 
     class CachedEsplora(RL.Esplora):
         def __init__(self):
-            super().__init__(base, save=True, delay=delay)
+            super().__init__(base, save=save, delay=delay)
             self.endpoint_cache = cache
             self.offline_only = offline
             self.cache_hits = 0
@@ -187,10 +188,7 @@ def make_esplora(RL, repo: Path, base: str, offline: bool, delay: float):
             self.cache_misses += 1
             self.missing_paths.append(path)
             if self.offline_only:
-                raise RL.Unavailable(
-                    f"offline cache miss: {path}. "
-                    f"Run sync once with the same bounds."
-                )
+                raise RL.Unavailable(f"offline cache miss: {path}. {miss_hint}".strip())
             try:
                 data = super()._get(path)
             except RL.Unavailable as e:
@@ -386,8 +384,10 @@ def main(argv=None):
         if a.cmd == "verify":
             if not a.txids and not a.h1:
                 raise ValueError("verify needs txids and/or --h1")
-            api = make_esplora(RL, repo, a.base, offline=True, delay=0)   # cache only: never fetches
+            api = make_esplora(RL, repo, a.base, offline=True, delay=0, save=False,   # cache only: never fetches
+                               miss_hint="Not in the frozen cache; verify never fetches.")          # and never writes
             out = []
+            a.txids = [RL.resolve_txid(t) for t in a.txids]
             res = [RL.audit_tx(api, t, out) for t in a.txids]
             h1 = RL.audit_h1(api, out, a.max_pages) if a.h1 else None
             if h1:
@@ -401,12 +401,14 @@ def main(argv=None):
                                                           os.path.basename(RL.audit_stem(a.txids, a.h1)))
             for f in RL.save_audit(stem, out, res, h1 and {k: v for k, v in h1.items() if k != "results"}, meta):
                 print("written:", f)
-            print(f"cache misses: {api.cache_misses}; network requests: {api.fetches}"
-                  + (" (verify never fetches: a miss is a raw the sync did not need, not a reason to sync again)"
-                     if api.cache_misses else ""))
+            raws = sum(1 for p in api.missing_paths if p.startswith("/tx/"))
+            pages = sum(1 for p in api.missing_paths if p.startswith("/address/"))
+            print(f"cache misses: {api.cache_misses} ({raws} raw(s), {pages} address-history page(s), "
+                  f"{api.cache_misses - raws - pages} other); network requests: {api.fetches}"
+                  + ("; the audit reports every item it could not check" if api.cache_misses else ""))
             if api.fetches:
                 raise RuntimeError("OFFLINE INVARIANT FAILED: a network request occurred")
-            return {False: 1, None: 6, True: 0}[RL.audit_ok(res)]
+            return RL.audit_exit(res, h1)
 
         if a.cmd in ("sync", "offline"):
             if a.depth < 1 or a.max_fetch < 1 or a.max_pages < 1:
