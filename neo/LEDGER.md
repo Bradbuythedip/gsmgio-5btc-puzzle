@@ -1943,3 +1943,51 @@ input must be a new creator sentence or page.
 - **Standing state:** the two locks stay gated on a new primary; the third door opens only from a
   pre-registered 2020 colour rule; new creator text enters one candidate at a time. Public corpus
   exhausted; prize key not deduced; address unspent.
+
+### Loop tick 47 (2026-09-26): the two locks are a complementary pair, not two unrelated locks
+
+Adopting the braid/pairing model as the working topology (not proven; falsifiable). It invents no
+arithmetic — it rests only on already-verified facts.
+
+**Verified this pass:**
+- **YOUWON is origin-invariant.** DBBI⊖VIC with both alphabets at origin 0 (`a=0…8`, `A=0…25`) and
+  both at origin 1 (`a=1…9`, `A=1…26`) produce the **identical** 91-letter string containing YOUWON;
+  only *mixing* origins destroys it. So the free choice is coordinate-mixing, not 0-vs-1-based — a
+  slight upgrade to YOUWON.
+- **"Make the best of everything" = elementwise max of the 7 layers → VIC subtraction: negative.**
+  Max and min both give no YOUWON, no YINYANG (`ASGIQDHUOW…`, `VNYBIYDMIQ…`). `best = numeric max`
+  is a clean negative. `bestofeverything` / `makethebestofeverything` as passwords: no pad≥4 on
+  either lock, freeze idle. Spent — do not mutate.
+
+**The model (record; treat the two locks as a pair until falsified):**
+```
+        GENESIS
+       /        \
+  main route   "another door"
+   Phase-3.2     SalPhaseIon
+     VIC(91)       DBBI(91)
+        \  DBBI⊖VIC=YOUWON  /
+     P32T(96B)      salph_inner(96B)
+     "half"         "better half"
+        \            /
+           YINYANG
+```
+Support, all authenticated: VIC and DBBI are both 91; P32T (`inner96`, salt b45a5e3d…) and
+salph_inner (`miniAB`, salt 3ab58534…) are both `Salted__`+8+80-byte envelopes; DBBI⊖VIC plants
+YOUWON across the two routes; the VIC sentence says "the private keys belong to HALF and BETTER
+HALF" (plural); the 2020 halving/second-door language ties the second door to the halved prize
+(2.5 BTC to `17ucy1…`); `yinyang` is the named future checkpoint.
+
+**Ledger reframing (per the model).** Replace "two unrelated AES locks remain" with: *two
+structurally paired 96-byte envelopes, one at the terminus of each authenticated route; the
+cross-route DBBI⊖VIC operation plants YOUWON; primary language supplies two keys / half+better-half
+/ a second door tied to the halved prize / a future yin-yang. Treat as a complementary pair.*
+
+**Provisional lock→address oracle** (priority ordering from the 2020 source history; swap also
+checkable): a P32T key should derive the prize `1GSMG1JC9…`; a salph_inner key should derive the
+better-half `17ucy1K9…`. That is a far stronger acceptance than padding.
+
+**Direction (unchanged, and this model sharpens it):** the missing input is *relationship/personal-
+context* information a close friend would hold (VIC names two people; #66573 "close friends have the
+best chance"), not another byte transform of DBBI. That class of fact is outside the corpus and is
+not to be searched for as names/dates/personal data. No grind. The locks stay gated on a new primary.
