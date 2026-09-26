@@ -2810,3 +2810,21 @@ Pre-registered at `intake/2026-09-26-196split/PREREG.md`, pushed before the run.
   path. Its null stands on its own.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 77 (2026-09-26): address-tracing tool for the Half/Better-Half funding question (tick 75)
+
+`harness/trace_address.py` pulls and decodes every transaction of an address from an Esplora API
+(mempool.space or blockstream.info) and, offline, decodes raw tx hex. Read-only, no keys. Built to
+answer the one open item from tick 75: the source of the 2026-02-05 funding of `1JG648…` (Half) and
+`145ZQ9…` (Better Half). A creator-trail funder (`1EtbTv…`, `3GSMG24T…`, prize, `17ucy1…`) would
+authenticate the Issue #79 construction; anything else keeps it solver traffic. The tool flags those
+addresses on both sides of every decoded tx.
+
+- **Offline decode verified** against the three in-repo txs: reproduces txids `2aa9a4a9…` (629998),
+  `88cdb3cd…` (840003) and `1fd46162…` (the Gavin tx), decodes legacy and segwit, and renders P2PKH,
+  P2SH, P2WPKH/P2WSH (bech32, BIP173 test vector passes) and OP_RETURN.
+- **Online path blocked here.** mempool.space and blockstream.info are refused by this environment's
+  network policy (connect_rejected), as at ticks 37/70/72. Run `trace_address.py` on a node or
+  unblocked host, or paste the funding tx hex and decode it here with `--decode-hex`.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
