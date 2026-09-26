@@ -2390,3 +2390,24 @@ hands with Gavin and everyone..." (a Satoshi quote) + 546/547 sat to all eight s
 unauthenticated.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 64 (2026-09-26): #60307 resolved — X quoted Jrk's own 2023 line back at him; August 2023 context verified
+
+Transcript check of a user-relayed analysis:
+- #8773 "Ok ok ok ok. I can't hold this one any longer." (to "shine us some light") → **#8774 "Are you
+  really looking for just the btc...?"** (2023-08-03) → #8795 "I saw that you guys got really really far
+  already." → #8796 "Actually, the hardest part is done." All exact.
+- #9599 (2023-08-06, three days later): "Probably the last hint: Once you hit a 'ying yang', you'll be
+  able to solve it the same day." Also #9607 "No need. You have all the info." and #9639 (internet only
+  to claim). Later: #24627 (2024-04-20: a private key, "obscure" intel, …), #39224/#39237 (2025: yinyang
+  is "the next phase", 2 hours max), #66593 ("The '5' btc was never the actual prize"), #66600 ("Some
+  already found it. And understood not to risk it... 🤐").
+- **#60307 (2026-03-04) closes:** X's question "@SoWut Are we really looking for just the btc...?" is
+  Jrk's own #8774 quoted back to him verbatim, and 🤐 is his refusal to expand. No missing operand.
+
+The BTCSEED Bifid head (8 of 9! squares; reported in an Aug-2026 GitHub issue) cannot be what the
+2023 line refers to. It is recorded as a forced artifact or decoy, not a door. The named success marker
+is still yinyang (slot D).
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent. Remaining
+recovery target: #8569's three questions.
