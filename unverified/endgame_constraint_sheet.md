@@ -131,21 +131,28 @@ assumption and must be labelled as one. The table is not claimed to be exhaustiv
 
 ## 5. Frozen candidate sets for B and C
 
-### Table B — `matrixsumlist` (pick one row; do not add rows)
+### Table B — `matrixsumlist`
 
-| id | value | why it is allowed |
+**Matrix pinned by soup position (tick 34):** `matrixsumlist` is the a/b field at soup offset
+91:195, sandwiched between DBBI (0:91) and FAED (195:765). The creator names the method next to
+its operands, as at every other stage, so the matrix is the **DBBI/FAED structure**, not the
+genesis 14×14 grid. `DBBI(91) ‖ FAED[0:546] = 637 = 7 × 91` = seven 7×13 layers. `matrixsumlist`
+emits an **integer list** (indices for slot C), not a string to hash.
+
+| id | value (source-forced, tick 34) | note |
 |---|---|---|
-| B0 | literal `matrixsumlist` | the label may be the value |
-| B1 | `610876654997879` | row sums of the genesis grid, 14 numbers concatenated |
-| B2 | `8108108736759668` | column sums of the genesis grid |
-| B3 | `610876654997879` ‖ `8108108736759668` | rows then columns, no separator (one separator choice, frozen) |
+| B-ew91 | element-wise sum of the 7 layers → 91 values (range 23–52) | the only index-sized list |
+| B-row7 | row sums of the element-wise 7×13 grid → `455 485 483 518 468 504 460` | too large to index directly |
+| B-col13 | col sums → `268 241 285 276 254 266 241 245 277 266 255 245 254` | too large to index directly |
 
-Test record (NEGATIVE): B1 and B2 were tested standalone in campaign 01 (raw and four sha
-forms, all targets × KDFs; rerun over seven targets in tick 2). B1 was also consumed as a
-slot value inside the seven-token frame (campaigns 01/03/05/06/07/10) and B2 inside
-campaign 05. **B3 has never been AES-tested**; it was only address-checked (campaign 26).
-Their role here is as a *slot value* in the three-input combine of §6, which none of those
-runs performed.
+**Deprecated for slot B:** the genesis-grid sums `610876654997879` (rows) and
+`8108108736759668` (cols) — the matrix is DBBI/FAED, not the 14×14 grid. (They were tested as
+passwords in campaigns 01/03/05 anyway, NEGATIVE.)
+
+Test record (NEGATIVE, tick 34): B-ew91 used as 1-based **word** indices into the 332-word
+Architect speech yields word-salad ("mathematical eventuality been otherwise is a ananomaly
+been harmony…"); per-layer DBBI row/col sums likewise. No readable English, so nothing reached
+the oracle. Per-matrix 7×13 row/col sum lists as passwords were already NEGATIVE (campaign 12).
 
 ### Table C — `lastwordsbeforearchichoice` (pick one row; do not add rows)
 

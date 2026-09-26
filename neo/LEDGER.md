@@ -1236,3 +1236,42 @@ retrievable, only re-derivable from the lost script. No retrievable hole remains
 set, but A has no named operation, B's matrix is unnamed, D is an output. `combine` stays
 illegal; no AES campaign. The next real move is a **named operand or operator** from a new
 authenticated statement.
+
+### Loop tick 34 (2026-09-26) — slot B pinned to the DBBI/FAED structure by soup position
+
+**The soup position forces the matrix.** `matrixsumlist` is decoded from the a/b field at
+offset 91:195, sandwiched between DBBI (0:91) and FAED (195:765). The creator names the method
+next to its operands at every stage, so B's matrix is the **DBBI/FAED structure**, not the
+genesis 14×14 grid. The provenance page's "which matrix?" ambiguity is resolved. Genesis row/col
+sums (`610876654997879` / `8108108736759668`) are **deprecated** for slot B.
+
+**Three source-forced B integer lists computed** (`campaign_31_matrixB.py`), from
+`DBBI ‖ FAED[0:546] = 637 = 7×91` = seven 7×13 layers, digits a=1…i=9:
+- **B-ew91** = element-wise sum of the 7 layers → 91 values, range 23–52 (the only index-sized list).
+- **B-row7** = row sums of the element-wise 7×13 grid = `455 485 483 518 468 504 460`.
+- **B-col13** = col sums = `268 241 285 276 254 266 241 245 277 266 255 245 254`.
+`matrixsumlist` emits an integer list (indices for slot C), not a string to hash — so these are
+frozen as lists, not fed to AES.
+
+**The B→C extraction is empty (NEGATIVE).** Using B-ew91 as 1-based word indices into the
+332-word Architect speech (the text slot C names) gives word-salad ("mathematical eventuality
+been otherwise is a ananomaly been harmony what i have unable to…"); per-layer DBBI row-sums
+("it of has thus a a beyond") and col-sums ("my what harmony from of been the unable to…")
+likewise. No readable English emerged, so nothing advanced to the freeze/address oracle. (This
+is the corrected matrix — the earlier campaign_30 used the 11×11 prime-position matrix, now
+closed at tick 32; per-matrix 7×13 sum lists as passwords were closed at campaign 12.)
+
+**FAED 24-tail vs colour frame (slot A↔B link, step 3).** `FAED[546:570] =
+ibibbibdcbahaidhfahiihic` (24 chars) against the colour sequence `BBBBYBBBYYBBBBYBBYYBYYBY`:
+blue-select → `ibibibdahaihfii` (15), yellow-select → `bcbdahihc` (9). Structurally the 24=24
+alignment holds (as at ticks 13/17/19), but neither selection nor its digit list is readable or
+recognisable. No source-grounded A→B link found.
+
+**Slot C word-counts (step 4).** The C strings' word counts (1, 5, 7) as indices into the VIC
+sentence / checkerboard sentence / URL give fragments ("in to this", "case crack the",
+"raising extra of"), nothing readable.
+
+**State.** B's matrix is now pinned and its candidate lists frozen — a real provenance advance.
+But the pipeline B feeds (matrixsumlist → index → lastwordsbeforearchichoice) is empty of
+readable output, and slot A still has no named operation. Per step 5 the combine stays illegal
+and no AES campaign runs. The next real move remains a named operator on a named object.
