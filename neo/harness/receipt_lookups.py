@@ -428,6 +428,13 @@ H1_EXPECT = {"1Jqq37KkZEt4F3Dt6qXdtyiMEFBBdawbkJ": 1, "1GyT5WrLYpwFkuiVoPDJZa1Q6
              "1AD2wfwXukZ1kUAy848hTQQ72aSBZPB75r": 1, "1M5ypvDbp124ZtKPbg3GJg1JqNs1x7TPoN": 1,
              "1NULY7DhzuNvSDtPkFzNo6oRTZQWBqXNE9": 1, SEEDKEY: 1, "13HGhjkmKUkP8sk9k63BLmhkxRjy7uK4Rp": 1,
              RT.HALF: 3}
+# the PREREG table's other attributes of those emissions: memo ("any" = a memo is present, None = bare) and amount
+H1_ATTRS = {**{a: {"memo": "any"} for a in ("1Jqq37KkZEt4F3Dt6qXdtyiMEFBBdawbkJ", "1GyT5WrLYpwFkuiVoPDJZa1Q6jtjbjuBff",
+                                              "18CchrjA3Uzfrzy4DFqao9ric6YfK4hjdc", "1K23RS1y2fnuZRkhw5nUpFr5Jk5WN11Zeq",
+                                              "1AD2wfwXukZ1kUAy848hTQQ72aSBZPB75r", "1M5ypvDbp124ZtKPbg3GJg1JqNs1x7TPoN")},
+            "1NULY7DhzuNvSDtPkFzNo6oRTZQWBqXNE9": {"memo": None, "sat": 1050},
+            SEEDKEY: {"memo": "Good job, Neo!"}, "13HGhjkmKUkP8sk9k63BLmhkxRjy7uK4Rp": {"memo": "Good job, Neo!"},
+            RT.HALF: {"memo": "Halving", "sat": 700}}
 
 def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
     """The 12 -> 12 test, exactly as pre-registered: the tree rooted at the root tx's outputs to `addr`
@@ -459,6 +466,10 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
         else:
             fuel[op] = sp
     diffs, per_recipient, emissions = [], {}, []
+    for t in splits:                                        # the fuel must come from the root alone
+        outside = [(v["txid"], v["vout"]) for v in txs[t][0]["vin"] if (v["txid"], v["vout"]) not in seen]
+        if outside:
+            diffs.append(f"`{t[:12]}…` (a split) also spends {len(outside)} input(s) from outside the tree")
     for t in dict.fromkeys(fuel.values()):                 # leaf spends in tree (breadth-first) order
         tx, signers, outs, memos, scripts = txs[t]
         ins = [(v["txid"], v["vout"]) for v in tx["vin"]]
@@ -467,19 +478,37 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
             diffs.append(f"`{t[:12]}…` also spends {len(ins) - len(used)} input(s) from outside the tree")
         if any(a == addr for n, s, k, a, _ in outs):
             diffs.append(f"`{t[:12]}…` pays change back to the address, so it is not a leaf spend")
-        recips = [a or "nonstandard:" + tx["vout"][n]["spk"] for n, s, k, a, _ in outs if k != "op_return" and a != addr]
-        if len(recips) != 1:
-            diffs.append(f"`{t[:12]}…` pays {len(recips)} recipients")
-        for a in recips:
-            per_recipient.setdefault(a, []).append((t, len(used)))
-        emissions.append({"txid": t, "recipients": recips, "fuel_outputs": len(used), "memo": memos,
-                          "sat": [s for n, s, k, a, _ in outs if k != "op_return" and a != addr]})
+        paid = {}
+        for n, s, k, a, _ in outs:
+            if k != "op_return" and a != addr:
+                paid.setdefault(a or "nonstandard:" + tx["vout"][n]["spk"], []).append(s)
+        if len(paid) != 1:
+            diffs.append(f"`{t[:12]}…` pays {len(paid)} recipients")
+        for a, sats in paid.items():
+            if len(sats) > 1:
+                diffs.append(f"`{t[:12]}…` pays {label(a)} in {len(sats)} outputs")
+            per_recipient.setdefault(a, {})[t] = (len(used), sum(sats), memos)
+        emissions.append({"txid": t, "recipients": list(paid), "fuel_outputs": len(used), "memo": memos,
+                          "sat": [sum(v) for v in paid.values()]})
     for a, want in H1_EXPECT.items():
-        got = per_recipient.get(a, [])
+        got = per_recipient.get(a, {})
         if len(got) != 1:
             diffs.append(f"{label(a)}: {len(got)} emission(s) from the tree, expected 1")
-        elif got[0][1] != want:
-            diffs.append(f"{label(a)}: its emission consumes {got[0][1]} fuel output(s), expected {want}")
+            continue
+        (t, (nfuel, sat, memos)), = got.items()
+        if nfuel != want:
+            diffs.append(f"{label(a)}: its emission consumes {nfuel} fuel output(s), expected {want}")
+        attrs = H1_ATTRS.get(a, {})
+        if "memo" in attrs:
+            m = attrs["memo"]
+            if m is None and memos:
+                diffs.append(f"{label(a)}: its emission carries memo {memos}, expected a bare payment")
+            elif m == "any" and not memos:
+                diffs.append(f"{label(a)}: its emission carries no memo, expected a checkpoint memo")
+            elif m not in (None, "any") and m not in memos:
+                diffs.append(f"{label(a)}: its emission carries memo {memos or 'none'}, expected {m!r}")
+        if "sat" in attrs and sat != attrs["sat"]:
+            diffs.append(f"{label(a)}: its emission pays {sat} sat, expected {attrs['sat']}")
     diffs += [f"another recipient: {label(a)}" for a in sorted(per_recipient) if a not in H1_EXPECT]
     if unspent:
         diffs.append(f"{len(unspent)} tree output(s) " + ("unspent" if full else "not spent within the fetched history")
@@ -489,6 +518,8 @@ def h1_check(addr, txs, cls, spent_by, mine, unread, full, root_prefix=H1_ROOT):
     if len(emissions) != 10:
         diffs.append(f"{len(emissions)} leaf spends, expected 10")
     verdict = "PASS" if not diffs and not gaps and full else ("UNDETERMINED" if gaps or not full else "FAIL")
+    if gaps:                                                # what lies past an unread spend is not known
+        diffs = [f"in the read part of the tree: {d}" for d in diffs]
     return {"verdict": verdict, "diffs": gaps + diffs, "fuel": len(fuel), "emissions": emissions, "root": root,
             "splits": splits, "gap_txids": list(dict.fromkeys(gap_txids))}
 
@@ -545,7 +576,7 @@ def lookup_fanout(api, out, max_pages, addr=RT.CREATOR, h1_root=H1_ROOT):
         to_other = [(n, sat, a) for n, sat, kind, a, _ in outs if kind != "op_return" and a != addr]
         if not any(from_me):
             cls[t] = "inbound"; inbound.append(t)
-        elif all(from_me) and not to_other:
+        elif all(from_me) and not to_other and any(a == addr for n, sat, kind, a, _ in outs):
             cls[t] = "split"
         elif all(from_me):
             cls[t] = "emit"
