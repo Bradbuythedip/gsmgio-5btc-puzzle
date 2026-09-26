@@ -2411,3 +2411,24 @@ is still yinyang (slot D).
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent. Remaining
 recovery target: #8569's three questions.
+
+### Tick 65 (2026-09-26): "DOUBLE DOWN / no odds / 2×14" is the solved phase-3.2 clue; user-reported nulls recorded
+
+User-relayed analysis ("operator wall, not private-fact wall"). Checked:
+- The clue "Raising the stakes without extra chances of winning. A fubcd-king & oracle-queen, thingky
+  mvps, on a sad board but as wide as the first one seen." is the **phase-3.2 plaintext's own clue**
+  (`materials/phase32_plaintext_outer.txt` line 9). Its words spell the straddling-checkerboard
+  alphabet `fubcdora/lethingkymvpszjqwx.` and its width, 14 (the first grid). That stage is solved and
+  certified (VIC, rowheads {1,4}, the 91-letter sentence). So DOUBLE DOWN / "no odds" readings are
+  readings of an already-consumed instruction, not an endgame operator. The 2×14 board was also tested
+  against P32T at tick 1b (182 trials per board, 0) and parked.
+- The 11/21 → 96/48 last-words split (A‖B, B = last 48) is campaign 32 (closed, tick ~1296).
+- User-reported nulls, USER grade, not re-run: doubledown / double down / doubleornothing / double or
+  nothing; B‖A, A/B interleaves, A‖0x00·48, 0x00·48‖B; the odd/even 14-char VIC-alphabet streams
+  `FBDR.EHNKMP.QX` / `UCOALTIGYVSJZW` (one pad-01 event, chance). ~60+ decrypts, 0 hits, 0 P32T
+  freeze-oracle keys.
+- Agreed: checkpoint keys are proof-of-knowledge bearer keys, not identities (tick 59). The framing
+  "unknown operation on public ingredients" matches the constraint sheet (slots A–D); what is missing
+  is a sourced rule for that operation.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
