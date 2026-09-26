@@ -1826,3 +1826,25 @@ for `1NULY7…` still counts only if published (matching the standing gate).
 2. **"Prize pubkey 04f4d1bb…"**: `1GSMG1JC9…` is unspent, so only its hash160 is public — the
    uncompressed pubkey is not revealed until a spend. Any quoted prize pubkey is solver-claimed.
    Likewise `3GSMG24T…`, the `1GSMG1CLx…` dust, and locktimes `629998`/`840003` are unverified.
+
+### Addendum (2026-09-26): the "DBBI/FAED column-sums contain KEY" claim, re-falsified cold
+
+A pasted synthesis re-raised the tick-8 claim and elevated it to Tier A ("hard/reproducible"):
+DBBI column-sums = `SAZHMLKEYKRAG` (KEY@7-9), FAED block 6 = `DTEKEYUFFXGTD` (KEY@4-6).
+Recomputed the 7×13 column sums under every natural convention — digit map a=0…i=8 and
+a=1…i=9, letter base A=0 and A=1, and row-major / column-major / 13×7 fill:
+
+```
+DBBI  col-sums -> VFJERAIBCGTAF | UEIDQZHABFSZE | CMQLYHPIJNAHM | BLPKXGOHIMZGL
+FAED6 col-sums -> GYLGFBKGCJCYE | FXKFEAJFBIBXD | NFSNMIRNJQJFL | MERMLHQMIPIEK
+```
+
+**Neither claimed string reproduces, and "KEY" appears in none of them, under any orientation.**
+(The FAED6 value `MERMLHQMIPIEK` matches the tick-8 record exactly.) So `SAZHMLKEYKRAG` /
+`DTEKEYUFFXGTD` are produced by a chosen zero-mask, not by the raw sums — mask-overfitting, as
+tick 8 found (KEY is forceable in 9–11 of 11 windows in *every* block once a mask is free).
+Section 10 leaves Tier A; the dependent `f73d92 → KEY cols → 6,18,25 → FRY` chain (synthesis §11)
+collapses with it. The verified-but-coincidental items (f73d92 = 2·11·149·prime(661), 661=91+570,
+149=VIC length) remain as recorded at tick 32 (a ~1-in-11 factorization coincidence), and the
+103×103 → Half/Better-Half construction inherits the *excluded* 1327-byte blob's unauthenticated
+status (issue #104) and yields non-prize addresses. No change to the standing state.
