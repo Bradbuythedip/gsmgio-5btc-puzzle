@@ -1767,3 +1767,22 @@ phase-3.2 checkerboard line (the 14-wide genesis grid, tick 1b). The 8-wide ches
 different board. Laying the VIC alphabet under the FEN pieces (`FRALGMX` / `FRAEKV`) combined
 the two, which makes it an invented operator. Its null stands, but it should not have been run
 as sourced. The FEN is closed: no knight tours, no reuse of the FEN as a password, no overlays.
+
+### Loop tick 46 (2026-09-26): the three remaining named pairs, disposed
+
+1. **The 20 sums as the next soup field** (house alphabet): no page marker forces it. The soup
+   grammar (tick 10) has no field for sums. **Left, not run.**
+2. **479/484, zeroing the blue prime 5, then stop:** yellow 479, blue 484 − 5 = **479. The
+   halves become equal.** This is near-tautological: the gap is 5 and 5 is blue, so removing it
+   balances by construction. The only coincidence is that the gap is a prime present on the
+   blue side. It yields no word and no operand. **Stopped as specified.**
+3. **P32T / SalPhaseIon short as two 80-byte halves:** a solve must open both ("HALF and BETTER
+   HALF"), and no candidate with an independent name exists. **Nothing to run.**
+
+**Closed this week, not to be reissued:** r133, giveit/t, faed⊖VIC, the 2026 pages, the
+501-span, homemade -K/-iv, π 9:11, Telegram LSB = URL LSB, Architect-as-index from the DBBI
+sums, the 7×13 self-index, 20 sums → 24 primes, the 331/421/4943 π-chain, FEN overlays, FEN
+reuse, invented grid operations, the XOR-triangle citation, prime-basics reinsertion.
+
+**Standing state:** until a page names the next rewrite of the 20 sums or the two missing
+ingredient values (yellowblueprimes, yinyang), there is no AES pass to run.
