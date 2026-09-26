@@ -3249,3 +3249,57 @@ Re-relayed with sources: the AAA In-Memoriam page for Ijiri; Grigg 2005 (iang.or
    (addr_check), and campaign 26 checked every named object against them.
 
 No compute. **State unchanged.**
+
+### Tick 89 (2026-09-26): Grigg's papers page — no provenance; the Ricardian document-hash reading run once, null; the tick-88 lookups packaged as one command
+
+Source: the user pasted the HTML of Ian Grigg's papers page (iang.org/papers) and asked for next
+steps, executed.
+
+**Provenance: none.** 35 distinctive terms from the page were searched in the creator's own words,
+with 0 hits: Grigg, Ricardian, Systemics, financial cryptography, EOS, Corda, R3, CAcert, Gresham,
+silver bullet, Pareto, Szabo, Mark Miller, smart/split contract, "two halves", Ivan, Sgantzos,
+cellular automata, mandala, edge protocol, 7 layers, Baumol–Tobin, digital cash, Sum of All Chains,
+Ricardian Triple, IAmSatoshi, CBDC, triple entry, receipt, and the rest of the list. The only repo
+hits are this session's tick-88 text.
+
+**What the page offers, mapped to GSMG:**
+
+| page idea | GSMG status |
+|---|---|
+| the signed receipt is the transaction; 3 entries for 3 roles (2005, 2024) | tested at tick 88: the halves transact, in the 2020 two-signature form, and never co-sign |
+| Ricardian contract: the hash of a human-readable document is its identifier | the one checkable structure; campaign 54 below, null |
+| "two halves of a split contract" (Miller: a prose half and a code half) | a metaphor. The creator ties "better half" to `17ucy1…` (#3902). No operation |
+| multiple-neighbourhood cellular automata | the 2021 "neighbors" memo is resolved (Q±G, Q/2, 2Q; ticks 52–53); rule-engine readings are closed (ticks 67–69) |
+| "FC in 7 layers"; "The Sum of All Chains" | numerology and wordplay against the seven parts and `matrixsumlist`. No operation |
+| SHA1 file hashes in the page's HTML comments | Grigg's own file-integrity records, not GSMG objects |
+
+**campaign_54**, pre-registered in `intake/2026-09-26-ricardian/PREREG.md` and committed before the
+run. Six whole, byte-exact documents:
+- the three solved-stage plaintexts, re-derived by decryption and matched byte for byte to the saved
+  files (648, 4090 and 2422 B);
+- the phase-3.2 prose in front of P32T, in two boundary forms (2292 and 2288 B);
+- the pinned soup (`d39d10b1…`, 2149 B).
+
+Each went through the frozen path on raw bytes, the P32T freeze, the padding-independent scan and
+addr_check. **96 decrypts, 0 PKCS#7-valid (0.4 expected by chance), 0 freeze passes, 0
+padding-independent hits, 0 of 48 addresses.** The Ricardian reading is closed.
+
+The phase-3.2 plaintext is not UTF-8: bytes 447–1985 are its EBCDIC cp1141 section, solved upstream.
+The gate's helper takes str, so the run applies the same forms, KDFs, targets and check to the raw
+bytes.
+
+**The tick-88 lookups, packaged.** `harness/receipt_lookups.py` answers all three in one run:
+- the parents of the 2024 split's other inputs;
+- a walk up from `3GSMG24T…`'s funder `547246e9…`;
+- the signer of the 2021 transaction.
+
+It checks every fetched raw tx against its txid, caches it under `materials/chain/fetched/`, and
+writes `materials/chain/RECEIPT_LOOKUPS.md`. `--selftest` passes offline: the decode controls, the
+integrity check, and three positive controls on saved data. Applied to the 2020 split, lookup 1
+recovers the "Halving" parent. The walk from the 2024 split reaches the prize key. The signer check
+recognises `3GSMG24T…`'s key `0205eaf7…`.
+
+The environment's network policy blocks the tool here (mempool.space and blockstream.info are
+denied). Run it on an unblocked machine, or after allowing mempool.space.
+
+**State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
