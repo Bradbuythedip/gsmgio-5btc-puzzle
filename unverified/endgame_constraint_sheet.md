@@ -60,7 +60,7 @@ Neither frame is revived here.
 |---|---|---|---|
 | **A** `yellowblueprimes` | AUTH name (#8446) + AUTH poem (#1710 → #4105) + DERIVED 24-bit colour frame; **absent from the soup**; **no value rule** | be derived from the colour frame under a rule the source names (§2, §3) | be the English string as password (NEGATIVE: campaigns 01–05); be the 9/15 counts (no creator statement names them; #4105 under one reading points at 1/0 instead, ledger tick 19); be "any mask of the 24 bits, hashed" (NEGATIVE: campaigns 13/17/19; POLICY) |
 | **B** `matrixsumlist` | AUTH name (#8446) and DECODED from the soup (bin1 a/b block → ASCII) | take one frozen representation from §5, table B | grow new sum variants (POLICY; NEGATIVE: campaigns 02/04/12/14) |
-| **C** `lastwordsbeforearchichoice` | AUTH name (#8446) and DECODED from the soup (agda block, o=0 a=1…i=9 → int → hex → ASCII) | take one frozen value from §5, table C | be a standalone password (NEGATIVE: campaigns 01/05/14) |
+| **C** `lastwordsbeforearchichoice` | AUTH name (#8446) and DECODED from the soup (agda block, o=0 a=1…i=9 → int → hex → ASCII) | take one frozen value from §5, table C | be a standalone password (NEGATIVE: C0 in campaigns 01 and 16, C1 in campaign 16, C2 in campaign 01, C3 in campaigns 01 and 16) |
 | **D** `yinyang` | AUTH name (#8446); AUTH as a **phase / milestone reached after the current wall**: #9599 2023-08-06 HINT *"Probably the last hint: Once you hit a "ying yang", you'll be able to solve it the same day."*; #39224 2025-04-28 HINT *"when yingyang is reached, 2 hours max"*; #39237 2025-04-28 CONFIRM *"It's the next phase, but I await the day someone finally gets there."* (reply to "is yinyang found after decoding an AES ciphertext?") | be recognised when reached; work remains after it | be fed in as a password component — this is a READING of the three statements (the ledger's model correction 1), not their text; be assigned to `faed` (USER: stated in conversation only; no repo source names that pairing) |
 
 ## 2. Operand rows (objects that exist)
@@ -139,24 +139,31 @@ assumption and must be labelled as one. The table is not claimed to be exhaustiv
 | B2 | `8108108736759668` | column sums of the genesis grid |
 | B3 | `610876654997879` ‖ `8108108736759668` | rows then columns, no separator (one separator choice, frozen) |
 
-Note: B1–B3 were tested as passwords in campaigns 02/04 (NEGATIVE). Their role here is as a
-*slot value* in a combine, which is not the same test.
+Test record (NEGATIVE): B1 and B2 were tested standalone in campaign 01 (raw and four sha
+forms, all targets × KDFs; rerun over seven targets in tick 2). B1 was also consumed as a
+slot value inside the seven-token frame (campaigns 01/03/05/06/07/10) and B2 inside
+campaign 05. **B3 has never been AES-tested**; it was only address-checked (campaign 26).
+Their role here is as a *slot value* in the three-input combine of §6, which none of those
+runs performed.
 
 ### Table C — `lastwordsbeforearchichoice` (pick one row; do not add rows)
 
-The puzzle's Architect text is a cut of the film monologue that stops **before** the two-door
-choice: the last words of the puzzle text are `…good luck nevertheless i really hope youre
-the one ciao bella o`. So the choice boundary lies *after* the end of the puzzle text.
+Repo-checkable facts: the decoded Architect text (`phase3.2.ipynb`) is a rewritten
+paraphrase of the film monologue with puzzle-specific insertions; it contains no door or
+choice passage at all; unpunctuated, it ends
+`…goodluckneverthelessireallyhopeyouretheoneciaobellao`. That the film's two-door choice
+comes *after* the point where the puzzle text stops is film knowledge, not repo material.
 
-| id | value | why it is allowed |
-|---|---|---|
-| C0 | literal `lastwordsbeforearchichoice` | the label may be the value |
-| C1 | `ireallyhopeyouretheone` | the last Architect sentence in the puzzle text before the film's choice would begin |
-| C2 | `hopeitisthequintessentialhumandelusionsimultaneouslythesourceofyourgreateststrengthandyourgreatestweakness` | #3390 2020-04-08, the creator quoted it verbatim — but he added #3391 "not a hint btw, just fooling around", and in the film this line comes *after* Neo's choice (film knowledge, not repo material); lowest-graded row |
-| C3 | `ciaobellao` | the literal final token of the puzzle text; it is before the choice boundary because the choice is not in the text |
+| id | value | grade | why it is allowed |
+|---|---|---|---|
+| C0 | literal `lastwordsbeforearchichoice` | DECODED | the label may be the value |
+| C1 | `ireallyhopeyouretheone` | READING | a segmentation of the unpunctuated ending that drops `goodlucknevertheless` before it and `ciaobellao` after it |
+| C2 | `hopeitisthequintessentialhumandelusionsimultaneouslythesourceofyourgreateststrengthandyourgreatestweakness` | LORE, **explicit exception** | #3390 2020-04-08 (tagged LORE; #3391 "not a hint btw, just fooling around"), normalised: letters only, lower case, leading "Humph." dropped. Kept at the user's instruction as the one exception to the LORE rule; in the film the line is spoken *after* Neo's choice (film knowledge); lowest-graded row |
+| C3 | `ciaobellao` | READING | the last ten letters of the unpunctuated text, which the notebook author splits as "ciao bella o"; the row assumes the choice boundary is the end of the text |
 
-Each C row has been tried as a standalone password (campaigns 01/05/14, NEGATIVE). Same
-remark as for B.
+Test record (NEGATIVE): C0 standalone in campaigns 01 and 16; C1 standalone in campaign 16
+only; C2 (exactly this string) standalone in campaign 01 only; C3 standalone in campaigns
+01 and 16. Campaigns 05 and 14 only ever wrapped C rows inside products. Same remark as for B.
 
 ## 6. What is missing, per slot
 
