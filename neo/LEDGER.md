@@ -1742,3 +1742,11 @@ reinsert, then the P32T `0x10`×16 check.
 
 Also recorded: two ChatGPT screenshots (2026-09-26). Both used personal_context or read this
 repo. Neither shows a source for the "XOR triangle" line (tick 43 stands).
+
+**Tick 44 run (user-requested, one pass).** This is a literal instance within the soup's own
+machinery, the inverse of tick 42's zeroing. Tapes: DBBI, FAED and DBBI‖FAED as house-map
+digits (a=1…i=9). Reinsert the prime basics 2,3,5,7 (cycling) at every prime position, 0- and
+1-based, in two modes: insert before, or overwrite. Then apply the soup's field-decode
+(digits → int → hex → ASCII). 12 variants (24, 104 and 120/121 reinsertions): **31–44%
+printable, no alphabetic run of 5 or more, no 64-hex shape. Null.** No AES. The ordering reading
+is closed for these tapes; the object "the source codes" remains unnamed.
