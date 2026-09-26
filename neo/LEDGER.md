@@ -1911,3 +1911,17 @@ test only; no key material generated.
 
 Consistent with tick 15: `YOUWON` marks the operation, and the 21 + 64 letters around it are
 residue. Closed.
+
+### Addendum (2026-09-26): step 2 of the pasted plan — the three admissible keys, one pass, empty
+
+Keys: the 21-letter prefix `VOZIJBDTIQBRGVEOMZNBC`, the VIC sentence, `THEMATRIXHASYOU`, each in
+upper and lower case. Each raw and as sha256hex / SHA256HEX / sha256(sha256hex) / sha256d,
+EVP-MD5 and EVP-SHA256, against the two real locks only (`salph_inner` salt 3ab58534…, P32T salt
+b45a5e3d…), strict gate; P32T also checked with the last-block test (primary 0x0a‖0x0f·15,
+secondary 0x10·16). **120 trials, 0 hits, 0 near-misses, 0 last-block hits.** Lower-case forms
+had already failed in campaigns 01/07/10/16 and the YOUWON campaign; this pass adds the upper-case
+forms and the last-block check.
+
+Plan status: step 1 (constraint sheet) exists; step 2 empty; step 3 (third door, campaign 34)
+empty; step 4 has no survivor to test. Stop rule met. The public corpus is exhausted; the next
+input must be a new creator sentence or page.
