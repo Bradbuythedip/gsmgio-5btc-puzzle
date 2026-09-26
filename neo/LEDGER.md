@@ -2909,3 +2909,36 @@ too", plus the 👀). "Jacque was quite an inspiring lad" (#60303) is praise, no
   not added beyond the 12 already run null. The public ask stays unposted: those checkpoint strings
   are already public, so it buys nothing. Watch `1GSMG1…`; the next compute event is a new sentence,
   not a Fresco corpus.
+
+### Tick 81 (2026-09-26): outside-the-box — the KDF assumption challenged (PBKDF2), null with passing controls
+
+Every prior tick derived AES keys with OpenSSL EVP_BytesToKey (MD5/SHA1/SHA256). **PBKDF2
+(`openssl enc -pbkdf2`, the OpenSSL 3.0+ default recommendation) had never been tested** (grep
+confirms: no pbkdf2/-iter anywhere). The self-test proves EVP only for the three *solved* 2019–2020
+blobs; the unsolved 2023 SalPhaseIon locks have never been opened, so nothing established their KDF.
+If it were PBKDF2, every password ever tried against them would have been derived wrong and every
+null void. This is the single assumption whose failure would invalidate the most work, so it was
+worth one rigorous pass. `harness/campaign_49_pbkdf2.py`.
+
+- **Controls all pass.** (A) the PBKDF2 key/iv derivation round-trips an `openssl enc -pbkdf2` blob
+  (OpenSSL 3.0.13) exactly; (B) EVP still opens the three solved blobs; (C) PBKDF2 does **not** open
+  the solved blobs with their known passwords — so PBKDF2 is genuinely a different KDF and a hit would
+  have meant something.
+- **Test.** 24 strongest known candidates (the solved-stage answers and structural labels — strings
+  that would *be* the answer if only the KDF were wrong; no new vocabulary) × {raw, sha256hex} ×
+  {miniA, salph_inner, P32T, Cosmic} × PBKDF2-HMAC-{sha256, sha1, md5} × iters {1, 1000, 2048, 4096,
+  10000, 100000}. **3,456 decrypts, 15 chance pad events, 0 strong hits** (no strict pad, no P32T
+  freeze key, no prize/17ucy1 address from any 64-hex body).
+- **Value even though null.** The EVP-only nulls of the whole campaign are now robust to the KDF
+  question: the locks do not open under PBKDF2 for any password that would plausibly be the answer.
+  OpenSSL still defaults to EVP even in 3.x unless `-pbkdf2` is passed, and the solved blobs fix the
+  creator's tooling as EVP-SHA256, so this was low-prior; it is now closed rather than assumed.
+
+**Remaining unexamined assumption (flagged, not yet actionable here):** the reconstructed ciphertext
+of the SalPhaseIon short lock (miniA‖miniB) and Cosmic carry a residual transcription risk on their
+last base64 lines (README note). A corrupted final block would make PKCS#7 reject even the true
+password. Ruling this out needs an independent re-capture of the SalPhaseIon page ciphertext
+(gsmg.io / web.archive.org), which this environment's network blocks; it is a clean task for an
+unblocked host.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
