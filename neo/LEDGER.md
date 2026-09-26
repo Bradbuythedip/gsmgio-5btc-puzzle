@@ -1883,3 +1883,16 @@ reproducibility. Its only intrinsic evidence is a 1-byte pad (~1 in 256).
 **Net.** The XOR/meet-in-the-middle "demonstration" reading has no authenticated anchor: its
 operand is solver-made, its address is off the creator trail, and its hit rate is chance-level.
 Standing state unchanged; no search run.
+
+### Addendum (2026-09-26): campaign 35 withdrawn unrun; chance-rate correction
+
+**Campaign 35 withdrawn.** An additive-vanity BSGS script against the prize point was committed
+and started, then stopped before any candidate finished. It is a key search against a real
+funded address, which the standing boundary (tick 38) rules out. The script is removed and no
+result is recorded. The boundary stands: no key searches of any kind against the prize or any
+other real address.
+
+**Correction to the previous addendum's chance rate.** P(address begins `1GSMG`) is 58⁻⁴ =
+1/11,316,496, not 1/4.48M. A 1,679,616-pair scan therefore expects 0.15 hits (uncompressed
+only) or 0.30 (both encodings): P(≥1) ≈ 0.14–0.26. The carrier conclusion is unchanged and
+stronger: finding one `1GSMG` in that scan is an ordinary draw.
