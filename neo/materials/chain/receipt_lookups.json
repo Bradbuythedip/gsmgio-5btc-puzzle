@@ -1,0 +1,273 @@
+{
+  "fanout": {
+    "complete": true,
+    "cosigned_inputs": {},
+    "funders": [
+      "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+      "bc1q5rs27knqndl6ewkats0jv78222dzuw2g6h8mx5"
+    ],
+    "funding_events": [
+      {
+        "kind": "inbound",
+        "signers": [
+          "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD"
+        ],
+        "source": "raw",
+        "txid": "1f8eb99e2da7b573980fe01a91ff1582411a73e8c94236c9b0ab947c7a6cb5f7",
+        "unidentified_inputs": 0
+      },
+      {
+        "kind": "inbound",
+        "signers": [
+          "bc1q5rs27knqndl6ewkats0jv78222dzuw2g6h8mx5"
+        ],
+        "source": "raw",
+        "txid": "e5db0968fdaed7687434d0b15ee4bf213be26886c545b1594a319aed2d509355",
+        "unidentified_inputs": 0
+      }
+    ],
+    "history_complete": true,
+    "inbound": [
+      "f675e8f87159e088f16e9760d51ef9152e5dd37f1e426e2443671bf80091ddb8",
+      "7aed1985a0d5fe304c99e713891e6b632b483849b1689dc34979a0d0ca047a83",
+      "e6b79a146e9e1707bb61200a61222d84394e94a5bdfe6087d6ccc055c6400c4a",
+      "38162e4fd40822d3efdb520996a6fc577455cba0608de36836e648e21efdd98f",
+      "6c543613d42b32b36d0388e96cf39d0ceee36a0dd960cc688cedb8e4faba9b37",
+      "a4d1f5fbe980a80066a89455adf34287f26572b3041440eb57188f6168df2a8b",
+      "b9d1b0e9f5a6c9c67d79370971a39d13d15bd6a4354a06c7ee3b48655e301bef",
+      "3ed3932f6629fd0aba6a92eb870df75d3da4445436fbaba71b06adf74c061a97",
+      "557d13006666cd4ec24216197879a8935a631ebf6fddefb9927d23c38dc0efbd",
+      "5b7a4390523ea4e26d8be8aeb6d8de8b0ec4c4a7552be9e8ab812bffe7635498",
+      "8aaa96d3a945cf741bddf366949bd070f58688c07ea940b59453f7ac842500c5",
+      "f77d6b4a3a05446b823d0ea03261ffdfd41b8554f40d7ef8ddaba5f8cb17d717",
+      "8d8497ece6ca166fe3385d9e8a0e6ba9fb1c01b8cdfa006ece40bda35f8190f3",
+      "097a0806a714b673e51e03ba3d3a1a8d4a22eae27e8e257f1e8208132f7b4d67",
+      "e5db0968fdaed7687434d0b15ee4bf213be26886c545b1594a319aed2d509355",
+      "1f8eb99e2da7b573980fe01a91ff1582411a73e8c94236c9b0ab947c7a6cb5f7"
+    ],
+    "unknown_recipients": [],
+    "unread": [],
+    "verdict": "30 transactions; 16 inbound; 11 emissions; 0 unknown recipients"
+  },
+  "h1": {
+    "diffs": [],
+    "emissions": [
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "GSMG.io: Right, this is causality"
+        ],
+        "recipients": [
+          "1Jqq37KkZEt4F3Dt6qXdtyiMEFBBdawbkJ"
+        ],
+        "sat": [
+          1000
+        ],
+        "txid": "117e2796e6c1ab36ea9a8111e00c02e36d1be0eb1d4faa8b3ab3bf2087b0e321"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "GSMG.io: You are here because 227 chars were correct"
+        ],
+        "recipients": [
+          "1M5ypvDbp124ZtKPbg3GJg1JqNs1x7TPoN"
+        ],
+        "sat": [
+          990
+        ],
+        "txid": "62dbb701ee67c3f4c75a9b186505c5f46c7e56ac16142bbd3abbc139124e3bc0"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "GSMG.io: phase3.2 pass OK"
+        ],
+        "recipients": [
+          "1K23RS1y2fnuZRkhw5nUpFr5Jk5WN11Zeq"
+        ],
+        "sat": [
+          1000
+        ],
+        "txid": "2f64b8758f97eb5b3c30b4e9b06a408f26dc533732bc88b13077d3b2dd34ed62"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "GSMG.io: are you sure?"
+        ],
+        "recipients": [
+          "1AD2wfwXukZ1kUAy848hTQQ72aSBZPB75r"
+        ],
+        "sat": [
+          1000
+        ],
+        "txid": "bd1b5d81b3eab6d8aff56ca673852292751cfc24c7effb3afff57ad4b971254f"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "GSMG.io: part of the cipher"
+        ],
+        "recipients": [
+          "18CchrjA3Uzfrzy4DFqao9ric6YfK4hjdc"
+        ],
+        "sat": [
+          1000
+        ],
+        "txid": "496ab2c73a15ce530518915e27aaa6dcae98490175b4544f8a49c5b90578677d"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "GSMG.io: do you beleive me you need it?"
+        ],
+        "recipients": [
+          "1GyT5WrLYpwFkuiVoPDJZa1Q6jtjbjuBff"
+        ],
+        "sat": [
+          1000
+        ],
+        "txid": "3891dd146dce36ed7f97e5476aa3cd427ebc9a8535ce6353b72309b28e686ced"
+      },
+      {
+        "fuel_outputs": 3,
+        "memo": [
+          "Halving"
+        ],
+        "recipients": [
+          "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe"
+        ],
+        "sat": [
+          700
+        ],
+        "txid": "a798905f53fdcadcbd2e2a1e61d23ba69a07e26130a78c76da4bf4d7a170f383"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [],
+        "recipients": [
+          "1NULY7DhzuNvSDtPkFzNo6oRTZQWBqXNE9"
+        ],
+        "sat": [
+          1050
+        ],
+        "txid": "d6ff3da13c67f8e784f3c8d57eaa05ce4456da3eebf67fa36a5e2cd9ca6f6b70"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "Good job, Neo!"
+        ],
+        "recipients": [
+          "13HGhjkmKUkP8sk9k63BLmhkxRjy7uK4Rp"
+        ],
+        "sat": [
+          1000
+        ],
+        "txid": "722fbf3507b025e7618a4b3764b7b74d67c4d02e24b18f610f8e657d6b69e4cb"
+      },
+      {
+        "fuel_outputs": 1,
+        "memo": [
+          "Good job, Neo!"
+        ],
+        "recipients": [
+          "148XH2YBmLr4oAJXQcG84FpNYoBmqnVPHQ"
+        ],
+        "sat": [
+          1000
+        ],
+        "txid": "364de511fda4a139bc20d356a3e97ff1077987daa23818fcdf1fdca748286990"
+      }
+    ],
+    "fuel": 12,
+    "gap_txids": [],
+    "root": "1f8eb99e2da7b573980fe01a91ff1582411a73e8c94236c9b0ab947c7a6cb5f7",
+    "splits": [
+      "8ee72f469561c85c42d45e4b2c54391031c26ea3d633da0a12f938b0778aa21e",
+      "0ba2a2e2d5255bc9de9e697da32c451c4eda217ff42b968e2ff6b628edc9e5f9",
+      "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25"
+    ],
+    "verdict": "PASS"
+  },
+  "invariant": {
+    "cache_complete": true,
+    "cache_misses": 0,
+    "mode": "offline",
+    "network_requests": 0,
+    "prereg_sha256": "dc748d60324e8ffd79262e5a9c484128a71aa18b87c46a1b738cb8401071a555",
+    "receipt_lookups_sha256": "caee40296bfa1b188ffad0914fc9ab85d501ac8f51a96d34e766853174b20606",
+    "transient_failures": 0,
+    "unavailable_items": 0
+  },
+  "prereg": {
+    "bytes": 2322,
+    "path": "/home/brad/Downloads/gsmgio-5btc-puzzle/neo/intake/2026-09-26-fanout/PREREG.md",
+    "present": true,
+    "sha256": "dc748d60324e8ffd79262e5a9c484128a71aa18b87c46a1b738cb8401071a555"
+  },
+  "promotion": {
+    "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD": {
+      "ancestry_cut": null,
+      "ancestry_depth": 12,
+      "ancestry_missing": 0,
+      "ancestry_read": 12,
+      "i": [],
+      "ii": [],
+      "iii": false,
+      "iv": [
+        "1f8eb99e2da7b573980fe01a91ff1582411a73e8c94236c9b0ab947c7a6cb5f7"
+      ],
+      "keys": [
+        "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+        "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22"
+      ],
+      "promote": false,
+      "states": {
+        "i": false,
+        "ii": false,
+        "iii": false,
+        "iv": false
+      }
+    },
+    "bc1q5rs27knqndl6ewkats0jv78222dzuw2g6h8mx5": {
+      "ancestry_cut": [
+        914,
+        10
+      ],
+      "ancestry_depth": 12,
+      "ancestry_missing": 0,
+      "ancestry_read": 200,
+      "i": [],
+      "ii": [],
+      "iii": true,
+      "iv": [
+        "e5db0968fdaed7687434d0b15ee4bf213be26886c545b1594a319aed2d509355"
+      ],
+      "keys": [
+        "025d529a4b63c0097a63f50a3a9ca05cd54920521a73f658fbc76d195f6cf7ce3d"
+      ],
+      "promote": true,
+      "states": {
+        "i": null,
+        "ii": false,
+        "iii": true,
+        "iv": false
+      }
+    }
+  },
+  "verdicts": [
+    "NO",
+    "NO within depths 0\u201311 (12 transactions read; walk complete)",
+    "YES"
+  ],
+  "wrapper": {
+    "base": "https://mempool.space/api",
+    "http_cache_hits": 26,
+    "http_cache_misses": 0,
+    "mode": "offline",
+    "network_requests": 0,
+    "version": "2026-09-26.3"
+  }
+}

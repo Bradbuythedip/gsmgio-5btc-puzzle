@@ -1,0 +1,1204 @@
+{
+ "all_inputs_valid": true,
+ "h1": {
+  "diffs": [],
+  "fees_in_tree": 5260,
+  "fuel_outputs": 12,
+  "gap_txids": [],
+  "h1": "PASS",
+  "ok": true,
+  "root_fee": 2884
+ },
+ "meta": {
+  "cache_misses": 0,
+  "mode": "verify (cache only)",
+  "network_requests": 0,
+  "prereg_sha256": "dc748d60324e8ffd79262e5a9c484128a71aa18b87c46a1b738cb8401071a555",
+  "receipt_lookups_sha256": "caee40296bfa1b188ffad0914fc9ab85d501ac8f51a96d34e766853174b20606",
+  "txscript_sha256": "a06383bb99c9056edba5749f2c2e29be68c9241c61cd78b912757b1b0ba45b64",
+  "wrapper_version": "2026-09-26.3"
+ },
+ "transactions": [
+  {
+   "fee": 5535,
+   "fee_rate_sat_vb": 27.0,
+   "inputs": [
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "amount_sat": 2271325,
+     "index": 0,
+     "kind": "p2sh-p2wsh-2of2",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+      "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      },
+      {
+       "key_any_index": null,
+       "key_index": 2,
+       "low_s": true,
+       "pubkey": "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "d724975efe6e6d2bec0ed49daec7da31a13f359ab61fec54db648897726f5399:1",
+     "spent_script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887",
+     "why": "2 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "bc1q9kcup4cl59wxndkzd35e68kt28se37xy36psee",
+     "kind": "p2wpkh",
+     "n": 0,
+     "op_return": null,
+     "sat": 14172,
+     "script": "00142db1c0d71fa15c69b6c26c699d1ecb51e198f8c4"
+    },
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "kind": "p2sh",
+     "n": 1,
+     "op_return": null,
+     "sat": 2251618,
+     "script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887"
+    }
+   ],
+   "raw_on_hand": true,
+   "size": 370,
+   "total_in": 2271325,
+   "total_out": 2265790,
+   "txid": "483451c5047180592ea4eba51ce0b273d62cb363243f06db9ba3807c285c4566",
+   "version": 1,
+   "vsize": 205,
+   "weight": 817,
+   "wtxid": "6bad0f63b8dffd87b45fabb696045a80d26bbc6cb618908044efc14d7adbba61"
+  },
+  {
+   "fee": 2884,
+   "fee_rate_sat_vb": 14.0,
+   "inputs": [
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "amount_sat": 2251618,
+     "index": 0,
+     "kind": "p2sh-p2wsh-2of2",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+      "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      },
+      {
+       "key_any_index": null,
+       "key_index": 2,
+       "low_s": true,
+       "pubkey": "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "483451c5047180592ea4eba51ce0b273d62cb363243f06db9ba3807c285c4566:1",
+     "spent_script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887",
+     "why": "2 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 0,
+     "op_return": null,
+     "sat": 15000,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "kind": "p2sh",
+     "n": 1,
+     "op_return": null,
+     "sat": 2233734,
+     "script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887"
+    }
+   ],
+   "raw_on_hand": true,
+   "size": 371,
+   "total_in": 2251618,
+   "total_out": 2248734,
+   "txid": "1f8eb99e2da7b573980fe01a91ff1582411a73e8c94236c9b0ab947c7a6cb5f7",
+   "version": 1,
+   "vsize": 206,
+   "weight": 821,
+   "wtxid": "95543621747263f678703b36a9c8ed1aa2ab1da55a73c7644e628b0cb3e33637"
+  },
+  {
+   "fee": 5535,
+   "fee_rate_sat_vb": 27.0,
+   "inputs": [
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "amount_sat": 2271325,
+     "index": 0,
+     "kind": "p2sh-p2wsh-2of2",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+      "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      },
+      {
+       "key_any_index": null,
+       "key_index": 2,
+       "low_s": true,
+       "pubkey": "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "d724975efe6e6d2bec0ed49daec7da31a13f359ab61fec54db648897726f5399:1",
+     "spent_script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887",
+     "why": "2 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "bc1q9kcup4cl59wxndkzd35e68kt28se37xy36psee",
+     "kind": "p2wpkh",
+     "n": 0,
+     "op_return": null,
+     "sat": 14172,
+     "script": "00142db1c0d71fa15c69b6c26c699d1ecb51e198f8c4"
+    },
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "kind": "p2sh",
+     "n": 1,
+     "op_return": null,
+     "sat": 2251618,
+     "script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "parent of the root",
+   "size": 370,
+   "total_in": 2271325,
+   "total_out": 2265790,
+   "txid": "483451c5047180592ea4eba51ce0b273d62cb363243f06db9ba3807c285c4566",
+   "version": 1,
+   "vsize": 205,
+   "weight": 817,
+   "wtxid": "6bad0f63b8dffd87b45fabb696045a80d26bbc6cb618908044efc14d7adbba61"
+  },
+  {
+   "fee": 2884,
+   "fee_rate_sat_vb": 14.0,
+   "inputs": [
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "amount_sat": 2251618,
+     "index": 0,
+     "kind": "p2sh-p2wsh-2of2",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+      "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "028f26891f480f1985251e17ba39eced2f9af9228e8d17bb27f02bd0650861e5e1",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      },
+      {
+       "key_any_index": null,
+       "key_index": 2,
+       "low_s": true,
+       "pubkey": "03e4bf9bc90397504ddc7bc7d6a499cd9ae69ca47b212e0ea3d1ee029d0c1e2a22",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "483451c5047180592ea4eba51ce0b273d62cb363243f06db9ba3807c285c4566:1",
+     "spent_script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887",
+     "why": "2 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 0,
+     "op_return": null,
+     "sat": 15000,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "37mh7EYetVKAesxqzv968sTYqSLF8dE6oD",
+     "kind": "p2sh",
+     "n": 1,
+     "op_return": null,
+     "sat": 2233734,
+     "script": "a91442b320c2e181b4a0a791afbc1d4ad706d0ab1f8887"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "root",
+   "size": 371,
+   "total_in": 2251618,
+   "total_out": 2248734,
+   "txid": "1f8eb99e2da7b573980fe01a91ff1582411a73e8c94236c9b0ab947c7a6cb5f7",
+   "version": 1,
+   "vsize": 206,
+   "weight": 821,
+   "wtxid": "95543621747263f678703b36a9c8ed1aa2ab1da55a73c7644e628b0cb3e33637"
+  },
+  {
+   "fee": 262,
+   "fee_rate_sat_vb": 1.0,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 15000,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "1f8eb99e2da7b573980fe01a91ff1582411a73e8c94236c9b0ab947c7a6cb5f7:0",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 0,
+     "op_return": null,
+     "sat": 1189,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1189,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 2,
+     "op_return": null,
+     "sat": 1180,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 3,
+     "op_return": null,
+     "sat": 1180,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 4,
+     "op_return": null,
+     "sat": 10000,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "split",
+   "size": 344,
+   "total_in": 15000,
+   "total_out": 14738,
+   "txid": "8ee72f469561c85c42d45e4b2c54391031c26ea3d633da0a12f938b0778aa21e",
+   "version": 1,
+   "vsize": 262,
+   "weight": 1046,
+   "wtxid": "7f9ebf1eaf20292f1da66651c85d537200170128dd66d7e78f0d346a18aa0821"
+  },
+  {
+   "fee": 200,
+   "fee_rate_sat_vb": 1.0101,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 10000,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "8ee72f469561c85c42d45e4b2c54391031c26ea3d633da0a12f938b0778aa21e:4",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 0,
+     "op_return": null,
+     "sat": 7400,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1200,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 2,
+     "op_return": null,
+     "sat": 1200,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "split",
+   "size": 279,
+   "total_in": 10000,
+   "total_out": 9800,
+   "txid": "0ba2a2e2d5255bc9de9e697da32c451c4eda217ff42b968e2ff6b628edc9e5f9",
+   "version": 1,
+   "vsize": 198,
+   "weight": 789,
+   "wtxid": "118ffe16f6ccd852a9d8ffeffa04a0458f3ecfdd345f8fd86a20cf4b4f78f1c3"
+  },
+  {
+   "fee": 294,
+   "fee_rate_sat_vb": 1.0,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 7400,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "0ba2a2e2d5255bc9de9e697da32c451c4eda217ff42b968e2ff6b628edc9e5f9:0",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 0,
+     "op_return": null,
+     "sat": 1106,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1200,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 2,
+     "op_return": null,
+     "sat": 1200,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 3,
+     "op_return": null,
+     "sat": 1200,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 4,
+     "op_return": null,
+     "sat": 1200,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "kind": "p2sh",
+     "n": 5,
+     "op_return": null,
+     "sat": 1200,
+     "script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "split",
+   "size": 375,
+   "total_in": 7400,
+   "total_out": 7106,
+   "txid": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25",
+   "version": 1,
+   "vsize": 294,
+   "weight": 1173,
+   "wtxid": "c1738212c3714ebcbd76eacabaf482ae8be9f6ea115be422937e195567e71916"
+  },
+  {
+   "fee": 189,
+   "fee_rate_sat_vb": 1.05,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1189,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "8ee72f469561c85c42d45e4b2c54391031c26ea3d633da0a12f938b0778aa21e:0",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "GSMG.io: Right, this is causality",
+     "sat": 0,
+     "script": "6a2147534d472e696f3a2052696768742c20746869732069732063617573616c697479"
+    },
+    {
+     "address": "1Jqq37KkZEt4F3Dt6qXdtyiMEFBBdawbkJ",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1000,
+     "script": "76a914c3b63406a08c6f6632b652231de04145c2207da888ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 261,
+   "total_in": 1189,
+   "total_out": 1000,
+   "txid": "117e2796e6c1ab36ea9a8111e00c02e36d1be0eb1d4faa8b3ab3bf2087b0e321",
+   "version": 1,
+   "vsize": 180,
+   "weight": 717,
+   "wtxid": "c7cd86d98a38cca3655a1e0094daad33161aab4f196dfe62f9ad9d55d3f105b1"
+  },
+  {
+   "fee": 199,
+   "fee_rate_sat_vb": 1.0,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1189,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "8ee72f469561c85c42d45e4b2c54391031c26ea3d633da0a12f938b0778aa21e:1",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "GSMG.io: You are here because 227 chars were correct",
+     "sat": 0,
+     "script": "6a3447534d472e696f3a20596f75206172652068657265206265636175736520323237206368617273207765726520636f7272656374"
+    },
+    {
+     "address": "1M5ypvDbp124ZtKPbg3GJg1JqNs1x7TPoN",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 990,
+     "script": "76a914dc539d9901881a34f8d3933b5ee361632d8d6f2388ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 281,
+   "total_in": 1189,
+   "total_out": 990,
+   "txid": "62dbb701ee67c3f4c75a9b186505c5f46c7e56ac16142bbd3abbc139124e3bc0",
+   "version": 1,
+   "vsize": 199,
+   "weight": 794,
+   "wtxid": "04d99c7abc546d91cd9d035004184d7055d6b1b434af67894e8771d9212a222d"
+  },
+  {
+   "fee": 180,
+   "fee_rate_sat_vb": 1.0465,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1180,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "8ee72f469561c85c42d45e4b2c54391031c26ea3d633da0a12f938b0778aa21e:2",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "GSMG.io: phase3.2 pass OK",
+     "sat": 0,
+     "script": "6a1947534d472e696f3a207068617365332e322070617373204f4b"
+    },
+    {
+     "address": "1K23RS1y2fnuZRkhw5nUpFr5Jk5WN11Zeq",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1000,
+     "script": "76a914c5a4b38288babd356ba9c371de5975e7d49ba3e488ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 253,
+   "total_in": 1180,
+   "total_out": 1000,
+   "txid": "2f64b8758f97eb5b3c30b4e9b06a408f26dc533732bc88b13077d3b2dd34ed62",
+   "version": 1,
+   "vsize": 172,
+   "weight": 685,
+   "wtxid": "0edacc8fbd77b6c09bcf9a7df9f17e6be1444ab471f1021036126569710a7a39"
+  },
+  {
+   "fee": 180,
+   "fee_rate_sat_vb": 1.0651,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1180,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "8ee72f469561c85c42d45e4b2c54391031c26ea3d633da0a12f938b0778aa21e:3",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "GSMG.io: are you sure?",
+     "sat": 0,
+     "script": "6a1647534d472e696f3a2061726520796f7520737572653f"
+    },
+    {
+     "address": "1AD2wfwXukZ1kUAy848hTQQ72aSBZPB75r",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1000,
+     "script": "76a91464ffbec5bbdf453699c81d621d852169b4fac8c588ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 251,
+   "total_in": 1180,
+   "total_out": 1000,
+   "txid": "bd1b5d81b3eab6d8aff56ca673852292751cfc24c7effb3afff57ad4b971254f",
+   "version": 1,
+   "vsize": 169,
+   "weight": 674,
+   "wtxid": "ddc56e0dea969924429c2dddcaf04d43f2ff4133d31483d1eeafefa3eb598b58"
+  },
+  {
+   "fee": 200,
+   "fee_rate_sat_vb": 1.1494,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1200,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "0ba2a2e2d5255bc9de9e697da32c451c4eda217ff42b968e2ff6b628edc9e5f9:1",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "GSMG.io: part of the cipher",
+     "sat": 0,
+     "script": "6a1b47534d472e696f3a2070617274206f662074686520636970686572"
+    },
+    {
+     "address": "18CchrjA3Uzfrzy4DFqao9ric6YfK4hjdc",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1000,
+     "script": "76a9144efb42b89b4c8f081ead5b3aca26f5938847d0bd88ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 255,
+   "total_in": 1200,
+   "total_out": 1000,
+   "txid": "496ab2c73a15ce530518915e27aaa6dcae98490175b4544f8a49c5b90578677d",
+   "version": 1,
+   "vsize": 174,
+   "weight": 693,
+   "wtxid": "5df3fcccd1fc6a176b74ce5de17499b483a276325b2bdc8297404b1f7830b486"
+  },
+  {
+   "fee": 200,
+   "fee_rate_sat_vb": 1.0753,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1200,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "0ba2a2e2d5255bc9de9e697da32c451c4eda217ff42b968e2ff6b628edc9e5f9:2",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "GSMG.io: do you beleive me you need it?",
+     "sat": 0,
+     "script": "6a2747534d472e696f3a20646f20796f752062656c65697665206d6520796f75206e6565642069743f"
+    },
+    {
+     "address": "1GyT5WrLYpwFkuiVoPDJZa1Q6jtjbjuBff",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1000,
+     "script": "76a914af36f3055e2e5e12cf77da10beb981d2201dd1e488ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 267,
+   "total_in": 1200,
+   "total_out": 1000,
+   "txid": "3891dd146dce36ed7f97e5476aa3cd427ebc9a8535ce6353b72309b28e686ced",
+   "version": 1,
+   "vsize": 186,
+   "weight": 741,
+   "wtxid": "90a7992afb9c3028e6abb3ead153a3eb62793652042c589c463e1be4dff8e281"
+  },
+  {
+   "fee": 2806,
+   "fee_rate_sat_vb": 8.3761,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1200,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:2",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1200,
+     "index": 1,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:1",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    },
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1106,
+     "index": 2,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:0",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "Halving",
+     "sat": 0,
+     "script": "6a0748616c76696e67"
+    },
+    {
+     "address": "1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 700,
+     "script": "76a914a9553269572a317e39f0f518cb87c1a0ee1dbae488ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 578,
+   "total_in": 3506,
+   "total_out": 700,
+   "txid": "a798905f53fdcadcbd2e2a1e61d23ba69a07e26130a78c76da4bf4d7a170f383",
+   "version": 1,
+   "vsize": 335,
+   "weight": 1340,
+   "wtxid": "bedecc58200e534fb7ae44dbb56dc6fb47c2aa1b49a05bfc188b41db964db8f5"
+  },
+  {
+   "fee": 150,
+   "fee_rate_sat_vb": 1.1029,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1200,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:3",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": "1NULY7DhzuNvSDtPkFzNo6oRTZQWBqXNE9",
+     "kind": "p2pkh",
+     "n": 0,
+     "op_return": null,
+     "sat": 1050,
+     "script": "76a914eb862e37998c1d077a6c0b46330bccb5f73427aa88ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 217,
+   "total_in": 1200,
+   "total_out": 1050,
+   "txid": "d6ff3da13c67f8e784f3c8d57eaa05ce4456da3eebf67fa36a5e2cd9ca6f6b70",
+   "version": 1,
+   "vsize": 136,
+   "weight": 541,
+   "wtxid": "d1978e9de8b552664ae957d04f224842dbe23b720ea2c5a7a525c9b5d120f41f"
+  },
+  {
+   "fee": 200,
+   "fee_rate_sat_vb": 1.2422,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1200,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:4",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "Good job, Neo!",
+     "sat": 0,
+     "script": "6a0e476f6f64206a6f622c204e656f21"
+    },
+    {
+     "address": "13HGhjkmKUkP8sk9k63BLmhkxRjy7uK4Rp",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1000,
+     "script": "76a914190403becbbc7bb057d7ad2e1d42c5728bb6b3f988ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 242,
+   "total_in": 1200,
+   "total_out": 1000,
+   "txid": "722fbf3507b025e7618a4b3764b7b74d67c4d02e24b18f610f8e657d6b69e4cb",
+   "version": 1,
+   "vsize": 161,
+   "weight": 641,
+   "wtxid": "b167e2e655d3e4a6b24c882c25babca670241c8151fdaa01f1a4f4e9f4767f22"
+  },
+  {
+   "fee": 200,
+   "fee_rate_sat_vb": 1.2422,
+   "inputs": [
+    {
+     "address": "3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK",
+     "amount_sat": 1200,
+     "index": 0,
+     "kind": "p2sh-p2wpkh",
+     "ok": true,
+     "parent_raw_on_hand": true,
+     "pubkeys": [
+      "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b"
+     ],
+     "signatures": [
+      {
+       "key_any_index": null,
+       "key_index": 1,
+       "low_s": true,
+       "pubkey": "0205eaf779d2ba38eac770699b8f59ccbcf645ab6789ed481a53c1f8d2c489c04b",
+       "sighash": "ALL",
+       "status": "verified",
+       "strict_der": true
+      }
+     ],
+     "spends": "547246e9fec52847f4710ec6d6a04673cbfb3eea7af6c04b79c433ce44059d25:5",
+     "spent_script": "a914a1c3c9bc2b46859a40baf2d4831d952e562b26d087",
+     "why": "1 signature(s) verified"
+    }
+   ],
+   "locktime": 0,
+   "ok": true,
+   "outputs": [
+    {
+     "address": null,
+     "kind": "op_return",
+     "n": 0,
+     "op_return": "Good job, Neo!",
+     "sat": 0,
+     "script": "6a0e476f6f64206a6f622c204e656f21"
+    },
+    {
+     "address": "148XH2YBmLr4oAJXQcG84FpNYoBmqnVPHQ",
+     "kind": "p2pkh",
+     "n": 1,
+     "op_return": null,
+     "sat": 1000,
+     "script": "76a91422548ffed7b782fcfa8b48e697674055cbcd66cb88ac"
+    }
+   ],
+   "raw_on_hand": true,
+   "role": "emission",
+   "size": 243,
+   "total_in": 1200,
+   "total_out": 1000,
+   "txid": "364de511fda4a139bc20d356a3e97ff1077987daa23818fcdf1fdca748286990",
+   "version": 1,
+   "vsize": 161,
+   "weight": 642,
+   "wtxid": "ff662118d8326cdc9239df9699605c64e365fe163641313e15fef3990335c09f"
+  }
+ ]
+}

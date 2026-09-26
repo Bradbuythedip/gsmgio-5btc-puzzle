@@ -3586,3 +3586,93 @@ Then push the frozen cache (`materials/chain/fetched/` including `json/` and `es
 here. The one open topology lookup is `e5db0968…`'s other output.
 
 **State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
+
+### Tick 94 (2026-09-26): the reviewed code replays the frozen cache; H1 PASS computed by the tool; the bootstrap chain audited signature by signature; `+jkl` logged as a coincidence marker; a two-door comparison pre-registered
+
+**Replay.** The user ran the reviewed code offline on the frozen cache from the tick-93 sync:
+- **Code:** commit `3edd71f`; `receipt_lookups.py` sha256 `caee4029…` and `txscript.py` `a06383bb…`, both equal to the
+  committed files.
+- **Invariant:** 0 network requests, 0 cache misses, 0 unavailable items. There was no second live pass.
+- **Records:** `materials/chain/RECEIPT_LOOKUPS.md`, `receipt_lookups.json` and `VERIFY_483451c5_1f8eb99e_H1.{md,json}`
+  are committed as the user-run record. The raws stay in the user's cache (user grade; heights and dates are
+  explorer-reported).
+
+**H1, computed by the tool: PASS.** 12 fuel outputs, 10 leaf spends, 3 splits (`8ee72f46…`, `0ba2a2e2…`, `547246e9…`) and
+no differences. The check includes the PREREG table's attributes: six checkpoint memos, `1NULY7…` a bare 1,050 sat,
+two "Good job, Neo!", and "Halving" paying 700 sat.
+
+**Promotion,** as at tick 93:
+- `37mh…` closes: (i)–(iv) are all false, and the (i) walk ran to its bound (12 transactions).
+- `bc1q5rs27…` is PROMOTE by (iii). Its (i) is NOT DETERMINED: the 200-fetch cap stopped the walk with 914 transactions
+  unread from depth 10.
+
+**The bootstrap chain, audited offline** (`verify 483451c5 1f8eb99e --h1`). Every input is valid, and all 17 signatures
+are SIGHASH_ALL, strict DER and low S.
+- **`483451c5…`** (a 37mh 2-of-2 spend) spends `d724975e…:1` = 2,271,325 sat. It pays 14,172 sat to
+  `bc1q9kcup4cl59wxndkzd35e68kt28se37xy36psee` and 2,251,618 sat back to 37mh; fee 5,535 sat (27 sat/vB).
+- **`1f8eb99e…`** spends `483451c5…:1` = 2,251,618 sat. It pays 15,000 sat to 3GSMG24T and 2,233,734 sat back to 37mh;
+  fee 2,884 sat (14 sat/vB).
+- **Key order:** in both 37mh spends, signature 1 verifies under key 1 `028f2689…` and signature 2 under key 2
+  `03e4bf9b…`, in CHECKMULTISIG order.
+- **The tree:** 15,000 sat = 9,740 sat emitted + 5,260 sat of split and emission fees. The three splits and ten emissions
+  each verify under 3GSMG24T's key `0205eaf7…`.
+- **The user's decode** of `1f8eb99e…` (wtxid `95543621…`; witness script hashing to `c6bd364a…`, the program of 37mh;
+  one output to 3GSMG24T and one back to 37mh) agrees with the audit. It was recomputed here with the repo's helpers and
+  by a panel agent with its own code. Reversing the key order would give `3NfxHWpr…`, so the order is committed.
+- **What the parent shows:** `483451c5…` has the same shape as `1f8eb99e…`, one payee plus change back to 37mh. The
+  15,000 sat to 3GSMG24T is one routine payout among the 4,332 transactions of a busy 2-of-2 wallet. That is consistent
+  with a service's withdrawal wallet paying the creator. The two keys identify that wallet, not the creator; they stay
+  topology only, with no EC work and no AES candidates.
+
+**`+jkl`: coincidence marker, not admissible.** The user proposed a positional reading: selectors 31/73 (yellowblueprimes)
+and 137/143 ("another door") read on SalPhaseIon ‖ one character ‖ P32T as Base64 text. An independent panel (facts,
+null model, advocate, preregistration designer, judge) reported the following.
+- **The positions are correct.**
+- **Only two characters carry information.** The `k` at 137 is forced by the `Salted__` header for any one-character
+  boundary, and the `+` at 31 is common to both doors. Only `j` (a miniB ciphertext character) and `l` (a P32T salt
+  character) are free.
+- **Exact `jkl` is 1 in 4,096** in the chosen construction. Over the 32 constructions already in play (door order,
+  boundary, A|B junction, 0/1-based, 31/73 against the house map's 40/88), a 3-letter run is about 1 in 58, and any
+  sequence pattern about 1 in 25. That lies between the ledger's "suggestive" level (about 1 in 20) and the tier at which
+  31/73→42 is held (about 1 in 1,600).
+- **`+jkl` needs a mixed rule.** The creator's own layout puts the 40-symbol "enter" between miniA and miniB, and P32T is
+  64 characters, CRLF, 64 characters. `+jkl` appears only if both doors' internal breaks are deleted and exactly one
+  character is inserted between the doors. Every consistent rule reads something else: `+jX4`, `+3VW`, `+jVW` or `+a8e`.
+- **The spine (42 / 64 / 6 / 112) gives zero evidence.** It is built from the selector numbers only and is the same
+  whatever the door content or join.
+- **The selectors have no source.** 31/73 depends on the a=0 letter map. No derivation of 137/143 exists in the repo, its
+  full git history or the session transcripts. Nothing in creator material says to join the doors or to index their
+  Base64 text. The tick-47 model also names SalPhaseIon as the "another door"; under that reading, 137/143 would fall in
+  SalPhaseIon and read `+qkY`.
+
+**Decisions (user):**
+- The gate stays unchanged, with no exception for `+jkl`.
+- `137/143` is a claimed prior result whose derivation is missing. If the Telegram message that produced it surfaces, it
+  is filed with community material (`unverified/`), not in the solving chain.
+
+**Tooling** (second and third review rounds, commits `ea61083`, `3edd71f`, `6072f45`). The verification of the tick-93
+fixes found further defects, each reproduced; all are fixed.
+- **Signatures now follow consensus.**
+  - Each signature carries a status, including "verifies only under key k, out of CHECKMULTISIG order".
+  - Pre-BIP66 signatures are parsed with Core's lax DER parser.
+  - A P2PK spend may leave items below the signature.
+  - A spent script that is no standard template is "not checkable", never "invalid".
+  - Over Bitcoin Core's `tx_valid.json`, no valid vector is now called invalid.
+- **Signer attribution** no longer depends on which raws happen to be on disk, so a sync and its offline replay agree.
+- **Promotion:**
+  - Rule (iii) requires the funder's own funding in its fetched history; a P2PK funder had been promoted on an empty
+    history.
+  - Co-signers and taproot keys feed (i) and (ii).
+  - Section 3 reads Q−G's whole history.
+- **`verify` is read-only.** It audits every tree spend, including unread ones (exit 6, fees marked PARTIAL), reports the
+  root's fee separately and resolves txid prefixes.
+- **H1 matches the pre-registration exactly:**
+  - an OP_RETURN-only spend is not a split;
+  - a split may not merge an outside input;
+  - the table's memo, bare and amount attributes are checked;
+  - 13 perturbations and 4 gap cases give the pre-registered verdicts.
+- **Replay:** a cache synced with the tick-92 code still replays offline with 0 misses.
+
+**Next:** the user proposed a structural comparison of the two 96-byte envelopes under complementarity operations, with
+exact acceptance only. It is pre-registered at `intake/2026-09-26-twodoor/PREREG.md`. There are no decrypts: the
+acceptance is an exact marker string or an address-matching key. The result is recorded in the next tick.
