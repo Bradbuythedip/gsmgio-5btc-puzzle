@@ -2779,3 +2779,34 @@ Community posts, USER grade, read from the public pages. Neither carries a creat
   `b1895055…`). That settles line 25's residual-risk note. Code from that repo is never run.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 76 (2026-09-26): the 196 = 91 + 14 + 91 scalar test, pre-registered and run once — null
+
+User-relayed follow-up to ticks 67–69: treat DBBI and the VIC sentence, the two 91-symbol streams,
+plus a "14-bit middle" as the three parts of 196 = 91 + 14 + 91, and test them as keys.
+Pre-registered at `intake/2026-09-26-196split/PREREG.md`, pushed before the run.
+`harness/campaign_46_196_split.py`.
+
+- **Definitions fixed before the run.** The 14 in the identity is the main diagonal (`M_diag` =
+  `01000000111111`). The spiral's bits 91–104 (`M_spiral` = `10011011001010`) were run as the draft's
+  alternative. Its "rows 7–8" is 28 cells and was not run. Both middles are functions of the known
+  URL. The draft's residual expression `(ord(d) − ord(v)) % 26 + 65` mixes lower- and upper-case
+  offsets, so it is the authenticated YOUWON stream shifted by 6 ("EUACUT" at 21). Both were run,
+  labelled; the self-check confirms the shift.
+- **Result: 0 of 10 scalars × 2 encodings × 2 addresses** (prize, `17ucy1…`). The scalars:
+  sha256(DBBI), sha256(VIC) (a re-check of campaigns 34/43), sha256 of both residual renderings,
+  sha256(DBBI ‖ M ‖ VIC) for both middles, and each middle as int(M, 2) and as the integer of its
+  ASCII bits. **Closed as thematic, not cryptographic**, by the draft's own rule. No reorderings or
+  other middles.
+- **Prior worth recording.** The prize address carries a six-character vanity prefix (`1GSMG1`),
+  about 1 in 6.6×10⁸ for a random key. A fixed natural-language string's sha256 lands on such a
+  prefix with that probability, so any "sha256(puzzle text) = prize key" reading needs text with free
+  symbols ground for the vanity. DBBI has such freedom (85 unconstrained a–i symbols around YOUWON),
+  which is why its test was worth running; it is null.
+- **The pasted K₁₄ solver's five bugs** (clockwise spiral, three flipped bits, 661 applied to a
+  196-bit object, the mask never applied, no decrypt) and its repaired 0/140 are USER grade. None
+  applies to campaign 44 (tick 68). That run self-checks that the authenticated CCW spiral reproduces
+  the URL, reads the grid from the primary JSON, applies the VIC mask, and uses gate.py's decrypt
+  path. Its null stands on its own.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
