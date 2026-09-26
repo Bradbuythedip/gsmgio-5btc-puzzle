@@ -1573,3 +1573,36 @@ has run. That pass already shows **the 700-sat "Halving" output (`a798905f…f38
 input of the 2.5 BTC halving spend (`2aa9a4a9…1b13`)**. The creator sent dust plus OP_RETURN
 `Halving` from `3GSMG24TujqfMJG1kQoBX18DzJHQLeJYMK` into the prize address, then spent it
 alongside the prize coins, so one party controls both the prize key and the `3GSMG24` wallet.
+
+### Loop tick 38 (2026-09-26): on-chain record, creator trail vs community traffic
+
+Source: the user's `esplora_flows.py` run (blockstream.info, 216 calls, 209 txs), pasted back
+into the session. Balances at that snapshot: prize `1GSMG1JC9…` 1.25636967 BTC; `17ucy1…`
+3.75055856 BTC, never spent; `1GSMG1CLx…` 0.01347934 BTC, never spent.
+
+**Creator trail (canon).** Each item is linked by spends to the prize key or its 2019 funder.
+- 2018-01-11: `1EtbTvVB8QTGN4mduSdy7n4cZQm4iYTpQ1` pays 1,337,000 sat to the vanity
+  `1GSMG1CLxGXuFtnKbwh1QWfp4xA6reAet3`.
+- 2019-04-13 (block 571497, locktime 571496): the same `1EtbTv…` pays exactly 5.0 BTC to the prize.
+- 2020-03-24 to 04-07: `3GSMG24T…` sends 1000-sat outputs with OP_RETURNs:
+  "GSMG.io: Right, this is causality", "…do you beleive me you need it?", "…part of the cipher",
+  "…phase3.2 pass OK", "…are you sure?", "…You are here because 227 chars were correct",
+  "Good job, Neo!" ×2. A bare 1050-sat output goes to `1NULY7DhzuNvSDtPkFzNo6oRTZQWBqXNE9`.
+- 2020-05-11 (block 630001): OP_RETURN `Halving` + 700 sat from `3GSMG24T…`. The prize key then
+  spends that 700 sat together with the 5 BTC, sending 2.5 BTC to `17ucy1…` with change back.
+- 2021-07-18: OP_RETURN "GSMG.io neighbors, half and double" + 5000 sat to four addresses. The
+  user reports them as the P2PKHs of 2P, P/2, P±G on the prize point. Not re-derived here.
+- 2024-04-24 (locktime 840003): the prize key sends 1.25 BTC to `17ucy1…`, change back.
+
+**Everything else is unauthenticated.** None of its inputs trace to `3GSMG24T…` or `1EtbTv…`.
+From 2023 on, the prize and `17ucy1…` are a public chalkboard: copied dust sizes, puzzle
+slogans, claimed "Neo wallets", the `1GSMG9…` "GSMG WITNESS" blobs, and the Feb/Apr 2026 token
+spray from `1JG648…`/`145ZQ9…`. The user attributes those two addresses to an old Cosmic
+decrypt; not verified here. An unidentified bc1q sender wrote "Happy New Year!" (bits and
+string reversed) and "illusions" (7-bit reversal); unattributed. If any of those keys were the
+prize key, the coins would have moved. They have not.
+
+**Boundary.** This session runs no further key searches, of any kind, against the prize or any
+other real address. The one meet-in-the-middle run (tick 37) is the last. The gate's rule
+stands: only new primary material. A preimage for `1NULY7…` counts only if it is published or
+named by the creator's circle, not if it is searched for.
