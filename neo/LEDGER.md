@@ -1671,3 +1671,25 @@ Nothing in the transcript is a new primary. The live lead remains tick 39: what 
 **Deliberately not run (unsourced):** the decimal concatenation `55656860…` as a password,
 XOR/permutation of FAED by those numbers, and a 4-state "@/A" reading. The numeric frame
 stays a pointer (479/484 → PRIVATEKEY). The gate stays empty.
+
+### Loop tick 42 (2026-09-26): three user-specified sourced tests, all closed
+
+**Control.** The soup's own field-decode (house map o=0, a=1…i=9 → concatenate → decimal int
+→ hex → ASCII, whole z-delimited segment) reproduces `lastwordsbeforearchichoice` and
+`thispassword`. The tests below use exactly this rule.
+
+1. **DBBI as a 7×13 house-value table.** Row sums `55 65 68 60 49 63 62`, column sums
+   `28 38 42 37 24 33 15 34 35 39 26 33 38` (the user's 20 sums). Field-decode of rows and
+   columns, concatenated and mod 10, and of the 91 cells themselves: 36–67% printable, no
+   English, no 64-hex. a/b binary on the grid (value parity, both polarities, row- and
+   column-major, MSB-first like bin1): 27–45% printable. **Closed.**
+2. **Zeroing on the blue primes {2,3,5,7}.** This zeroes 61 of 91 cells. The same decodes
+   give 0–67% printable garbage. **Closed** (one pass, as specified).
+3. **P32T board from the phase-3.2 clue plus the phase-2 FEN.** The clue ("fubcd-king &
+   oracle-queen, thingky mvps, on a sad board but as wide as the first one seen") already
+   built the VIC alphabet. An FEN overlay needs an 8-wide board: `FUBCDORA / .LETHING /
+   KYMVPS.J / QZXW`. Letters under the FEN pieces are `FRALGMX` (white `FRAGM`, black `LX`);
+   no token. **Stop rule applied: no AES pass.**
+
+The gate stays empty. The missing object is still the two short words behind
+yellowblueprimes and yinyang, which need a named rule to print them.
