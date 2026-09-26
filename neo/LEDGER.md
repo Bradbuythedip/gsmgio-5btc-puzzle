@@ -1501,3 +1501,28 @@ creator bit-string), not one cut because it is the right length.
 
 **Gate: empty.** Standing state unchanged: A unfilled, C blank. This tick improved the ledger's
 description of the tape. It did not solve the puzzle.
+
+**Tick 36 addendum: base rates for the "π(x) is the operator" reading.** The same facts were
+re-presented as evidence that the prime-counting function is the missing operator.
+`harness/checksum_machine_baserates.py` measures what each fact is worth.
+- **Uniqueness is mostly automatic.** Of 547 FAED colour windows, 344 already have a (Y,B) pair
+  that no other window shares; 31/73 was read off offset 546, so its uniqueness is expected.
+  A prime pair 42 apart is **not** unique on FAED: offset 110 gives 29/71. Of the 25 tape
+  alignments, 15 have a prime-position pattern that no other alignment shares, and {1,4} is
+  simply the offset-0 pattern.
+- **The 67 | 82 cut.** 22 of 148 digit cuts land on both a token boundary and a word
+  boundary, so landing on one is a **15%** event. The notable part is π(331)+π(421) = 149,
+  the VIC length, a chain of the kind tick 32 measured at about 1 in 11.
+- **The length zoo is nearly free.** Newly checked: π(104)=27=|verylaststepisatruegiveaway|,
+  π(10)=4=|HALF|, π(21)=8=|promised|, π(4943)=661. Against 24 named tokens, π(n) hits a named
+  length for **78% of n ≤ 50** and 35% of n ≤ 150.
+- **What survives: ENTER.** A random 40-bit mask over a random 40-letter window gives a prime
+  pair exactly 42 apart about **1 in 1,400** times. That the natural mask on the natural
+  prefix repeats the 42 is the one genuinely unlikely item. It still depends on MSB-first
+  bits and A=0, and what it points at is the solved sentence (PRIVATEKEYS, the 51-letter
+  remainder), not an operand.
+
+**Verdict unchanged.** Grant π(x) as the creator's device and it is still a device for
+checksumming lengths and cuts of decoded text. It emits no string, key or scalar that any lock
+could take, and no source-named next mask exists to feed it. The frozen continuation rule
+stands; the gate stays empty.
