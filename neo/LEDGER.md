@@ -1427,3 +1427,77 @@ address.** Each is logged in `attempts/gate_intake.jsonl` and is now spent.
 timing constants (1441, 2442 ms …) are not promoted. Nothing in the three archives is a new Jrk
 sentence or an uttered password. Standing state is unchanged: A unfilled, C blank, tooling
 waiting.
+
+### Loop tick 36 (2026-09-26): the checksum machine, cold-verified, classified and frozen
+
+**Verified.** `harness/verify_checksum_machine.py` recomputes every claim from primary files
+(soup, `phase3-assets/phase3.2.txt`, the phase-0 grid JSON). No AES, no gate. **26 of 26 checks
+pass**, including each uniqueness scan.
+
+The tape, as it now reads:
+
+```text
+soup[0:91]     DBBI (91, a–i)     layer 1 of 7: a=0 total 331 (prime, π=67)
+soup[91:195]   bin1 (104, a/b)    48 a / 56 b; a=0,b=1 packed MSB-first = "matrixsumlist";
+                                  bit[31]=0, bit[73]=1 (Yellow=0 / Blue=1 polarity), 31+73=104
+soup[195:765]  FAED (570, a–i)    [0:546] = layers 2–7: 360 369 421 418 441 396 (421 prime, π=82)
+                                  [546:570] = tail; phase-0 frame BBBBYBBBYYBBBBYBBYYBYYBY gives
+                                  Yellow=31 / Blue=73 under a=0
+DBBI‖FAED = 661 symbols; 4943 = p_661; 0xF73D92 = 2·11·149·4943
+```
+
+- **Colour window:** of 547 windows of 24 on FAED, only offset 546 gives 31/73 under a=0. The
+  house map gives no 31/73 window anywhere; the tail reads 40/88 there.
+- **Layer totals:** of the 25 alignments of a 637-block on the 661 tape, only offset 0 has
+  primes at positions {1,4}, values {331, 421} and rank-sum 67+82 = 149.
+- **VIC split:** the 149 VIC digits decode to the 91-letter sentence on the proven board
+  (91 tokens). Letter 40 ends exactly at digit 67, so 67 | 82 decode separately to
+  `INCASEYOUMANAGETOCRACKTHISTHEPRIVATEKEYS` | `BELONGTOHALFANDBETTERHALFANDTHEYALSONEEDFUNDSTOLIVE`.
+  That is the sentence boundary.
+- **The one 42:** token `42` occurs once in the tokenization (it is also the only raw `42`
+  substring), at digit 47, and it is the `P` of PRIVATEKEYS. Board: 42→P, 15→I, 10→`.`, 43→S.
+- **ENTER mask:** the 40 bits of `enter` over the first 40 letters (A=0…Z=25) sum to 191 where
+  the bit is 1 (prime, π=43, board code `S`, the last letter of PRIVATEKEYS) and 233 where it
+  is 0 (prime, π=51 = the 51 remaining letters). The gap is 42. Of 52 windows of 40, only
+  offset 0 gives a prime pair with gap 42.
+- **Lengths:** π(11)=5=|enter|, π(149)=35=|shabefourfirsthintisyourlastcommand|.
+
+**Precision notes, from the check.**
+1. **π was never uttered as a function.** In 510 creator-log rows, the prime-counting function
+   π(n) and "rank" never appear. The only "pi" is #32671 (2024-11-29), "You only need the last
+   number of pi…", which is banter about the constant and was closed as key/IV material at
+   tick 22.
+2. **Two conventions carry the machine.** 31/73 exists only under a=0, which is not the house
+   map. The ENTER pair exists only with MSB-first bits: LSB-first gives 218/206, both even.
+   MSB-first is at least the soup's own bin1 packing, so that one is internally consistent.
+3. **Correction to the campaign-32 remark.** Its 64-hex regex ran on AES decrypts, never on an
+   XOR output. It was dead only on miniA's 32-byte decrypt and live, with low power, on the
+   80-byte locks and Cosmic. The code that really was dead is the XOR scan's
+   WIF/`xprv`/`1GSMG` prefix loop, whose body is `pass`, so XOR outputs were checked only for
+   `Salted__` and ≥90% printable. The script also reads `/tmp/arch_words.txt`, which is not in
+   the repo, so campaign 32 cannot be reproduced as committed. Its null stands and is not
+   re-run.
+
+**What it is.** A closed arithmetic commentary on the already-decoded Phase-3.2 and SalPhaseIon
+layout. Every output lands on a length or a cut already in hand: 149, PRIVATEKEYS, HALF AND
+BETTER HALF, `enter`, 661, matrixsumlist.
+
+**What it does not do.** It does not name a creator-written operation for slot A, does not fill
+C from a new primary page, does not open mini, P32T or Cosmic, and does not produce a 32-byte
+scalar for `1GSMG1JC9wtdSwfwApgj2xcmJPAwx7prBe`.
+
+**Frozen as not key material.**
+- `4943`: reading it as p_661 is the best reading of that marker so far, but it is still the
+  frozen Genesis object. It is not hashed, not used as an offset and not put in the gate.
+- The length zoo, such as π(42)=13=|matrixsumlist|, π(31)=11=|thepassword| and
+  π(15)=6=|YOUWON|, is look-elsewhere and stays off the key list.
+- `42 15 10 → PI.` (73−31, 82−67, π(73)−π(31) on the board) is a wink, not a password.
+
+**The continuation rule, frozen.** If the machine is continued at all, it takes the **next
+source-named** binary mask × an equal-length named text, demands another prime-pair / π
+checkpoint, **then stops. No AES.** Masks already spent: the Phase-0 24-colour frame and the
+`enter` 40 bits. A next mask must be as named as those two (`shabefour…`, `hash_the_text`, a
+creator bit-string), not one cut because it is the right length.
+
+**Gate: empty.** Standing state unchanged: A unfilled, C blank. This tick improved the ledger's
+description of the tape. It did not solve the puzzle.
