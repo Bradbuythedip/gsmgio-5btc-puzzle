@@ -2182,3 +2182,26 @@ applied: no variants, no prefix stripping, no substrings. The creator OP_RETURN 
 before it was run needs a pre-registered direct run like this one, not an edit to the frozen gate.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 55 (2026-09-26): Δ42 operator on the DBBI⊖VIC residual, three falsification tests, fails; not run
+
+Proposal (user-relayed): arrange R = map0(DBBI) − VIC (mod 26) as 13×7 and take
+Δ42(R)_i = R[i+42] − R[i] (6 rows; "π = negation"). The output is 49 chars,
+`ZZONDOXILKEYUFTYXZYYZWIKVPAAWOUWETBBAZUDPAPYDYGRA` (reproduced exactly). As a 7×7, row 2 reads
+`ILKEYUF`. `harness/campaign_40_delta42_audit.py` ran the proposer's own tests (no AES):
+
+1. **Marker list over DBBI, VIC and R, every k=1..90, both signs** (KEY, YOUWON, YINYANG, PASSWORD,
+   DOOR, HALF, BETTER, NEO, ONE, ZERO; 24,570 positions): **4 hits vs 4.36 expected by chance**.
+   VIC gives NEO twice (k=4 and k=19, reversed sign), R gives ONE (k=4) and KEY (k=42). The residual
+   is not marker-rich; the transform is generic.
+2. **KEY audit:** exactly one KEY in the whole search (R, k=42, later−earlier, index 9). The claimed
+   4–6 / 7–9 / 10–12 progression does not reproduce. There are no other KEYs to form one.
+3. **Missing KEY at 1–3:** none anywhere in the search. Fails.
+
+For scale: P(KEY somewhere in Δ42 of a random 91-string, one sign) ≈ 0.0026. But the sign was chosen
+after seeing the output (the other sign gives `BBMNXMD…`), KEY was chosen after seeing it, and
+42 = 73 − 31 holds only under the a=0 map (tick-verified). Under the proposer's stop rule this is a
+coincidence. The 49-string is **not run**: "derived_candidate" is not an admissible gate kind, and
+the precondition failed. Recorded so it is not re-derived.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
