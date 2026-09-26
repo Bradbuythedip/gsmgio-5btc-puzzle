@@ -185,7 +185,11 @@ def run(args):
              for p in [os.path.join(CHAIN, p)]]
     txs = {t["txid"]: t for t in seeds}
     prevouts = {}
-    rpc = None if args.offline else RPC(os.environ.get("BTC_RPC_URL") or sys.exit("set BTC_RPC_URL"))
+    url = os.environ.get("BTC_RPC_URL", "")
+    if not args.offline and (not url.startswith("https://") or re.search(r"[<>\s]", url)):
+        sys.exit("BTC_RPC_URL must be your full endpoint with the real key, e.g. "
+                 "https://bitcoin-mainnet.g.alchemy.com/v2/AbC123... (no <placeholder>, no spaces)")
+    rpc = None if args.offline else RPC(url)
 
     def fetch(txid):
         if txid in txs and "blockhash" in txs[txid]:
