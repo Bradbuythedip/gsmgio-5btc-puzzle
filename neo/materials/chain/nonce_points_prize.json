@@ -1,0 +1,54 @@
+{
+  "source": "prize-key ECDSA signatures in materials/chain/tx_halving_spend.hex, tx_halving2024_spend.hex",
+  "derivation": "R = (z*s^-1)G + (r*s^-1)Q from signature verification; R.x == r for all six",
+  "points": [
+    {
+      "label": "2aa9a4a90be819d5\u2026 in0 (locktime 629998)",
+      "txid": "2aa9a4a90be819d5122d70c993280785a0508f163521e7b38cebb4db0b071b13",
+      "input": 0,
+      "r": "dbe31ca9440892abcec35c0aa83380e1c35d2a33ea99fc314e6bcaf299b8847a",
+      "x": "dbe31ca9440892abcec35c0aa83380e1c35d2a33ea99fc314e6bcaf299b8847a",
+      "y": "fab930a46b6b602f34d53b60c9ed129da2baafaa929473ce345e487080cd2d8a"
+    },
+    {
+      "label": "2aa9a4a90be819d5\u2026 in1 (locktime 629998)",
+      "txid": "2aa9a4a90be819d5122d70c993280785a0508f163521e7b38cebb4db0b071b13",
+      "input": 1,
+      "r": "fce22a0a026a33197ae65efa47420aa1c4efdbf95f8370f4da22802392ab2db2",
+      "x": "fce22a0a026a33197ae65efa47420aa1c4efdbf95f8370f4da22802392ab2db2",
+      "y": "6fc881a76fbca5e7848d74a972d057a21e3f3bca38810114d055efd1b74d5639"
+    },
+    {
+      "label": "2aa9a4a90be819d5\u2026 in2 (locktime 629998)",
+      "txid": "2aa9a4a90be819d5122d70c993280785a0508f163521e7b38cebb4db0b071b13",
+      "input": 2,
+      "r": "776706ca3039c2e127aff3f144333e9afc6c4dcf5ba2dd9243268324622d65f6",
+      "x": "776706ca3039c2e127aff3f144333e9afc6c4dcf5ba2dd9243268324622d65f6",
+      "y": "92f2176ab647965d40fcaf197748b9b1a98b86ef7192630850f16bbc0577c794"
+    },
+    {
+      "label": "88cdb3cdca12b471\u2026 in0 (locktime 840003)",
+      "txid": "88cdb3cdca12b471551b1b26188508a14ca5fd8a415223ffb7c190381c9b9df3",
+      "input": 0,
+      "r": "1df5cf8403c9309aba324ef94a43551a32a258326009abb4ac1153c06de327d0",
+      "x": "1df5cf8403c9309aba324ef94a43551a32a258326009abb4ac1153c06de327d0",
+      "y": "3b4ab2297ad9898a47f9c99ab86a9caed777bd27746a1079ad889f7d09792d00"
+    },
+    {
+      "label": "88cdb3cdca12b471\u2026 in1 (locktime 840003)",
+      "txid": "88cdb3cdca12b471551b1b26188508a14ca5fd8a415223ffb7c190381c9b9df3",
+      "input": 1,
+      "r": "4c18f2f20ea146ad2e4accaa0094d7b52bf4da5322e78fd1a651a526fdc43dae",
+      "x": "4c18f2f20ea146ad2e4accaa0094d7b52bf4da5322e78fd1a651a526fdc43dae",
+      "y": "5847e7b6d10c5af543ebb9a33f8474902542ab265e2b77c7abdff6801429cae4"
+    },
+    {
+      "label": "88cdb3cdca12b471\u2026 in2 (locktime 840003)",
+      "txid": "88cdb3cdca12b471551b1b26188508a14ca5fd8a415223ffb7c190381c9b9df3",
+      "input": 2,
+      "r": "429e4e8f162b0dafc1ca9f2b13e4e0fa57a26c2b9f2bf5a3ae934c40ea1f7845",
+      "x": "429e4e8f162b0dafc1ca9f2b13e4e0fa57a26c2b9f2bf5a3ae934c40ea1f7845",
+      "y": "3348fe57587420f38b6c2cb5d2c061497dd55740671df37a1ec98e37845f420e"
+    }
+  ]
+}

@@ -3357,3 +3357,47 @@ Checked against the record:
 vocabulary, not an operation. No compute.
 
 **State unchanged:** three locks byte-pinned; corpus exhausted; `1GSMG1…` unspent.
+
+### Tick 91 (2026-09-26): the offline solver v2, validated against the checkout; two bugs and one regression fixed; verified nonce points added
+
+The user uploaded `gsmg_offline_solver.py` 2026-09-26.1: 1,331 lines, 11 commands (doctor, audit,
+selftest, test, gate, keytest, digest, components, opreturn, txscan, report), with a README and a
+nonce-points template. It was installed as `harness/gsmg_offline_solver.py`, replacing tick 86's
+version, and validated here.
+
+**Found and fixed** (now 2026-09-26.2):
+1. **The phase-3 solved control could never pass.** Its password was 220 characters, missing the
+   7th FEN rank `1P2P2P/` (sha256 `ad029745…`, not `1a57c572…`), so `selftest` failed with exit 3
+   on any checkout. It is restored to the verified 227-character string.
+2. **Regression: key material was checked only on PKCS#7-valid decrypts.** Tick 86's version, and
+   campaign 51's lesson, check `plaintext[0:32]`, `[32:64]` and literal 64-hex on every raw
+   decrypt, because a right key can sit under a bad last block. This is restored. Proven by a
+   planted control: a real miniAB decrypt with *invalid* padding, with its `[32:64]` registered as
+   a synthetic address. The unfixed build misses it; the fixed build flags it.
+3. **`txscan` exited 10 ("strong cryptographic hit") whenever the JSON merely mentioned the prize
+   address.** It now exits 10 only on a nonce match.
+
+Also found: the tick-86 claim that the run log is "gitignored" was wrong. `harness/.gitignore` held
+only a comment. `offline_solver_attempts.jsonl` is now ignored at the repo root.
+
+**Validated here, all green:**
+- `doctor`; `audit` (three envelopes byte-pinned, Issue #108 J/s); `selftest` (NIST AES, secp256k1
+  vectors, the P32T synthetic, and all three solved controls).
+- `test` on a spent control: null. A repeat is refused. `gate` refuses creator line #8048 as
+  corpus-present. `keytest` runs.
+- `digest` of the image caption is `89727c598b9c…`, the SalPhaseIon URL (positive control).
+- `components` places `yellowblueprimes` / `matrixsumlist` / `lastwordsbeforearchichoice` at
+  offsets 0 / 16 / 29 of the creator's own decoded hint, and invents no serialization.
+- `opreturn` gives an exact and a byte-reversed match on a verified R.x, and none on a random
+  payload.
+- `txscan` on the seven saved transactions decodes all five OP_RETURNs ("Halving", "Good job,
+  Neo!" ×2, the Gavin quote, "Neo wallet …").
+
+**New authenticated input.** `harness/nonce_points.py` recomputes the nonce point R = (z·s⁻¹)G +
+(r·s⁻¹)Q of all six prize-key signatures (2020 and 2024 splits; R.x ≡ r for each, matching tick
+72's r values) and writes `materials/chain/nonce_points_prize.json` for `opreturn`/`txscan`.
+**No saved creator transaction has a 32-byte OP_RETURN**; the memos are 7–53 bytes of ASCII. So the
+OP_RETURN-as-nonce idea has no in-repo target.
+
+No candidates were tested beyond the controls. **State unchanged:** three locks byte-pinned; corpus
+exhausted; `1GSMG1…` unspent.
