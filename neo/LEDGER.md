@@ -2084,3 +2084,29 @@ start anyway (tick 48 caveat: yellowblueprimes/yinyang have no value; the soup l
 scalars). One such script was already withdrawn unrun. Not revived.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 51 (2026-09-26): `piandonehalf` provenance resolved — a participant's handle; π↔½ phase reading recorded, not run
+
+**Provenance, settled from the primary log.** The only occurrence of `piandonehalf` in the corpus
+is creator-log #66912 (2026-07-16): `🤫 (↩ @piandonehalf: thats not a wise move)`. It is the
+**Telegram username of another chat member** whom Jrk answered with an emoji. Jrk did not write the
+string; the member did, as their account name. Grade: USER. The π-phrase family stays closed and
+no `piandonehalf` candidate (1.5π, π+½, π≡½-turn) goes to the gate. Nearby rows (#66909 BIP360
+ELI5, #66913 "ELI4.5 is meta", #66931 "you have to be in your prime", replying to "fractions can't be
+prime") are banter with the room and give no operand.
+
+**The π↔½ phase chain (42 → 21 → ½ → π → −1 → yin/yang), assessed without a run.**
+- The identity `2π·(21/42) = π` is true. But it uses only the numbers already on the sheet, so it
+  is a re-expression that adds no bits and yields no bytes, key or index.
+- Its inputs are the weakest links on the sheet. `42 = 73 − 31` holds only under the a=0 map
+  (house map: 40/88, no 42; tick-verified null ~1 in 1600 combined). `21 = π(73)` is the reading
+  tick 48 already marked as weaker pedigree, "not a theorem, not an index set".
+- "Any k and 2k are antipodal on a 2k-cycle" is true of every even number, so the ±1 yin/yang
+  reading places no constraint on the data.
+- The Shor/`Q = dG` end of the chain is discrete-log recovery against the funded address. That
+  stays out of scope (tick 50).
+
+**Disposition.** Kept as a descriptive gloss on the sheet's numbers, not as a clue. Not promoted
+to slot D. No test was run because no operand or byte string exists to test.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
