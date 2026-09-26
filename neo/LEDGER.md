@@ -2110,3 +2110,35 @@ prime") are banter with the room and give no operand.
 to slot D. No test was run because no operand or byte string exists to test.
 
 **State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
+
+### Tick 52 (2026-09-26): the 2021 "neighbors, half and double" outputs re-derived; no operand
+
+Re-derived offline with coincurve from the prize pubkey (`03f4d1bb…a464` = `04f4d1bb…3559`,
+revealed by the 2020-05-11 halving spend). Uncompressed P2PKH addresses:
+
+| point | uncompressed P2PKH | user-reported output of tx `a82052a2…` (2021-07-18) |
+|---|---|---|
+| Q − G | `1G1kRAFR68y6CUq1SAJMzHmjd6sEEgtVUT` | yes |
+| Q / 2 | `16eEXbSuKN8tvcos1iKjdju6dAaWWRBMEs` | yes |
+| 2Q    | `1KHMK2C8uBptRz67FbrXy43yHzhZG16Hbm` | yes |
+| Q + G | `1PhXF3xVQ8Sg9FomBcmRwRbvvGfm3Y2os1` | yes |
+
+All four match. None match in compressed form. The Q/2 address never appeared in the user's
+`anti.py` output, so the list was not copied back from that output. **Still unverified here:**
+that these four are the actual outputs of `a82052a2…` (no raw tx in the repo, network blocked).
+The OP_RETURN text was already recorded above (line ~1593).
+
+**What it is:** creator-side (funded from `3GSMG24T…`) annotation of the public point. **What it
+is not:**
+- Not proof of knowing d. Q was public from May 2020, so anyone could compute these four points
+  and pay them without the private key.
+- Not a key path. Each point is its own ECDLP. The spend history of these dust addresses
+  would reveal only public keys we can already compute, never d (barring nonce reuse, which
+  would need their spending txs as a primary).
+- Not a reading of "half and better half". That VIC line names people. #3902 ("the half of prize
+  went to better half" → "Well spotted") ties "better half" to `17ucy1…`, not to Q/2.
+
+Its only direction is "operate on the public point", i.e. ECDLP against the funded address, which
+stays out of scope (tick 50). Kept as creator lore. Not a password; not sent to the gate.
+
+**State unchanged:** two locks gated on a new primary; corpus exhausted; address unspent.
