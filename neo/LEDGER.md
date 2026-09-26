@@ -1991,3 +1991,33 @@ better-half `17ucy1K9…`. That is a far stronger acceptance than padding.
 context* information a close friend would hold (VIC names two people; #66573 "close friends have the
 best chance"), not another byte transform of DBBI. That class of fact is outside the corpus and is
 not to be searched for as names/dates/personal data. No grind. The locks stay gated on a new primary.
+
+### Loop tick 48 (2026-09-26): the {1,4,21} selector caveat; 2020 third door frozen
+
+**{1,4,21} selector caveat (record so it never becomes a password-index set).**
+`R[1], R[4], R[21] = V, I, C` (1-based) and `R[22:28] = YOUWON` are **facts** in the residual
+`R = map0(DBBI) − VIC (mod 26)`. But the index set `{1,4,21}` is two glued readings, not a
+soup-derived theorem:
+- `{1,4}` = "the two prime layer-sums (331,421) sit at positions 1 and 4 of seven" — a reading of
+  `matrixsumlist`.
+- `21` = "blue = 73 = the 21st prime" — a later colour-score under the a=0…8 map.
+Gluing them yields the set that spells `VIC`. That is one bit of design **or** one bit of
+selection; the pedigree of `21` is weaker than `{1,4}`. **Do not write `R[{1,4,21}]=VIC` as a
+theorem, and do not use `{1,4,21}` as a password/index set.** What YOUWON authenticates is
+*correspondence* between the two 91-streams (`map0(DBBI) − VIC`), not a key; hard success remains
+decrypt → scalar → known address, never pad=01.
+
+**Paired-lock oracle is a priority order, not a proof.** P32T→`1GSMG1…` and salph_inner→`17ucy1…`
+is the 2020-source-history ordering; **both assignments must be checked**. "Better half = his
+partner" names the *class* of the missing fact (relationship/personal context), and licenses no
+name/date/password search.
+
+**Third door, 2020-only — frozen.** `campaign_37_thirddoor2020.py`: sha256(X)+5 encodings →
+P2PKH vs `1NULY7…`/prize/second, X from 2020 material only — the poem #1710 lines, "First or
+zero"→1/0, the URL, the colour frame (`f73d92`/`08c26d`/sequence/bits), yellow/blue counts. **29
+X, 288 addresses, 0 matches.** No 31/73/42 or layer-sums (wrong year). Rule frozen; not grown.
+
+**Not next (record):** HNP/kangaroo/BSGS on any real address; Cosmic; any cipher on the 64;
+`bestofeverything`/max-layer mutants; extracting operators from the later "everything/best/chance"
+hints (those say *why* the public bytes are insufficient, they are not new combinators). The next
+compute event is one new-primary candidate through both envelopes with the address oracle.
